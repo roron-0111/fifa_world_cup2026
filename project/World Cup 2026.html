@@ -1277,7 +1277,7 @@ const T={
     roomCode:'ルームコード',copy:'コピー',copied:'✓ コピー済み',
     predicted:'予想済み',unpredicted:'未予想',confirmed:'結果確定',
     groupStage:'グループステージ',standings:'順位表',predictions:'試合予想',
-    bracket:'未',ranking:'未',settings:'設定',home:'ホーム',
+    bracket:'決勝T(未)',ranking:'得点ランキング(未)',settings:'設定',home:'ホーム',
     predict:'予想する',confirm:'予想確定',unlock:'解除',
     oppPred:'対戦相手の予想:',noPred:'まだ未予想',
     pointSettings:'ポイント設定',resultPts:'勝敗的中',exactPts:'スコア的中',
@@ -1297,7 +1297,7 @@ const T={
     roomCode:'Room Code',copy:'Copy',copied:'✓ Copied',
     predicted:'Predicted',unpredicted:'Pending',confirmed:'Results In',
     groupStage:'Group Stage',standings:'Standings',predictions:'Predictions',
-    bracket:'TBD',ranking:'TBD',settings:'Settings',home:'Home',
+    bracket:'Knockout (TBD)',ranking:'Scoring (TBD)',settings:'Settings',home:'Home',
     predict:'Predict',confirm:'Confirm',unlock:'Unlock',
     oppPred:'Opponent:',noPred:'Not predicted',
     pointSettings:'Point Settings',resultPts:'Correct Result',exactPts:'Exact Score',
@@ -1898,8 +1898,8 @@ function BottomNav({screen,setScreen}){
   const tabs=[
     {id:'home',icon:'🏠',label:l.home},
     {id:'groups',icon:'⚽',label:'グループ'},
-    {id:'bracket',icon:'🏆',label:'未'},
-    {id:'leaderboard',icon:'📊',label:'未'},
+    {id:'bracket',icon:'🏆',label:'決勝T(未)'},
+    {id:'leaderboard',icon:'📊',label:'得点ランキング(未)'},
     {id:'settings',icon:'⚙️',label:l.settings},
   ];
   return(
@@ -2279,7 +2279,7 @@ function BracketScreen({user,syncToken}){
 
   return(
     <div className="page page-enter">
-      <div className="shdr"><h2>未</h2></div>
+      <div className="shdr"><h2>決勝T(未)</h2></div>
       <div className="section-title">横画面でも全体を見渡せるトーナメント表</div>
       <div className="bracket-tree">
         <div className="bracket-board">
@@ -2344,7 +2344,7 @@ function LeaderboardScreen({user,onOpenTeam}){
 
   return(
     <div className="page page-enter">
-      <div className="shdr"><h2>未</h2></div>
+      <div className="shdr"><h2>得点ランキング(未)</h2></div>
       <div className="lb-hero">
         <div className="lb-bg-txt">W杯</div>
         <div className="lb-label">ワールドカップ得点</div>
