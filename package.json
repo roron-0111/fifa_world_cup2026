@@ -11,5 +11,8 @@
     "@koozaki/romaji-conv": "^2.0.35",
     "puppeteer": "^24.41.0",
     "wanakana": "^5.3.1"
+  },
+  "devDependencies": {
+    "firebase-tools": "^15.15.0"
   }
 }
