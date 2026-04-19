@@ -430,6 +430,29 @@ html,body{background:#ddd8ce;color:var(--text);font-family:'Inter',sans-serif;mi
 .player-field input,.player-field select{width:100%;min-width:0;padding:9px 10px;border:1.5px solid var(--border);border-radius:10px;background:var(--s1);font:inherit;color:var(--text);outline:none;max-width:100%;}
 .player-field input:focus,.player-field select:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accentf);}
 .player-edit-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;}
+.player-mini-btn{
+  min-width:0;
+  padding:8px 12px;
+  border:1.5px solid var(--border);
+  border-radius:10px;
+  background:var(--s2);
+  color:var(--text2);
+  font:inherit;
+  font-size:11px;
+  font-weight:800;
+  cursor:pointer;
+  transition:all .15s;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:4px;
+}
+.player-mini-btn:hover{border-color:var(--accent);color:var(--accent);}
+.player-mini-btn.primary{background:var(--accent);border-color:var(--accent);color:#fff;}
+.player-mini-btn.primary:hover{opacity:.92;color:#fff;}
+.player-mini-btn.danger{background:transparent;border-color:var(--red);color:var(--red);}
+.player-mini-btn.danger:hover{background:var(--red);color:#fff;}
+.player-mini-btn:disabled{opacity:.55;cursor:not-allowed;transform:none;}
 .room-hero-score{display:flex;flex-direction:column;gap:4px;align-items:center;}
 .room-score-sub{display:flex;flex-direction:column;gap:1px;font-size:10px;line-height:1.25;color:rgba(255,255,255,.82);font-weight:700;}
 .member-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:8px;padding:12px 16px 0;}
@@ -750,6 +773,7 @@ html,body{background:#ddd8ce;color:var(--text);font-family:'Inter',sans-serif;mi
 <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
 <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/@koozaki/romaji-conv@2.0.35/dist/romaji-conv.js"></script>
+<script src="./bootstrap-data.js"></script>
 <script type="text/babel">
 const {useState,useEffect,useRef,useContext,createContext}=React;
 
@@ -1484,7 +1508,7 @@ function CountryModal({team,onClose}){
   if(!team)return null;
   const players=PLAYER_DATA[team]||[];
   const meta=teamMeta(team);
-  const blankDraft={name:'',position:'FW',club:'',goals:'0',clubGoals:'0',internationalGoals:'0'};
+  const blankDraft={name:'',position:'FW',club:'',goals:'0',clubGoals:'0'};
   const [selectedPlayerId,setSelectedPlayerId]=useState('new');
   const [draft,setDraft]=useState(()=>({...blankDraft}));
   const [saving,setSaving]=useState(false);
@@ -1534,7 +1558,6 @@ function CountryModal({team,onClose}){
       club:p.club||'',
       goals:String(p.goals??0),
       clubGoals:String(p.clubGoals??0),
-      internationalGoals:String(p.internationalGoals??p.goals??0),
     });
   }
 
@@ -1557,7 +1580,6 @@ function CountryModal({team,onClose}){
       club:draft.club?.trim(),
       goals:Number(draft.goals||0),
       clubGoals:Number(draft.clubGoals||0),
-      internationalGoals:Number(draft.internationalGoals||0),
     };
     Object.entries(nextValues).forEach(([key,value])=>{
       if(String(value)!==String(selectedPlayer[key]??'')) patch[key]=value;
@@ -1575,6 +1597,8 @@ function CountryModal({team,onClose}){
         overrides.deletedIds=overrides.deletedIds.filter((id)=>String(id)!==String(selectedPlayer.id));
         return overrides;
       });
+      setSelectedPlayerId('new');
+      setDraft({...blankDraft});
       setStatus('保存しました');
     }finally{
       setSaving(false);
@@ -1604,7 +1628,6 @@ function CountryModal({team,onClose}){
           position:normalizePosition(draft.position),
           club:(draft.club||'').trim()||'Unknown',
           clubGoals:Number(draft.clubGoals||0),
-          internationalGoals:Number(draft.internationalGoals||0),
           goals:Number(draft.goals||0),
           source:'manual',
           _added:true,
@@ -1616,22 +1639,6 @@ function CountryModal({team,onClose}){
       setSelectedPlayerId('new');
       setDraft({...blankDraft});
       setStatus('選手を追加しました');
-    }finally{
-      setSaving(false);
-    }
-  }
-
-  async function clearSelectedPlayer(){
-    if(!selectedPlayer||saving)return;
-    setSaving(true);
-    try{
-      commitOverrides((overrides)=>{
-        overrides.players ||= {};
-        delete overrides.players[selectedPlayer.id];
-        return overrides;
-      });
-      syncDraftFromPlayer(selectedPlayer);
-      setStatus('修正を解除しました');
     }finally{
       setSaving(false);
     }
@@ -1699,7 +1706,7 @@ function CountryModal({team,onClose}){
             <div>
               <div className="player-editor-title">{selectedPlayer ? '編集' : '新しい選手を追加'}</div>
               <div className="player-editor-note">
-                {selectedPlayer ? '選手をクリックすると編集対象が切り替わります。' : '選手をクリックして編集できます。ここから新規追加もできます。'}
+                {selectedPlayer ? '保存すると追加モードに戻ります。' : '選手をクリックして編集できます。ここから新規追加もできます。'}
               </div>
             </div>
             <button className="player-mini-btn" onClick={startNewPlayer} disabled={saving}>新規入力</button>
@@ -1720,16 +1727,12 @@ function CountryModal({team,onClose}){
               <input value={draft?.club||''} onChange={(e)=>updateDraft('club',e.target.value)} placeholder="所属クラブ" />
             </div>
             <div className="player-field">
-              <label>国際得点</label>
+              <label>得点</label>
               <input type="number" min="0" step="1" value={draft?.goals||0} onChange={(e)=>updateDraft('goals',e.target.value)} />
             </div>
             <div className="player-field">
               <label>クラブ得点</label>
               <input type="number" min="0" step="1" value={draft?.clubGoals||0} onChange={(e)=>updateDraft('clubGoals',e.target.value)} />
-            </div>
-            <div className="player-field">
-              <label>補助得点</label>
-              <input type="number" min="0" step="1" value={draft?.internationalGoals||0} onChange={(e)=>updateDraft('internationalGoals',e.target.value)} />
             </div>
           </div>
           <div className="player-edit-actions">
@@ -1738,7 +1741,6 @@ function CountryModal({team,onClose}){
             </button>
             {selectedPlayer&&<>
               <button className="player-mini-btn" onClick={()=>syncDraftFromPlayer(selectedPlayer)} disabled={saving}>元の値へ戻す</button>
-              <button className="player-mini-btn danger" onClick={clearSelectedPlayer} disabled={saving}>修正解除</button>
               <button className="player-mini-btn danger" onClick={deleteSelectedPlayer} disabled={saving}>削除</button>
             </>}
           </div>

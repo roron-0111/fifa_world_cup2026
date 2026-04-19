@@ -418,6 +418,21 @@ const server = http.createServer(async (req, res) => {
       return;
     }
 
+    if (req.method === 'GET' && /^\/[^/]+\.(js|json|css)$/i.test(pathname)) {
+      const requested = pathname.replace(/^\//, '');
+      const filePath = path.normalize(path.join(ROOT, 'project', requested));
+      if (!filePath.startsWith(path.normalize(path.join(ROOT, 'project')))) {
+        sendJson(res, 400, { ok: false, error: 'Invalid asset path' });
+        return;
+      }
+      if (!fs.existsSync(filePath) || !fs.statSync(filePath).isFile()) {
+        sendJson(res, 404, { ok: false, error: 'Asset not found' });
+        return;
+      }
+      serveStaticFile(res, filePath);
+      return;
+    }
+
     if (req.method === 'GET' && /^\/[^/]+\.(png|jpe?g|gif|svg|ico)$/i.test(pathname)) {
       const requested = pathname.replace(/^\//, '');
       const filePath = path.normalize(path.join(ROOT, requested));
