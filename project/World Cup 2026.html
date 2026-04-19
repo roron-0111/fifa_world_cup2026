@@ -92,12 +92,12 @@ html,body{background:#ddd8ce;color:var(--text);font-family:'Inter',sans-serif;mi
 .auth-overlay.messi{
   left:calc(50% - clamp(88px, 8vw, 150px));
   transform:translate(-50%, -50%) scale(1.02);
-  background-image:url('/messi.png?v=20260419_203652');
+  background-image:url('./messi.png?v=20260419_234500');
 }
 .auth-overlay.haaland{
   left:calc(50% + clamp(88px, 8vw, 150px));
   transform:translate(-50%, -50%) scale(1.15);
-  background-image:url('/Haaland.png?v=20260419_203652');
+  background-image:url('./Haaland.png?v=20260419_234500');
 }
 .auth-logo{
   position:relative;
@@ -152,8 +152,8 @@ html,body{background:#ddd8ce;color:var(--text);font-family:'Inter',sans-serif;mi
   pointer-events:none;
   filter:drop-shadow(0 12px 24px rgba(0,0,0,.12));
 }
-.home-hero::before{left:-46px;bottom:-18px;background-image:url('/messi.png?v=20260419_203652');transform:rotate(-10deg);}
-.home-hero::after{right:-42px;top:-10px;background-image:url('/Haaland.png?v=20260419_203652');transform:rotate(10deg);}
+.home-hero::before{left:-46px;bottom:-18px;background-image:url('./messi.png?v=20260419_234500');transform:rotate(-10deg);}
+.home-hero::after{right:-42px;top:-10px;background-image:url('./Haaland.png?v=20260419_234500');transform:rotate(10deg);}
 .hero-bg-num{position:absolute;right:-10px;top:-20px;font-family:'Bebas Neue';font-size:150px;color:rgba(255,255,255,.08);line-height:1;pointer-events:none;user-select:none;}
 .hero-greet{font-size:13px;color:rgba(255,255,255,.7);}
 .hero-name{font-size:26px;font-weight:900;color:#fff;margin-top:2px;}
@@ -1864,7 +1864,7 @@ function AuthScreen({onAuth}){
       <div className="auth-top-title">FIFA WORLD CUP 2026</div>
       <div className="auth-hero">
         <div className="auth-brand">
-          <img className="auth-logo-art" src="/WorldCup_logo.png?v=20260419_203652" alt="FIFA WORLD CUP 2026" />
+          <img className="auth-logo-art" src="./WorldCup_logo.png?v=20260419_234500" alt="FIFA WORLD CUP 2026" />
           <div className="auth-overlay messi" aria-hidden="true"></div>
           <div className="auth-overlay haaland" aria-hidden="true"></div>
         </div>
@@ -1975,18 +1975,20 @@ function HomeScreen({user,onLogout}){
       </div>
       {room&&<div className="room-bar">
         <div><div className="room-lbl">{l.roomCode}</div><div className="room-code">{room.code}</div></div>
-        <button className="copy-btn" onClick={()=>{navigator.clipboard?.writeText(room.code);setCopied(true);setTimeout(()=>setCopied(false),2000);}}>
-          {copied?l.copied:l.copy+' 📋'}
-        </button>
+        {user.isGuest
+          ?<button className="copy-btn" onClick={onLogout}>トップに戻る</button>
+          :<button className="copy-btn" onClick={()=>{navigator.clipboard?.writeText(room.code);setCopied(true);setTimeout(()=>setCopied(false),2000);}}>
+            {copied?l.copied:l.copy+' 📋'}
+          </button>}
       </div>}
       <div className="stats-grid">
         <div className="sc acc"><div className="n">{myPredCount}</div><div className="l">{l.predicted}</div></div>
         <div className="sc gold"><div className="n">{GROUP_MATCHES.length-myPredCount}</div><div className="l">{l.unpredicted}</div></div>
         <div className="sc grn"><div className="n">{resultCount}</div><div className="l">{l.confirmed}</div></div>
       </div>
-      <div style={{padding:'0 14px 20px'}}>
+      {!user.isGuest&&<div style={{padding:'0 14px 20px'}}>
         <button className={primaryActionClass} onClick={onLogout}>{primaryActionLabel}</button>
-      </div>
+      </div>}
     </div>
   );
 }
