@@ -1277,7 +1277,7 @@ const T={
     roomCode:'ルームコード',copy:'コピー',copied:'✓ コピー済み',
     predicted:'予想済み',unpredicted:'未予想',confirmed:'結果確定',
     groupStage:'グループステージ',standings:'順位表',predictions:'試合予想',
-    bracket:'決勝トーナメント',ranking:'ランキング',settings:'設定',home:'ホーム',
+    bracket:'未',ranking:'未',settings:'設定',home:'ホーム',
     predict:'予想する',confirm:'予想確定',unlock:'解除',
     oppPred:'対戦相手の予想:',noPred:'まだ未予想',
     pointSettings:'ポイント設定',resultPts:'勝敗的中',exactPts:'スコア的中',
@@ -1297,7 +1297,7 @@ const T={
     roomCode:'Room Code',copy:'Copy',copied:'✓ Copied',
     predicted:'Predicted',unpredicted:'Pending',confirmed:'Results In',
     groupStage:'Group Stage',standings:'Standings',predictions:'Predictions',
-    bracket:'Knockout Bracket',ranking:'Rankings',settings:'Settings',home:'Home',
+    bracket:'TBD',ranking:'TBD',settings:'Settings',home:'Home',
     predict:'Predict',confirm:'Confirm',unlock:'Unlock',
     oppPred:'Opponent:',noPred:'Not predicted',
     pointSettings:'Point Settings',resultPts:'Correct Result',exactPts:'Exact Score',
@@ -1694,6 +1694,7 @@ function CountryModal({team,onClose}){
                     <span className="player-meta-line">{teamJa(team)}</span>
                     <span className="player-meta-line">{positionJa(p.position)}</span>
                     <span className="player-meta-line">{p.club||'Unknown'}</span>
+                    <span className="player-meta-line">2026ワールドカップ得点 {p.goals}</span>
                     <span className="player-meta-line">クラブ得点 {p.clubGoals}</span>
                   </div>
                 </div>
@@ -1727,7 +1728,7 @@ function CountryModal({team,onClose}){
               <input value={draft?.club||''} onChange={(e)=>updateDraft('club',e.target.value)} placeholder="所属クラブ" />
             </div>
             <div className="player-field">
-              <label>得点</label>
+              <label>2026ワールドカップ得点</label>
               <input type="number" min="0" step="1" value={draft?.goals||0} onChange={(e)=>updateDraft('goals',e.target.value)} />
             </div>
             <div className="player-field">
@@ -1897,8 +1898,8 @@ function BottomNav({screen,setScreen}){
   const tabs=[
     {id:'home',icon:'🏠',label:l.home},
     {id:'groups',icon:'⚽',label:'グループ'},
-    {id:'bracket',icon:'🏆',label:'決勝T'},
-    {id:'leaderboard',icon:'📊',label:'得点'},
+    {id:'bracket',icon:'🏆',label:'未'},
+    {id:'leaderboard',icon:'📊',label:'未'},
     {id:'settings',icon:'⚙️',label:l.settings},
   ];
   return(
@@ -2278,7 +2279,7 @@ function BracketScreen({user,syncToken}){
 
   return(
     <div className="page page-enter">
-      <div className="shdr"><h2>{l.bracket}</h2></div>
+      <div className="shdr"><h2>未</h2></div>
       <div className="section-title">横画面でも全体を見渡せるトーナメント表</div>
       <div className="bracket-tree">
         <div className="bracket-board">
@@ -2343,7 +2344,7 @@ function LeaderboardScreen({user,onOpenTeam}){
 
   return(
     <div className="page page-enter">
-      <div className="shdr"><h2>ワールドカップ得点ランキング</h2></div>
+      <div className="shdr"><h2>未</h2></div>
       <div className="lb-hero">
         <div className="lb-bg-txt">W杯</div>
         <div className="lb-label">ワールドカップ得点</div>
