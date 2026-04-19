@@ -61,6 +61,14 @@
         "u-1776602659387-sllj"
       ],
       "maxMembers": 2
+    },
+    {
+      "id": "room-1776605164304",
+      "code": "BBB",
+      "members": [
+        "u-1776605164304-3p2u"
+      ],
+      "maxMembers": 2
     }
   ],
   "users": [
@@ -135,6 +143,12 @@
       "username": "bbb",
       "memberCode": "FM08",
       "roomId": "room-1776602654600"
+    },
+    {
+      "id": "u-1776605164304-3p2u",
+      "username": "bbb",
+      "memberCode": "DEUV",
+      "roomId": "room-1776605164304"
     }
   ],
   "roomStates": {
@@ -297,12 +311,16 @@
             "away": 0
           },
           "A-2": {
-            "home": 1,
+            "home": 2,
             "away": 0
           },
           "A-4": {
             "home": 0,
             "away": 0
+          },
+          "A-3": {
+            "home": 0,
+            "away": 4
           }
         },
         "u-1776602654600-jj3r": {
@@ -320,13 +338,24 @@
       "locked": {
         "u-1776602659387-sllj": [
           "A-1",
-          "A-2"
+          "A-2",
+          "A-3"
         ],
         "u-1776602654600-jj3r": [
           "A-1",
           "A-2"
         ]
       },
+      "koPreds": {},
+      "settings": {
+        "resultPts": 1,
+        "exactPts": 2
+      }
+    },
+    "room-1776605164304": {
+      "predictionsV2": {},
+      "results": {},
+      "locked": {},
       "koPreds": {},
       "settings": {
         "resultPts": 1,

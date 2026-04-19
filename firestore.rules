@@ -1,0 +1,10 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Firebase 移行時の最小テンプレート。
+    // 実運用では room / user / prediction ごとに細かく権限制御する。
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

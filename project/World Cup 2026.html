@@ -40,6 +40,16 @@ html,body{background:#ddd8ce;color:var(--text);font-family:'Inter',sans-serif;mi
   position:relative;
   overflow:hidden;
 }
+.auth-top-title{
+  width:100%;
+  text-align:center;
+  font-family:'Bebas Neue',sans-serif;
+  font-size:22px;
+  line-height:1;
+  letter-spacing:.18em;
+  color:var(--text);
+  padding-top:2px;
+}
 .auth-hero{
   position:relative;
   width:min(100%,780px);
@@ -113,6 +123,8 @@ html,body{background:#ddd8ce;color:var(--text);font-family:'Inter',sans-serif;mi
 .btn:active{transform:none;}
 .btn.ghost{background:transparent;border:1.5px solid var(--border);color:var(--text2);font-weight:600;font-size:14px;margin-top:8px;}
 .btn.ghost:hover{border-color:var(--text2);color:var(--text);}
+.btn.ghost.danger{border-color:var(--red);color:var(--red);}
+.btn.ghost.danger:hover{background:var(--red);border-color:var(--red);color:#fff;}
 .divlabel{display:flex;align-items:center;gap:10px;margin:14px 0;color:var(--text2);font-size:12px;}
 .divlabel::before,.divlabel::after{content:'';flex:1;height:1px;background:var(--border);}
 .errmsg{color:var(--red);font-size:12px;margin-top:8px;text-align:center;font-weight:600;}
@@ -146,10 +158,12 @@ html,body{background:#ddd8ce;color:var(--text);font-family:'Inter',sans-serif;mi
 .hero-greet{font-size:13px;color:rgba(255,255,255,.7);}
 .hero-name{font-size:26px;font-weight:900;color:#fff;margin-top:2px;}
 .hero-pts-row{display:grid;grid-template-columns:1fr auto 1fr;gap:10px;align-items:center;margin-top:18px;}
-.hpc{background:rgba(255,255,255,.15);border-radius:14px;padding:14px;text-align:center;backdrop-filter:blur(4px);}
+.hpc{background:rgba(255,255,255,.40);border-radius:14px;padding:14px;text-align:center;backdrop-filter:blur(1px);border:1px solid rgba(255,255,255,.22);}
 .hpc .n{font-family:'Bebas Neue';font-size:50px;line-height:1;color:#fff;}
 .hpc .l{font-size:10px;color:rgba(255,255,255,.7);font-weight:700;margin-top:2px;text-transform:uppercase;}
 .hpc.opp .n{color:var(--gold);}
+.hpc-tag{font-size:10px;color:rgba(255,255,255,.78);font-weight:800;line-height:1;letter-spacing:.3px;margin-bottom:4px;}
+.hpc-user{font-size:14px;font-weight:900;color:#fff;line-height:1.1;word-break:break-word;}
 .vs-txt{font-family:'Bebas Neue';font-size:26px;color:rgba(255,255,255,.5);text-align:center;}
 .room-bar{display:flex;align-items:center;justify-content:space-between;background:var(--s1);border-bottom:1px solid var(--border);padding:12px 18px;}
 .room-lbl{font-size:10px;color:var(--text2);font-weight:700;text-transform:uppercase;letter-spacing:.5px;}
@@ -245,14 +259,32 @@ html,body{background:#ddd8ce;color:var(--text);font-family:'Inter',sans-serif;mi
 .locked-display{display:flex;align-items:center;justify-content:center;gap:6px;padding:8px 0;}
 .locked-score{font-family:'Bebas Neue';font-size:38px;color:var(--accent);letter-spacing:2px;}
 .locked-dash{font-family:'Bebas Neue';font-size:28px;color:var(--text2);}
+.result-display{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:6px;
+  min-width:128px;
+  padding:4px 6px;
+}
+.result-score{
+  font-family:'Bebas Neue';
+  font-size:34px;
+  line-height:1;
+  color:var(--accent);
+  letter-spacing:1px;
+}
+.result-dash{
+  font-family:'Bebas Neue';
+  font-size:24px;
+  color:var(--text2);
+}
 .lock-tag{display:inline-flex;align-items:center;gap:3px;background:var(--accentf);color:var(--accent);font-size:9px;font-weight:800;padding:2px 8px;border-radius:18px;letter-spacing:.2px;white-space:nowrap;}
-.mactions{margin-top:12px;display:flex;gap:6px;align-items:center;}
-.pbtn{flex:1;padding:9px 8px;background:var(--accent);border:none;color:#fff;font-size:11px;font-weight:800;border-radius:10px;cursor:pointer;font-family:inherit;transition:all .2s;letter-spacing:.2px;min-width:0;}
+.mactions{margin-top:10px;display:flex;gap:6px;align-items:center;}
+.pbtn{flex:1;padding:8px 7px;background:var(--accent);border:none;color:#fff;font-size:11px;font-weight:800;border-radius:10px;cursor:pointer;font-family:inherit;transition:all .2s;letter-spacing:.15px;min-width:0;}
 .pbtn:hover{opacity:.88;}
-.ubtn{flex:1;padding:9px 8px;background:var(--s2);border:1.5px solid var(--border);color:var(--text2);font-size:11px;font-weight:800;border-radius:10px;cursor:pointer;font-family:inherit;transition:all .2s;letter-spacing:.2px;min-width:0;}
+.ubtn{flex:1;padding:8px 7px;background:var(--s2);border:1.5px solid var(--border);color:var(--text2);font-size:11px;font-weight:800;border-radius:10px;cursor:pointer;font-family:inherit;transition:all .2s;letter-spacing:.15px;min-width:0;}
 .ubtn:hover{border-color:var(--red);color:var(--red);}
-.opp-pred{font-size:11px;color:var(--text2);text-align:center;margin-top:8px;padding:6px 0;background:transparent;border-radius:0;font-weight:500;}
-.opp-pred strong{color:var(--text);font-weight:800;}
 /* Admin result entry (visible to admin in match card) */
 .admin-result{border-top:1px dashed var(--border);margin-top:12px;padding-top:10px;}
 .adm-tag{font-size:9px;font-weight:800;color:var(--text2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;}
@@ -373,33 +405,29 @@ html,body{background:#ddd8ce;color:var(--text);font-family:'Inter',sans-serif;mi
 .modal-head h3{font-size:20px;font-weight:900;line-height:1.1;}
 .modal-close{border:1px solid var(--border);background:var(--s2);color:var(--text2);border-radius:999px;padding:8px 12px;font-size:12px;font-weight:800;cursor:pointer;font-family:inherit;}
 .modal-sub{font-size:12px;color:var(--text2);margin-bottom:12px;}
-.player-list{display:flex;flex-direction:column;gap:8px;}
-.player-row{display:flex;flex-direction:column;gap:10px;padding:12px;border:1px solid var(--border);border-radius:14px;background:var(--s2);}
+.player-list{display:flex;flex-direction:column;gap:8px;margin-top:12px;}
+.player-row{display:flex;flex-direction:column;gap:8px;padding:12px;border:1px solid var(--border);border-radius:14px;background:var(--s2);cursor:pointer;transition:all .15s;}
+.player-row:hover{border-color:var(--accent);box-shadow:0 0 0 3px var(--accentf);}
 .player-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;}
 .player-main{min-width:0;flex:1;}
-.player-name{font-size:14px;font-weight:800;line-height:1.25;}
-.player-meta{font-size:11px;color:var(--text2);margin-top:4px;line-height:1.4;}
-.player-goals{text-align:center;min-width:54px;}
-.pg-num{font-family:'Bebas Neue';font-size:30px;line-height:1;color:var(--accent);}
-.pg-lbl{font-size:10px;font-weight:800;color:var(--text2);text-transform:uppercase;letter-spacing:.4px;margin-top:2px;}
+.player-name{font-size:clamp(11px,2.7vw,14px);font-weight:800;line-height:1.18;word-break:break-word;}
+.player-meta{font-size:clamp(9px,2.4vw,11px);color:var(--text2);margin-top:4px;line-height:1.42;display:flex;flex-direction:column;gap:3px;}
+.player-meta-line{display:block;word-break:break-word;}
 .player-badges{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px;}
 .player-badge{display:inline-flex;align-items:center;padding:3px 8px;border-radius:999px;font-size:10px;font-weight:800;background:var(--accentf);color:var(--accent);}
 .player-badge.dim{background:var(--s1);color:var(--text2);}
-.player-actions{display:flex;gap:8px;flex-wrap:wrap;}
-.player-mini-btn{padding:7px 10px;border:1.5px solid var(--border);background:var(--s1);color:var(--text2);border-radius:10px;font-size:11px;font-weight:800;cursor:pointer;font-family:inherit;transition:all .15s;}
-.player-mini-btn:hover{border-color:var(--accent);color:var(--accent);}
-.player-mini-btn.primary{background:var(--accent);border-color:var(--accent);color:#fff;}
-.player-mini-btn.danger{border-color:var(--red);color:var(--red);}
-.player-mini-btn.danger:hover{background:var(--red);color:#fff;}
-.player-edit{padding:10px;border:1px dashed var(--border);border-radius:12px;background:rgba(255,255,255,.5);}
-.player-edit-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.player-row.on{border-color:var(--accent);box-shadow:0 0 0 3px var(--accentf);}
+.player-editor{padding:12px;border:1px solid var(--border);border-radius:14px;background:var(--s1);margin-bottom:12px;}
+.player-editor-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:10px;flex-wrap:wrap;}
+.player-editor-title{font-size:13px;font-weight:900;color:var(--text);}
+.player-editor-note{font-size:11px;color:var(--text2);margin-top:4px;line-height:1.45;}
+.player-select{width:100%;padding:9px 10px;border:1.5px solid var(--border);border-radius:10px;background:var(--s2);font:inherit;color:var(--text);outline:none;}
+.player-select:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accentf);}
+.player-edit-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;min-width:0;}
 .player-edit.full{margin-top:12px;}
-.player-tab-row{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0 12px;}
-.player-tab{padding:8px 14px;border:1.5px solid var(--border);background:var(--s1);border-radius:999px;color:var(--text2);font-size:12px;font-weight:800;cursor:pointer;font-family:inherit;}
-.player-tab.on{background:var(--accent);border-color:var(--accent);color:#fff;}
-.player-field{display:flex;flex-direction:column;gap:4px;}
+.player-field{display:flex;flex-direction:column;gap:4px;min-width:0;}
 .player-field label{font-size:10px;color:var(--text2);font-weight:800;text-transform:uppercase;letter-spacing:.4px;}
-.player-field input,.player-field select{padding:9px 10px;border:1.5px solid var(--border);border-radius:10px;background:var(--s1);font:inherit;color:var(--text);outline:none;}
+.player-field input,.player-field select{width:100%;min-width:0;padding:9px 10px;border:1.5px solid var(--border);border-radius:10px;background:var(--s1);font:inherit;color:var(--text);outline:none;max-width:100%;}
 .player-field input:focus,.player-field select:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accentf);}
 .player-edit-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;}
 .room-hero-score{display:flex;flex-direction:column;gap:4px;align-items:center;}
@@ -416,19 +444,30 @@ html,body{background:#ddd8ce;color:var(--text);font-family:'Inter',sans-serif;mi
 .member-card .mc-break{font-size:11px;color:var(--text2);font-weight:700;width:100%;line-height:1.4;}
 .member-card .mc-break strong{color:var(--text);}
 .pred-compare{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px;}
-.pred-box{background:var(--s2);border:1px solid var(--border);border-radius:10px;padding:7px 8px;min-width:0;}
-.pred-box .pl{font-size:9px;font-weight:800;color:var(--text2);text-transform:uppercase;letter-spacing:.3px;}
-.pred-box .pu{font-size:10px;font-weight:800;color:var(--text);margin-top:1px;line-height:1.1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.pred-box .pv{font-size:13px;font-weight:900;color:var(--text);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.pred-box{background:var(--s2);border:1px solid var(--border);border-radius:10px;padding:7px 8px;min-width:0;display:flex;flex-direction:column;gap:2px;}
+.pred-box .pu{font-size:11px;font-weight:800;color:var(--text);line-height:1.1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.pred-box .pv{font-size:13px;font-weight:900;color:var(--text);line-height:1.1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.pred-box .ptag{font-size:10px;font-weight:900;opacity:.82;line-height:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .pred-box.me{background:var(--accentf);border-color:rgba(30,110,240,.22);}
 .pred-box.opp{background:var(--goldf);border-color:rgba(212,150,10,.22);}
+.pred-edit{display:flex;align-items:center;justify-content:center;gap:4px;flex-wrap:nowrap;}
+.pred-edit .snum{width:40px;height:40px;font-size:26px;border-radius:9px;}
+.pred-edit .sarr{width:26px;height:20px;font-size:11px;border-radius:5px;}
+.pred-edit .sdiv{font-size:18px;}
 .timezone-select{display:flex;gap:6px;flex-wrap:wrap;}
 .timezone-chip{padding:8px 12px;border:1.5px solid var(--border);border-radius:999px;background:var(--s1);color:var(--text2);font-size:12px;font-weight:800;cursor:pointer;font-family:inherit;display:flex;flex-direction:column;align-items:flex-start;gap:2px;min-width:112px;line-height:1.1;}
 .timezone-chip.on{background:var(--accent);border-color:var(--accent);color:#fff;}
 .tz-main{font-size:12px;font-weight:800;}
 .tz-sub{font-size:10px;font-weight:700;opacity:.85;letter-spacing:.2px;}
 @media (max-width: 520px){
+  .auth-top-title{font-size:18px;letter-spacing:.14em;}
   .player-edit-grid{grid-template-columns:1fr;}
+  .player-editor{padding:10px;}
+  .player-name{font-size:11px;}
+  .player-meta{font-size:9px;}
+  .player-list{gap:6px;}
+  .player-row{padding:10px;}
+  .player-mini-btn,.btn.ghost,.modal-close{font-size:11px;}
   .rank-card-top{flex-direction:column;align-items:flex-start;}
   .rank-score-sub{text-align:left;}
 }
@@ -791,7 +830,17 @@ function teamJa(team){return teamMeta(team).ja;}
 function teamFlag(team){return teamMeta(team).f;}
 function teamDisplay(team){return team.startsWith('TBD-')?placeholderLabel(team):`${teamFlag(team)} ${teamJa(team)}`;}
 function placeholderLabel(team){return team.startsWith('TBD-')?`${team.replace('TBD-','')}組未定`:teamJa(team);}
-function positionJa(pos){return {FW:'フォワード',MF:'ミッドフィルダー',DF:'ディフェンダー',GK:'ゴールキーパー'}[pos]||pos;}
+function normalizePosition(pos){
+  const raw=String(pos||'').trim();
+  const key=raw.toLowerCase();
+  if(['fw','forward','centre-forward','center-forward','striker','winger','left winger','right winger','secondary striker','centre forward'].some((v)=>key===v||key.includes(v))) return 'FW';
+  if(['mf','midfield','midfielder','central midfield','central midfielder','attacking midfield','attacking midfielder','defensive midfield','defensive midfielder'].some((v)=>key===v||key.includes(v))) return 'MF';
+  if(['df','defender','centre-back','center-back','full-back','full back','left-back','right-back','wing-back','back'].some((v)=>key===v||key.includes(v))) return 'DF';
+  if(['gk','goalkeeper','keeper'].some((v)=>key===v||key.includes(v))) return 'GK';
+  if(['fw','mf','df','gk'].includes(key)) return key.toUpperCase();
+  return 'Unknown';
+}
+function positionJa(pos){return {FW:'FW',MF:'MF',DF:'DF',GK:'GK',Unknown:'Unknown'}[normalizePosition(pos)]||'Unknown';}
 const DISPLAY_TIME_ZONES=[
   {id:'Asia/Tokyo',label:'東京'},
   {id:'Asia/Singapore',label:'シンガポール'},
@@ -1435,41 +1484,38 @@ function CountryModal({team,onClose}){
   if(!team)return null;
   const players=PLAYER_DATA[team]||[];
   const meta=teamMeta(team);
-  const [panel,setPanel]=useState('list');
-  const [editingId,setEditingId]=useState(null);
-  const [draft,setDraft]=useState(null);
-  const [addDraft,setAddDraft]=useState({name:'',position:'FW',club:'',goals:'0',clubGoals:'0',internationalGoals:'0'});
+  const blankDraft={name:'',position:'FW',club:'',goals:'0',clubGoals:'0',internationalGoals:'0'};
+  const [selectedPlayerId,setSelectedPlayerId]=useState('new');
+  const [draft,setDraft]=useState(()=>({...blankDraft}));
   const [saving,setSaving]=useState(false);
   const [status,setStatus]=useState('');
+  const selectedPlayer=selectedPlayerId==='new' ? null : players.find((p)=>p.id===selectedPlayerId)||null;
 
   useEffect(()=>{
-    setPanel('list');
-    setEditingId(null);
-    setDraft(null);
-    setAddDraft({name:'',position:'FW',club:'',goals:'0',clubGoals:'0',internationalGoals:'0'});
+    setDraft({...blankDraft});
     setSaving(false);
     setStatus('');
+    setSelectedPlayerId('new');
   },[team]);
 
-  function beginEdit(p){
-    setEditingId(p.id);
-    setDraft({
-      name:p.name||'',
-      position:p.position||'Unknown',
-      club:p.club||'',
-      goals:String(p.goals??0),
-      clubGoals:String(p.clubGoals??0),
-      internationalGoals:String(p.internationalGoals??p.goals??0),
-    });
+  useEffect(()=>{
+    if(!players.length){
+      setSelectedPlayerId('new');
+      return;
+    }
+    if(selectedPlayerId!=='new' && !players.find((p)=>p.id===selectedPlayerId)){
+      setSelectedPlayerId(players[0].id);
+    }
+  },[players,selectedPlayerId]);
+
+  function startNewPlayer(){
+    setSelectedPlayerId('new');
+    setDraft({...blankDraft});
     setStatus('');
   }
 
   function updateDraft(key,value){
     setDraft((d)=>({...d,[key]:value}));
-  }
-
-  function updateAddDraft(key,value){
-    setAddDraft((d)=>({...d,[key]:value}));
   }
 
   function commitOverrides(mutator){
@@ -1481,19 +1527,40 @@ function CountryModal({team,onClose}){
     notifyStateChange();
   }
 
-  async function saveEdit(p){
-    if(!draft||saving)return;
+  function syncDraftFromPlayer(p){
+    setDraft({
+      name:p.name||'',
+      position:normalizePosition(p.position),
+      club:p.club||'',
+      goals:String(p.goals??0),
+      clubGoals:String(p.clubGoals??0),
+      internationalGoals:String(p.internationalGoals??p.goals??0),
+    });
+  }
+
+  useEffect(()=>{
+    if(selectedPlayerId==='new'){
+      setDraft({...blankDraft});
+      return;
+    }
+    if(selectedPlayer){
+      syncDraftFromPlayer(selectedPlayer);
+    }
+  },[selectedPlayerId, selectedPlayer?.id, team]);
+
+  async function saveSelectedPlayer(){
+    if(saving||selectedPlayerId==='new'||!selectedPlayer||!draft)return;
     const patch={};
     const nextValues={
       name:draft.name?.trim(),
-      position:draft.position?.trim(),
+      position:normalizePosition(draft.position),
       club:draft.club?.trim(),
       goals:Number(draft.goals||0),
       clubGoals:Number(draft.clubGoals||0),
       internationalGoals:Number(draft.internationalGoals||0),
     };
     Object.entries(nextValues).forEach(([key,value])=>{
-      if(String(value)!==String(p[key]??'')) patch[key]=value;
+      if(String(value)!==String(selectedPlayer[key]??'')) patch[key]=value;
     });
     if(!Object.keys(patch).length){
       setStatus('変更がありません');
@@ -1504,36 +1571,19 @@ function CountryModal({team,onClose}){
       commitOverrides((overrides)=>{
         overrides.players ||= {};
         overrides.deletedIds ||= [];
-        overrides.players[p.id]={...(overrides.players[p.id]||{}),...patch};
-        overrides.deletedIds=overrides.deletedIds.filter((id)=>String(id)!==String(p.id));
+        overrides.players[selectedPlayer.id]={...(overrides.players[selectedPlayer.id]||{}),...patch};
+        overrides.deletedIds=overrides.deletedIds.filter((id)=>String(id)!==String(selectedPlayer.id));
         return overrides;
       });
-      setEditingId(null);
-      setDraft(null);
       setStatus('保存しました');
     }finally{
       setSaving(false);
     }
   }
 
-  async function clearEdit(p){
-    setSaving(true);
-    try{
-      commitOverrides((overrides)=>{
-        overrides.players ||= {};
-        delete overrides.players[p.id];
-        return overrides;
-      });
-      setEditingId(null);
-      setDraft(null);
-      setStatus('修正を解除しました');
-    }finally{
-      setSaving(false);
-    }
-  }
-
-  async function addPlayer(){
-    const name=(addDraft.name||'').trim();
+  async function addSelectedPlayer(){
+    if(saving||!draft)return;
+    const name=(draft.name||'').trim();
     if(!name){
       setStatus('選手名を入力してください');
       return;
@@ -1551,11 +1601,11 @@ function CountryModal({team,onClose}){
           countryJa:teamJa(team),
           countryName:teamJa(team),
           name,
-          position:addDraft.position||'Unknown',
-          club:(addDraft.club||'').trim()||'Unknown',
-          clubGoals:Number(addDraft.clubGoals||0),
-          internationalGoals:Number(addDraft.internationalGoals||0),
-          goals:Number(addDraft.goals||0),
+          position:normalizePosition(draft.position),
+          club:(draft.club||'').trim()||'Unknown',
+          clubGoals:Number(draft.clubGoals||0),
+          internationalGoals:Number(draft.internationalGoals||0),
+          goals:Number(draft.goals||0),
           source:'manual',
           _added:true,
         };
@@ -1563,31 +1613,49 @@ function CountryModal({team,onClose}){
         overrides.deletedIds=overrides.deletedIds.filter((id)=>String(id)!==String(playerId));
         return overrides;
       });
-      setAddDraft({name:'',position:'FW',club:'',goals:'0',clubGoals:'0',internationalGoals:'0'});
+      setSelectedPlayerId('new');
+      setDraft({...blankDraft});
       setStatus('選手を追加しました');
     }finally{
       setSaving(false);
     }
   }
 
-  async function deletePlayer(p){
-    if(!confirm(`${playerDisplayName(p)} を削除しますか？`))return;
+  async function clearSelectedPlayer(){
+    if(!selectedPlayer||saving)return;
+    setSaving(true);
+    try{
+      commitOverrides((overrides)=>{
+        overrides.players ||= {};
+        delete overrides.players[selectedPlayer.id];
+        return overrides;
+      });
+      syncDraftFromPlayer(selectedPlayer);
+      setStatus('修正を解除しました');
+    }finally{
+      setSaving(false);
+    }
+  }
+
+  async function deleteSelectedPlayer(){
+    if(!selectedPlayer||saving)return;
+    if(!confirm(`${playerDisplayName(selectedPlayer)} を削除しますか？`))return;
     setSaving(true);
     try{
       commitOverrides((overrides)=>{
         overrides.players ||= {};
         overrides.deletedIds ||= [];
-        if(p._added){
+        if(selectedPlayer._added){
           const list=overrides.additionsByCountry?.[team]||[];
-          overrides.additionsByCountry={...(overrides.additionsByCountry||{}),[team]:list.filter((entry)=>String(entry.id)!==String(p.id))};
+          overrides.additionsByCountry={...(overrides.additionsByCountry||{}),[team]:list.filter((entry)=>String(entry.id)!==String(selectedPlayer.id))};
         }else{
-          overrides.deletedIds=Array.from(new Set([...overrides.deletedIds,String(p.id)]));
+          overrides.deletedIds=Array.from(new Set([...overrides.deletedIds,String(selectedPlayer.id)]));
         }
-        delete overrides.players[p.id];
+        delete overrides.players[selectedPlayer.id];
         return overrides;
       });
-      setEditingId(null);
-      setDraft(null);
+      setSelectedPlayerId('new');
+      setDraft({...blankDraft});
       setStatus('選手を削除しました');
     }finally{
       setSaving(false);
@@ -1606,118 +1674,75 @@ function CountryModal({team,onClose}){
           </div>
           <button className="modal-close" onClick={onClose}>閉じる</button>
         </div>
-        <div className="modal-sub">国名をタップすると選手一覧が開きます。このログインだけに反映される選手情報 {(editedCount>0||addedCount>0)&&` / 修正済み ${editedCount}件 / 追加 ${addedCount}件`}</div>
-        <div className="player-tab-row">
-          <button className={`player-tab${panel==='list'?' on':''}`} onClick={()=>setPanel('list')}>一覧</button>
-          <button className={`player-tab${panel==='add'?' on':''}`} onClick={()=>setPanel('add')}>追加</button>
-        </div>
+        <div className="modal-sub">{(editedCount>0||addedCount>0)&&` / 修正済み ${editedCount}件 / 追加 ${addedCount}件`}</div>
         {status&&<div style={{fontSize:11,color:'var(--text2)',marginBottom:10}}>{status}</div>}
-        {panel==='list'&&(
-          <>
-            <div className="player-list">
-              {players.length===0&&<div style={{padding:'18px 12px',textAlign:'center',color:'var(--text2)',fontSize:13}}>まだ選手がいません</div>}
-              {players.map(p=>(
-                <div className="player-row" key={p.id}>
-                  <div className="player-top">
-                    <div className="player-main">
-                      <div className="player-name">{playerDisplayName(p)}{p._added&&<span className="player-badge" style={{marginLeft:8}}>追加</span>}{p._edited&&<span className="player-badge" style={{marginLeft:8}}>修正済み</span>}</div>
-                      <div className="player-meta">{teamJa(team)} / {positionJa(p.position)} / {p.club} / クラブ得点 {p.clubGoals}</div>
-                      <div className="player-badges">
-                        <span className="player-badge dim">国際得点 {p.goals}</span>
-                        {p.position&&<span className="player-badge dim">{positionJa(p.position)}</span>}
-                      </div>
-                    </div>
-                    <div className="player-goals">
-                      <div className="pg-num">{p.goals}</div>
-                      <div className="pg-lbl">得点</div>
-                    </div>
+        <div className="player-list">
+          {players.length===0&&<div style={{padding:'18px 12px',textAlign:'center',color:'var(--text2)',fontSize:13}}>まだ選手がいません</div>}
+          {players.map(p=>(
+            <div className={`player-row${selectedPlayerId===p.id?' on':''}`} key={p.id} onClick={()=>{setSelectedPlayerId(p.id);syncDraftFromPlayer(p);setStatus('');}}>
+              <div className="player-top">
+                <div className="player-main">
+                  <div className="player-name">{playerDisplayName(p)}{p._added&&<span className="player-badge" style={{marginLeft:8}}>追加</span>}{p._edited&&<span className="player-badge" style={{marginLeft:8}}>修正済み</span>}</div>
+                  <div className="player-meta">
+                    <span className="player-meta-line">{teamJa(team)}</span>
+                    <span className="player-meta-line">{positionJa(p.position)}</span>
+                    <span className="player-meta-line">{p.club||'Unknown'}</span>
+                    <span className="player-meta-line">クラブ得点 {p.clubGoals}</span>
                   </div>
-                  <div className="player-actions">
-                    <button className="player-mini-btn" onClick={()=>editingId===p.id?setEditingId(null):beginEdit(p)}>
-                      {editingId===p.id?'閉じる':'編集'}
-                    </button>
-                    <button className="player-mini-btn danger" onClick={()=>deletePlayer(p)} disabled={saving}>削除</button>
-                    {p._edited&&<button className="player-mini-btn danger" onClick={()=>clearEdit(p)} disabled={saving}>修正解除</button>}
-                  </div>
-                  {editingId===p.id&&draft&&(
-                    <div className="player-edit">
-                      <div className="player-edit-grid">
-                        <div className="player-field">
-                          <label>選手名</label>
-                          <input value={draft.name} onChange={(e)=>updateDraft('name',e.target.value)} />
-                        </div>
-                        <div className="player-field">
-                          <label>ポジション</label>
-                          <select value={draft.position} onChange={(e)=>updateDraft('position',e.target.value)}>
-                            {['FW','MF','DF','GK','Unknown'].map((pos)=><option key={pos} value={pos}>{positionJa(pos)}</option>)}
-                          </select>
-                        </div>
-                        <div className="player-field">
-                          <label>所属クラブ</label>
-                          <input value={draft.club} onChange={(e)=>updateDraft('club',e.target.value)} />
-                        </div>
-                        <div className="player-field">
-                          <label>国際得点</label>
-                          <input type="number" min="0" step="1" value={draft.goals} onChange={(e)=>updateDraft('goals',e.target.value)} />
-                        </div>
-                        <div className="player-field">
-                          <label>クラブ得点</label>
-                          <input type="number" min="0" step="1" value={draft.clubGoals} onChange={(e)=>updateDraft('clubGoals',e.target.value)} />
-                        </div>
-                        <div className="player-field">
-                          <label>補助得点</label>
-                          <input type="number" min="0" step="1" value={draft.internationalGoals} onChange={(e)=>updateDraft('internationalGoals',e.target.value)} />
-                        </div>
-                      </div>
-                      <div className="player-edit-actions">
-                        <button className="player-mini-btn primary" onClick={()=>saveEdit(p)} disabled={saving}>{saving?'保存中…':'保存'}</button>
-                        <button className="player-mini-btn" onClick={()=>beginEdit(p)} disabled={saving}>元の値へ戻す</button>
-                        <button className="player-mini-btn" onClick={()=>{setEditingId(null);setDraft(null);}} disabled={saving}>キャンセル</button>
-                      </div>
-                    </div>
-                  )}
                 </div>
-              ))}
-            </div>
-          </>
-        )}
-        {panel==='add'&&(
-          <div className="player-edit full">
-            <div className="modal-kicker" style={{marginBottom:8}}>選手を追加</div>
-            <div className="player-edit-grid">
-              <div className="player-field">
-                <label>選手名</label>
-                <input value={addDraft.name} onChange={(e)=>updateAddDraft('name',e.target.value)} placeholder="新しい選手名" />
-              </div>
-              <div className="player-field">
-                <label>ポジション</label>
-                <select value={addDraft.position} onChange={(e)=>updateAddDraft('position',e.target.value)}>
-                  {['FW','MF','DF','GK','Unknown'].map((pos)=><option key={pos} value={pos}>{positionJa(pos)}</option>)}
-                </select>
-              </div>
-              <div className="player-field">
-                <label>所属クラブ</label>
-                <input value={addDraft.club} onChange={(e)=>updateAddDraft('club',e.target.value)} placeholder="所属クラブ" />
-              </div>
-              <div className="player-field">
-                <label>国際得点</label>
-                <input type="number" min="0" step="1" value={addDraft.goals} onChange={(e)=>updateAddDraft('goals',e.target.value)} />
-              </div>
-              <div className="player-field">
-                <label>クラブ得点</label>
-                <input type="number" min="0" step="1" value={addDraft.clubGoals} onChange={(e)=>updateAddDraft('clubGoals',e.target.value)} />
-              </div>
-              <div className="player-field">
-                <label>補助得点</label>
-                <input type="number" min="0" step="1" value={addDraft.internationalGoals} onChange={(e)=>updateAddDraft('internationalGoals',e.target.value)} />
               </div>
             </div>
-            <div className="player-edit-actions">
-              <button className="player-mini-btn primary" onClick={addPlayer} disabled={saving}>{saving?'追加中…':'選手を追加'}</button>
-              <button className="player-mini-btn" onClick={()=>setAddDraft({name:'',position:'FW',club:'',goals:'0',clubGoals:'0',internationalGoals:'0'})} disabled={saving}>入力をリセット</button>
+          ))}
+        </div>
+        <div className="player-editor full">
+          <div className="player-editor-head">
+            <div>
+              <div className="player-editor-title">{selectedPlayer ? '編集' : '新しい選手を追加'}</div>
+              <div className="player-editor-note">
+                {selectedPlayer ? '選手をクリックすると編集対象が切り替わります。' : '選手をクリックして編集できます。ここから新規追加もできます。'}
+              </div>
+            </div>
+            <button className="player-mini-btn" onClick={startNewPlayer} disabled={saving}>新規入力</button>
+          </div>
+          <div className="player-edit-grid">
+            <div className="player-field">
+              <label>選手名</label>
+              <input value={draft?.name||''} onChange={(e)=>updateDraft('name',e.target.value)} placeholder="選手名" />
+            </div>
+            <div className="player-field">
+              <label>ポジション</label>
+              <select value={draft?.position||'FW'} onChange={(e)=>updateDraft('position',e.target.value)}>
+                {['FW','MF','DF','GK','Unknown'].map((pos)=><option key={pos} value={pos}>{positionJa(pos)}</option>)}
+              </select>
+            </div>
+            <div className="player-field">
+              <label>所属クラブ</label>
+              <input value={draft?.club||''} onChange={(e)=>updateDraft('club',e.target.value)} placeholder="所属クラブ" />
+            </div>
+            <div className="player-field">
+              <label>国際得点</label>
+              <input type="number" min="0" step="1" value={draft?.goals||0} onChange={(e)=>updateDraft('goals',e.target.value)} />
+            </div>
+            <div className="player-field">
+              <label>クラブ得点</label>
+              <input type="number" min="0" step="1" value={draft?.clubGoals||0} onChange={(e)=>updateDraft('clubGoals',e.target.value)} />
+            </div>
+            <div className="player-field">
+              <label>補助得点</label>
+              <input type="number" min="0" step="1" value={draft?.internationalGoals||0} onChange={(e)=>updateDraft('internationalGoals',e.target.value)} />
             </div>
           </div>
-        )}
+          <div className="player-edit-actions">
+            <button className="player-mini-btn primary" onClick={selectedPlayer?saveSelectedPlayer:addSelectedPlayer} disabled={saving}>
+              {saving?(selectedPlayer?'保存中…':'追加中…'):(selectedPlayer?'保存':'追加')}
+            </button>
+            {selectedPlayer&&<>
+              <button className="player-mini-btn" onClick={()=>syncDraftFromPlayer(selectedPlayer)} disabled={saving}>元の値へ戻す</button>
+              <button className="player-mini-btn danger" onClick={clearSelectedPlayer} disabled={saving}>修正解除</button>
+              <button className="player-mini-btn danger" onClick={deleteSelectedPlayer} disabled={saving}>削除</button>
+            </>}
+          </div>
+        </div>
       </div>
     </div>
   );
@@ -1837,6 +1862,7 @@ function AuthScreen({onAuth}){
 
   return(
     <div className="auth-bg">
+      <div className="auth-top-title">FIFA WORLD CUP 2026</div>
       <div className="auth-hero">
         <div className="auth-brand">
           <img className="auth-logo-art" src="/WorldCup_logo.png?v=20260419_203652" alt="FIFA WORLD CUP 2026" />
@@ -1851,8 +1877,7 @@ function AuthScreen({onAuth}){
         <div className="field"><label>ルームコード</label>
           <input value={form.roomCode} onChange={set('roomCode')} placeholder="FIFA26" maxLength={12} style={{letterSpacing:'3px',fontWeight:800,fontSize:18}}/>
         </div>
-        <p style={{fontSize:12,color:'var(--text2)',marginBottom:12,lineHeight:1.6}}>ルームコードを入れると、その部屋の予想に参加できます。表示名が同じでも大丈夫です。</p>
-        <p style={{fontSize:11,color:'var(--text2)',marginBottom:12,lineHeight:1.6}}>1ルームの参加上限は2名です。3人目以降は入れません。</p>
+        <p style={{fontSize:12,color:'var(--text2)',marginBottom:12,lineHeight:1.6}}>1ルーム2人まで入室可。友達同士で試合予想をしよう！</p>
         {err&&<div className="errmsg">{err}</div>}
         <button className="btn" style={{marginTop:12}} onClick={submit}>
           ルームに参加 / 作成
@@ -1860,7 +1885,6 @@ function AuthScreen({onAuth}){
         <button className="btn ghost" style={{marginTop:10}} onClick={startGuestMode}>
           ゲストで見る
         </button>
-        <p style={{fontSize:11,color:'var(--text2)',marginTop:10,lineHeight:1.5}}>ゲストはこの端末だけに予想を保存します。ログインや共有はしません。</p>
       </div>
     </div>
   );
@@ -1911,12 +1935,6 @@ function HomeScreen({user,onLogout}){
     return [...byId.values()];
   })();
   const roomMembers=roomUsers.length?roomUsers:[user];
-  const memberSummaries=roomMembers.map((member)=>({
-    member,
-    label:displayUserLabel(member,roomMembers),
-    summary:calcPointSummary(preds,results,member.id,settings),
-    predCount:Object.keys(preds[member.id]||{}).length,
-  }));
   const opp=roomMembers.find((m)=>m.id!==user.id)||null;
   const oppId=opp?.id||null;
   const oppSummary=oppId?calcPointSummary(preds,results,oppId,settings):{total:0,resultHits:0,exactHits:0};
@@ -1933,8 +1951,9 @@ function HomeScreen({user,onLogout}){
         <div className="hero-name">{myLabel} 👋</div>
         {room&&opp&&<div className="hero-pts-row">
           <div className="hpc me room-hero-score">
+            <div className="hpc-tag">自分</div>
+            <div className="hpc-user">{myLabel}</div>
             <div className="n">{mySummary.total}</div>
-            <div className="l">{l.you}</div>
             <div className="room-score-sub">
               <div>勝敗的中：{mySummary.resultHits}</div>
               <div>スコア的中：{mySummary.exactHits}</div>
@@ -1942,8 +1961,9 @@ function HomeScreen({user,onLogout}){
           </div>
           <div className="vs-txt">VS</div>
           <div className="hpc opp room-hero-score">
+            <div className="hpc-tag">相手</div>
+            <div className="hpc-user">{oppLabel}</div>
             <div className="n">{oppSummary.total}</div>
-            <div className="l">{oppLabel}</div>
             <div className="room-score-sub">
               <div>勝敗的中：{oppSummary.resultHits}</div>
               <div>スコア的中：{oppSummary.exactHits}</div>
@@ -1958,25 +1978,13 @@ function HomeScreen({user,onLogout}){
           {copied?l.copied:l.copy+' 📋'}
         </button>
       </div>}
-      {room&&<div className="member-grid">
-        {memberSummaries.map(({member,label,summary,predCount})=>(
-          <div className={`member-card${member.id===user.id?' me':''}`} key={member.id}>
-            <div className="mc-name">{label}</div>
-            <div className="mc-row">
-              <div className="mc-total"><span className="mc-total-num">{summary.total}</span><span className="mc-unit">点</span></div>
-              <div className="mc-pred">予想 {predCount} 件</div>
-            </div>
-            <div className="mc-break">勝敗的中：{summary.resultHits} / スコア的中：{summary.exactHits}</div>
-          </div>
-        ))}
-      </div>}
       <div className="stats-grid">
         <div className="sc acc"><div className="n">{myPredCount}</div><div className="l">{l.predicted}</div></div>
         <div className="sc gold"><div className="n">{GROUP_MATCHES.length-myPredCount}</div><div className="l">{l.unpredicted}</div></div>
         <div className="sc grn"><div className="n">{resultCount}</div><div className="l">{l.confirmed}</div></div>
       </div>
       {!user.isGuest&&<div style={{padding:'0 14px 20px'}}>
-        <button className="btn ghost" onClick={onLogout}>{l.logout}</button>
+        <button className="btn ghost danger" onClick={onLogout}>{l.logout}</button>
       </div>}
     </div>
   );
@@ -2047,27 +2055,39 @@ function MatchCard({match,userId,opponentId,preds,results,onSave,roomId,syncToke
       <div className="mcard-body">
         <div className="mteams">
           <div className="mt"><span className="fl"><TeamFlag team={match.home}/></span><div className="nm">{showTeam(match.home)}</div></div>
-          {localLocked
-            ?<div className="locked-display">
-              <span className="locked-score">{myPred?.home??'?'}</span>
-              <span className="locked-dash">–</span>
-              <span className="locked-score">{myPred?.away??'?'}</span>
-            </div>
-            :<div className="score-ctrl">
-              <div className="scw">
-                <button className="sarr" onClick={()=>setHome(h=>Math.min(20,h+1))}>▲</button>
-                <div className={`snum${home>0?' active':''}`}>{home}</div>
-                <button className="sarr" onClick={()=>setHome(h=>Math.max(0,h-1))}>▼</button>
-              </div>
-              <div className="sdiv">–</div>
-              <div className="scw">
-                <button className="sarr" onClick={()=>setAway(a=>Math.min(20,a+1))}>▲</button>
-                <div className={`snum${away>0?' active':''}`}>{away}</div>
-                <button className="sarr" onClick={()=>setAway(a=>Math.max(0,a-1))}>▼</button>
-              </div>
-            </div>
-          }
+          <div className="result-display">
+            <span className="result-score">{result?.home??'?'}</span>
+            <span className="result-dash">–</span>
+            <span className="result-score">{result?.away??'?'}</span>
+          </div>
           <div className="mt"><span className="fl"><TeamFlag team={match.away}/></span><div className="nm">{showTeam(match.away)}</div></div>
+        </div>
+        <div className="pred-compare">
+          <div className="pred-box me">
+            <div className="ptag">あなた</div>
+            <div className="pu">{myUserName}</div>
+            {localLocked
+              ?<div className="pv">{myPred?`${myPred.home}–${myPred.away}`:l.noPred}</div>
+              :<div className="pred-edit">
+                <div className="scw">
+                  <button className="sarr" onClick={()=>setHome(h=>Math.min(20,h+1))}>▲</button>
+                  <div className={`snum${home>0?' active':''}`}>{home}</div>
+                  <button className="sarr" onClick={()=>setHome(h=>Math.max(0,h-1))}>▼</button>
+                </div>
+                <div className="sdiv">–</div>
+                <div className="scw">
+                  <button className="sarr" onClick={()=>setAway(a=>Math.min(20,a+1))}>▲</button>
+                  <div className={`snum${away>0?' active':''}`}>{away}</div>
+                  <button className="sarr" onClick={()=>setAway(a=>Math.max(0,a-1))}>▼</button>
+                </div>
+              </div>
+            }
+          </div>
+          <div className="pred-box opp">
+            <div className="ptag">相手</div>
+            <div className="pu">{oppUserName}</div>
+            <div className="pv">{oppPred?`${oppPred.home}–${oppPred.away}`:l.noPred}</div>
+          </div>
         </div>
         <div className="mactions">
           {localLocked
@@ -2080,19 +2100,6 @@ function MatchCard({match,userId,opponentId,preds,results,onSave,roomId,syncToke
             </>
             :<button className="pbtn" onClick={doConfirm}>{l.confirm}</button>
           }
-        </div>
-        {oppPred&&<div className="opp-pred">{l.oppPred} <strong>{oppPred.home}–{oppPred.away}</strong></div>}
-        <div className="pred-compare">
-          <div className="pred-box me">
-            <div className="pl">ユーザー名</div>
-            <div className="pu">{myUserName}</div>
-            <div className="pv">{myPred?`${myPred.home}–${myPred.away}`:l.noPred}</div>
-          </div>
-          <div className="pred-box opp">
-            <div className="pl">ユーザー名</div>
-            <div className="pu">{oppUserName}</div>
-            <div className="pv">{oppPred?`${oppPred.home}–${oppPred.away}`:l.noPred}</div>
-          </div>
         </div>
       </div>
     </div>
@@ -2160,7 +2167,7 @@ function GroupsScreen({user,onOpenTeam,syncToken}){
         </div>
       </div>
       <div className="section-title">{l.standings}</div>
-      <div style={{padding:'0 16px 8px',fontSize:11,color:'var(--text2)'}}>国名をタップすると一覧が開きます</div>
+      <div style={{padding:'0 16px 8px',fontSize:11,color:'var(--text2)'}}>国名をタップすると選手一覧が開きます</div>
       <div className="standings">
         <div className="sth">
           <span></span>
