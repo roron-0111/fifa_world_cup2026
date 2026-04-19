@@ -928,7 +928,7 @@ function koSeedLabel(label){
     .replace(/準決勝(\d)敗者/g,'準決勝$1敗者');
 }
 const BOOTSTRAP=window.__WC26_BOOTSTRAP__||null;
-const HAS_BACKEND=!!BOOTSTRAP;
+const HAS_BACKEND=!!BOOTSTRAP?.state;
 const DEFAULT_ROOM_SETTINGS={resultPts:1,exactPts:2};
 const DEFAULT_UI_SETTINGS={bgTheme:'cream',accentColor:'blue',timeZone:'Asia/Tokyo'};
 const BOOTSTRAP_PLAYERS=BOOTSTRAP?.playersByCountry&&Object.keys(BOOTSTRAP.playersByCountry).length
