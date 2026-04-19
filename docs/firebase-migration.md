@@ -55,3 +55,4 @@ The Firebase migration will keep the UI behavior but replace the persistence lay
 - The current local server uses JSON files, which are fine for development.
 - For production, the Firebase path should become the source of truth.
 - Guest mode should stay device-local unless explicitly synced later.
+- The live result-update flow should follow [result-update-checklist.md](./result-update-checklist.md) during the tournament.
