@@ -1,0 +1,337 @@
+{
+  "rooms": [
+    {
+      "id": "room-demo",
+      "code": "FIFA26",
+      "members": [
+        "demo-opp"
+      ],
+      "maxMembers": 2
+    },
+    {
+      "id": "room-1776577956313",
+      "code": "DEMO",
+      "members": [
+        "u-1776577956313-m9p6",
+        "u-1776593100939-vucl"
+      ],
+      "maxMembers": 2
+    },
+    {
+      "id": "room-1776593771328",
+      "code": "DEMO2",
+      "members": [
+        "u-1776593771328-perb",
+        "u-1776593778651-361r"
+      ],
+      "maxMembers": 2
+    },
+    {
+      "id": "room-1776599215207",
+      "code": "A",
+      "members": [
+        "u-1776599215207-uc44",
+        "u-1776601248739-ijf2"
+      ],
+      "maxMembers": 2
+    },
+    {
+      "id": "room-1776601323801",
+      "code": "B",
+      "members": [
+        "u-1776601323801-9ory",
+        "u-1776601333098-jtel"
+      ],
+      "maxMembers": 2
+    },
+    {
+      "id": "room-1776602144345",
+      "code": "DEMO1",
+      "members": [
+        "u-1776602144345-udpr",
+        "u-1776602160748-r5sr"
+      ],
+      "maxMembers": 2
+    },
+    {
+      "id": "room-1776602654600",
+      "code": "AAA",
+      "members": [
+        "u-1776602654600-jj3r",
+        "u-1776602659387-sllj"
+      ],
+      "maxMembers": 2
+    }
+  ],
+  "users": [
+    {
+      "id": "u-1776577956313-m9p6",
+      "username": "demo1",
+      "memberCode": "D1A2",
+      "roomId": "room-1776577956313"
+    },
+    {
+      "id": "u-1776593100939-vucl",
+      "username": "demo2",
+      "memberCode": "PXCI",
+      "roomId": "room-1776577956313"
+    },
+    {
+      "id": "u-1776593771328-perb",
+      "username": "demo1",
+      "memberCode": "AI4E",
+      "roomId": "room-1776593771328"
+    },
+    {
+      "id": "u-1776593778651-361r",
+      "username": "demo2",
+      "memberCode": "IDYB",
+      "roomId": "room-1776593771328"
+    },
+    {
+      "id": "u-1776599215207-uc44",
+      "username": "a",
+      "memberCode": "N0VB",
+      "roomId": "room-1776599215207"
+    },
+    {
+      "id": "u-1776601248739-ijf2",
+      "username": "b",
+      "memberCode": "X5I7",
+      "roomId": "room-1776599215207"
+    },
+    {
+      "id": "u-1776601323801-9ory",
+      "username": "z",
+      "memberCode": "318I",
+      "roomId": "room-1776601323801"
+    },
+    {
+      "id": "u-1776601333098-jtel",
+      "username": "w",
+      "memberCode": "35G9",
+      "roomId": "room-1776601323801"
+    },
+    {
+      "id": "u-1776602144345-udpr",
+      "username": "demo1",
+      "memberCode": "IMZE",
+      "roomId": "room-1776602144345"
+    },
+    {
+      "id": "u-1776602160748-r5sr",
+      "username": "demo2",
+      "memberCode": "TT14",
+      "roomId": "room-1776602144345"
+    },
+    {
+      "id": "u-1776602654600-jj3r",
+      "username": "aaa",
+      "memberCode": "48FY",
+      "roomId": "room-1776602654600"
+    },
+    {
+      "id": "u-1776602659387-sllj",
+      "username": "bbb",
+      "memberCode": "FM08",
+      "roomId": "room-1776602654600"
+    }
+  ],
+  "roomStates": {
+    "room-demo": {
+      "results": {},
+      "locked": {},
+      "koPreds": {},
+      "settings": {
+        "resultPts": 1,
+        "exactPts": 2
+      },
+      "predictionsV2": {}
+    },
+    "room-1776577956313": {
+      "results": {},
+      "locked": {},
+      "koPreds": {
+        "u-1776577956313-m9p6": {
+          "F-0": "home",
+          "SF-0": "away",
+          "SF-1": "away",
+          "R16-7": "away",
+          "R32-7": "home",
+          "R16-3": "away",
+          "R32-3": "away",
+          "R32-4": "home",
+          "R16-4": "home",
+          "R32-5": "away",
+          "R32-0": "home",
+          "R16-0": "home",
+          "R32-1": "home",
+          "R32-2": "home"
+        }
+      },
+      "settings": {
+        "resultPts": 1,
+        "exactPts": 2
+      },
+      "predictionsV2": {}
+    },
+    "room-1776593771328": {
+      "results": {},
+      "locked": {
+        "u-1776593778651-361r": [
+          "E-1"
+        ]
+      },
+      "koPreds": {},
+      "settings": {
+        "resultPts": 1,
+        "exactPts": 2
+      },
+      "predictionsV2": {
+        "u-1776593778651-361r": {
+          "E-1": {
+            "home": 1,
+            "away": 0
+          }
+        }
+      }
+    },
+    "room-1776599215207": {
+      "results": {},
+      "locked": {
+        "u-1776599215207-uc44": [
+          "A-1"
+        ]
+      },
+      "koPreds": {
+        "u-1776599215207-uc44": {
+          "R32-0": "home",
+          "R32-1": "away",
+          "R32-2": "away",
+          "R32-3": "away",
+          "R32-4": "away",
+          "R32-5": "away",
+          "R32-6": "away",
+          "R32-7": "away"
+        }
+      },
+      "settings": {
+        "resultPts": 1,
+        "exactPts": 2
+      },
+      "predictionsV2": {
+        "u-1776599215207-uc44": {
+          "A-1": {
+            "home": 1,
+            "away": 0
+          }
+        }
+      }
+    },
+    "room-1776601323801": {
+      "predictionsV2": {
+        "u-1776601323801-9ory": {
+          "A-1": {
+            "home": 1,
+            "away": 0
+          }
+        },
+        "u-1776601333098-jtel": {
+          "A-1": {
+            "home": 2,
+            "away": 0
+          },
+          "A-2": {
+            "home": 0,
+            "away": 0
+          }
+        }
+      },
+      "results": {},
+      "locked": {
+        "u-1776601323801-9ory": [
+          "A-1"
+        ],
+        "u-1776601333098-jtel": [
+          "A-1",
+          "A-2"
+        ]
+      },
+      "koPreds": {},
+      "settings": {
+        "resultPts": 1,
+        "exactPts": 2
+      }
+    },
+    "room-1776602144345": {
+      "predictionsV2": {
+        "u-1776602160748-r5sr": {
+          "A-1": {
+            "home": 1,
+            "away": 0
+          },
+          "A-2": {
+            "home": 1,
+            "away": 0
+          }
+        }
+      },
+      "results": {},
+      "locked": {
+        "u-1776602160748-r5sr": [
+          "A-1",
+          "A-2"
+        ]
+      },
+      "koPreds": {},
+      "settings": {
+        "resultPts": 1,
+        "exactPts": 2
+      }
+    },
+    "room-1776602654600": {
+      "predictionsV2": {
+        "u-1776602659387-sllj": {
+          "A-1": {
+            "home": 0,
+            "away": 0
+          },
+          "A-2": {
+            "home": 1,
+            "away": 0
+          },
+          "A-4": {
+            "home": 0,
+            "away": 0
+          }
+        },
+        "u-1776602654600-jj3r": {
+          "A-1": {
+            "home": 3,
+            "away": 0
+          },
+          "A-2": {
+            "home": 2,
+            "away": 0
+          }
+        }
+      },
+      "results": {},
+      "locked": {
+        "u-1776602659387-sllj": [
+          "A-1",
+          "A-2"
+        ],
+        "u-1776602654600-jj3r": [
+          "A-1",
+          "A-2"
+        ]
+      },
+      "koPreds": {},
+      "settings": {
+        "resultPts": 1,
+        "exactPts": 2
+      }
+    }
+  }
+}

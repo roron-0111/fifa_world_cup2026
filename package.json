@@ -1,0 +1,15 @@
+{
+  "name": "wordl-cup-2026",
+  "private": true,
+  "version": "0.1.0",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node server.js",
+    "import:data": "node scripts/import-player-data.js"
+  },
+  "dependencies": {
+    "@koozaki/romaji-conv": "^2.0.35",
+    "puppeteer": "^24.41.0",
+    "wanakana": "^5.3.1"
+  }
+}
