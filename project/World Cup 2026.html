@@ -1778,7 +1778,6 @@ function AuthScreen({onAuth}){
     if(existingIdx>=0)users[existingIdx]=guest;else users.push(guest);
     ss('users',users);
     ss('currentUser',guest);
-    ss('lastAuthUser',{...guest,roomCode:guestRoomCode});
     onAuth(guest);
   }
 
@@ -1942,6 +1941,8 @@ function HomeScreen({user,onLogout}){
   const resultCount=Object.keys(results).length;
   const myLabel=displayUserLabel(user,roomMembers);
   const oppLabel=displayUserLabel(opp,roomMembers);
+  const primaryActionLabel=user?.isGuest?'トップに戻る':l.logout;
+  const primaryActionClass=user?.isGuest?'btn ghost':'btn ghost danger';
 
   return(
     <div className="page page-enter">
@@ -1983,9 +1984,9 @@ function HomeScreen({user,onLogout}){
         <div className="sc gold"><div className="n">{GROUP_MATCHES.length-myPredCount}</div><div className="l">{l.unpredicted}</div></div>
         <div className="sc grn"><div className="n">{resultCount}</div><div className="l">{l.confirmed}</div></div>
       </div>
-      {!user.isGuest&&<div style={{padding:'0 14px 20px'}}>
-        <button className="btn ghost danger" onClick={onLogout}>{l.logout}</button>
-      </div>}
+      <div style={{padding:'0 14px 20px'}}>
+        <button className={primaryActionClass} onClick={onLogout}>{primaryActionLabel}</button>
+      </div>
     </div>
   );
 }
@@ -2625,6 +2626,11 @@ function App(){
 
   function handleLogout(){
     const current=gs('currentUser',null);
+    if(current?.isGuest){
+      ss('currentUser',null);
+      setUser(null);
+      return;
+    }
     if(current){
       ss('lastAuthUser',{id:current.id,username:current.username,memberCode:current.memberCode,roomId:current.roomId,roomCode:(gs('rooms',[]).find(r=>r.id===current.roomId)?.code)||''});
     }
