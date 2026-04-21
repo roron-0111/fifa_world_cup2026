@@ -323,6 +323,28 @@ function joinRoom({ username, roomCode, memberCode, userId }) {
   };
 }
 
+function renameUser({ roomId, userId, username }) {
+  const room = getRoomById(roomId);
+  if (!room) return { error: 'ルームが見つかりません', status: 404 };
+  if (!room.members.includes(userId)) return { error: 'ルームの参加者ではありません', status: 403 };
+
+  const rawName = String(username || '').trim();
+  if (!rawName) {
+    return { error: 'ユーザー名を入力してください', status: 400 };
+  }
+
+  const user = state.users.find((u) => u.id === userId && u.roomId === room.id);
+  if (!user) return { error: 'ユーザーが見つかりません', status: 404 };
+
+  user.username = rawName;
+  return {
+    room: getRoomSnapshot(room),
+    user,
+    rooms: state.rooms,
+    users: state.users,
+  };
+}
+
 function requireRoomAndUser(roomId, userId) {
   const room = getRoomById(roomId);
   if (!room) return { error: 'ルームが見つかりません', status: 404 };
@@ -473,6 +495,17 @@ const server = http.createServer(async (req, res) => {
     if (req.method === 'POST' && pathname === '/api/auth/join') {
       const body = await readBody(req);
       const result = joinRoom(body);
+      if (result.error) {
+        sendJson(res, result.status || 400, { ok: false, error: result.error });
+        return;
+      }
+      saveAndRespond(res, { ok: true, ...result });
+      return;
+    }
+
+    if (req.method === 'POST' && pathname === '/api/auth/rename') {
+      const body = await readBody(req);
+      const result = renameUser(body);
       if (result.error) {
         sendJson(res, result.status || 400, { ok: false, error: result.error });
         return;
