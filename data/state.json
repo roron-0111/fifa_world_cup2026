@@ -69,6 +69,14 @@
         "u-1776605164304-3p2u"
       ],
       "maxMembers": 2
+    },
+    {
+      "id": "room-1777955460631",
+      "code": "TEST01",
+      "members": [
+        "u-1777955460631-pbci"
+      ],
+      "maxMembers": 2
     }
   ],
   "users": [
@@ -149,6 +157,12 @@
       "username": "bbb",
       "memberCode": "DEUV",
       "roomId": "room-1776605164304"
+    },
+    {
+      "id": "u-1777955460631-pbci",
+      "username": "test01",
+      "memberCode": "FP7W",
+      "roomId": "room-1777955460631"
     }
   ],
   "roomStates": {
@@ -158,7 +172,11 @@
       "koPreds": {},
       "settings": {
         "resultPts": 1,
-        "exactPts": 2
+        "exactPts": 2,
+        "koWinnerPts": 1,
+        "koExactPts": 2,
+        "koPenaltyPts": 1,
+        "koChampionPts": 5
       },
       "predictionsV2": {}
     },
@@ -185,7 +203,11 @@
       },
       "settings": {
         "resultPts": 1,
-        "exactPts": 2
+        "exactPts": 2,
+        "koWinnerPts": 1,
+        "koExactPts": 2,
+        "koPenaltyPts": 1,
+        "koChampionPts": 5
       },
       "predictionsV2": {}
     },
@@ -199,7 +221,11 @@
       "koPreds": {},
       "settings": {
         "resultPts": 1,
-        "exactPts": 2
+        "exactPts": 2,
+        "koWinnerPts": 1,
+        "koExactPts": 2,
+        "koPenaltyPts": 1,
+        "koChampionPts": 5
       },
       "predictionsV2": {
         "u-1776593778651-361r": {
@@ -231,7 +257,11 @@
       },
       "settings": {
         "resultPts": 1,
-        "exactPts": 2
+        "exactPts": 2,
+        "koWinnerPts": 1,
+        "koExactPts": 2,
+        "koPenaltyPts": 1,
+        "koChampionPts": 5
       },
       "predictionsV2": {
         "u-1776599215207-uc44": {
@@ -274,7 +304,11 @@
       "koPreds": {},
       "settings": {
         "resultPts": 1,
-        "exactPts": 2
+        "exactPts": 2,
+        "koWinnerPts": 1,
+        "koExactPts": 2,
+        "koPenaltyPts": 1,
+        "koChampionPts": 5
       }
     },
     "room-1776602144345": {
@@ -300,7 +334,11 @@
       "koPreds": {},
       "settings": {
         "resultPts": 1,
-        "exactPts": 2
+        "exactPts": 2,
+        "koWinnerPts": 1,
+        "koExactPts": 2,
+        "koPenaltyPts": 1,
+        "koChampionPts": 5
       }
     },
     "room-1776602654600": {
@@ -349,7 +387,11 @@
       "koPreds": {},
       "settings": {
         "resultPts": 1,
-        "exactPts": 2
+        "exactPts": 2,
+        "koWinnerPts": 1,
+        "koExactPts": 2,
+        "koPenaltyPts": 1,
+        "koChampionPts": 5
       }
     },
     "room-1776605164304": {
@@ -359,7 +401,29 @@
       "koPreds": {},
       "settings": {
         "resultPts": 1,
-        "exactPts": 2
+        "exactPts": 2,
+        "koWinnerPts": 1,
+        "koExactPts": 2,
+        "koPenaltyPts": 1,
+        "koChampionPts": 5
+      }
+    },
+    "room-1777955460631": {
+      "predictionsV2": {},
+      "results": {},
+      "locked": {},
+      "koPreds": {},
+      "settings": {
+        "resultPts": 1,
+        "exactPts": 2,
+        "koWinnerPts": 1,
+        "koExactPts": 2,
+        "koPenaltyPts": 1,
+        "koChampionPts": 5,
+        "koRunnerUpPts": 3,
+        "koThirdPlacePts": 2,
+        "koRunnerUpEnabled": false,
+        "koThirdPlaceEnabled": false
       }
     }
   }

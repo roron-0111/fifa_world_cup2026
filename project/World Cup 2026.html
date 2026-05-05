@@ -223,6 +223,20 @@ html,body{background:#ddd8ce;color:var(--text);font-family:'Inter',sans-serif;mi
 .pts-box .l{font-size:10px;color:var(--text2);font-weight:700;margin-top:2px;}
 .pts-box.grn .n{color:var(--green);}
 .pts-box.gold .n{color:var(--gold);}
+.home-breakdown{padding:0 14px 18px;}
+.home-breakdown-title{font-size:12px;font-weight:900;color:var(--text2);letter-spacing:.4px;text-transform:uppercase;margin:4px 2px 9px;}
+.home-breakdown-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;}
+.home-break-card{background:var(--s1);border:1px solid var(--border);border-radius:16px;padding:13px;box-shadow:var(--shadow);min-width:0;}
+.home-break-card h3{font-size:13px;font-weight:900;margin-bottom:8px;color:var(--text);}
+.home-break-total{display:flex;align-items:baseline;gap:4px;margin-bottom:8px;}
+.home-break-total strong{font-family:'Bebas Neue';font-size:42px;line-height:1;color:var(--accent);}
+.home-break-total span{font-size:12px;color:var(--text2);font-weight:900;}
+.home-break-lines{display:flex;flex-direction:column;gap:5px;font-size:11px;color:var(--text2);font-weight:700;line-height:1.35;}
+.home-break-lines div{display:flex;justify-content:space-between;gap:8px;border-top:1px solid var(--border);padding-top:5px;}
+.home-break-lines b{color:var(--text);font-weight:900;}
+.guest-notice{margin:12px 14px 0;padding:14px;border-radius:18px;background:linear-gradient(135deg,#0f172a,#1e6ef0 58%,#d4960a);color:#fff;box-shadow:0 16px 36px rgba(15,23,42,.22);display:flex;align-items:center;justify-content:space-between;gap:12px;border:1px solid rgba(255,255,255,.22);}
+.guest-notice strong{display:block;font-size:14px;font-weight:900;margin-bottom:4px;}
+.guest-notice span{display:block;font-size:12px;line-height:1.55;font-weight:800;color:rgba(255,255,255,.88);}
 /* GROUPS */
 .gtabs-scroll{padding:10px 14px;border-bottom:1px solid var(--border);background:var(--s1);}
 .gtabs-scroll{position:sticky;top:56px;z-index:30;backdrop-filter:saturate(1.1) blur(8px);}
@@ -321,6 +335,7 @@ html,body{background:#ddd8ce;color:var(--text);font-family:'Inter',sans-serif;mi
 .pbtn:hover{opacity:.88;}
 .ubtn{flex:1;padding:8px 7px;background:var(--s2);border:1.5px solid var(--border);color:var(--text2);font-size:11px;font-weight:800;border-radius:10px;cursor:pointer;font-family:inherit;transition:all .2s;letter-spacing:.15px;min-width:0;}
 .ubtn:hover{border-color:var(--red);color:var(--red);}
+.readonly-note{width:100%;padding:8px 10px;border:1px dashed var(--border);border-radius:10px;background:var(--s2);color:var(--text2);font-size:11px;font-weight:800;text-align:center;}
 /* Admin result entry (visible to admin in match card) */
 .admin-result{border-top:1px dashed var(--border);margin-top:12px;padding-top:10px;}
 .adm-tag{font-size:9px;font-weight:800;color:var(--text2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;}
@@ -605,6 +620,8 @@ html,body{background:#ddd8ce;color:var(--text);font-family:'Inter',sans-serif;mi
 .tz-sub{font-size:10px;font-weight:700;opacity:.85;letter-spacing:.2px;}
 @media (max-width: 520px){
   .auth-top-title{font-size:18px;letter-spacing:.14em;}
+  .home-breakdown-grid{grid-template-columns:1fr;}
+  .guest-notice{align-items:flex-start;flex-direction:column;}
   .player-edit-grid{grid-template-columns:1fr;}
   .player-editor{padding:10px;}
   .player-name{font-size:11px;}
@@ -671,28 +688,135 @@ html,body{background:#ddd8ce;color:var(--text);font-family:'Inter',sans-serif;mi
 .bracket-check{font-size:12px;color:var(--accent);font-weight:900;}
 .bracket-team.winner .bracket-check{color:var(--gold);}
 
+/* KNOCKOUT BOARD */
+.ko-toolbar{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;padding:12px 14px 0;}
+.ko-summary-card{background:linear-gradient(135deg,var(--s1),var(--s2));border:1px solid var(--border);border-radius:14px;padding:12px 14px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:4px;min-width:0;position:relative;overflow:hidden;}
+.ko-summary-card::after{content:'';position:absolute;right:-28px;top:-34px;width:92px;height:92px;border-radius:999px;background:var(--accentf);pointer-events:none;}
+.ko-summary-card span{font-size:10px;font-weight:900;color:var(--text2);text-transform:uppercase;letter-spacing:.4px;}
+.ko-summary-card strong{font-family:'Bebas Neue';font-size:34px;line-height:1;color:var(--accent);display:flex;align-items:center;gap:7px;min-width:0;}
+.ko-summary-card.champion strong{font-family:inherit;font-size:15px;font-weight:900;line-height:1.25;color:var(--text);}
+.ko-summary-card em{font-style:normal;font-size:11px;color:var(--text2);font-weight:700;line-height:1.35;display:flex;align-items:center;gap:5px;min-width:0;}
+.ko-nav-spacer{display:none;}
+.ko-podium-panel{margin:10px 14px 0;background:linear-gradient(135deg,#fff,#f7f3ec);border:1px solid var(--border);border-radius:16px;padding:12px;box-shadow:var(--shadow);}
+.ko-podium-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;}
+.ko-podium-pick{min-width:0;border:1px solid var(--border);border-radius:14px;background:var(--s1);padding:10px;display:flex;flex-direction:column;gap:7px;}
+.ko-podium-pick.off{opacity:.55;background:var(--s2);}
+.ko-podium-label{display:flex;align-items:center;gap:6px;font-size:11px;font-weight:900;color:var(--text2);}
+.ko-podium-pick select{width:100%;min-width:0;border:1.5px solid var(--border);border-radius:10px;background:var(--s2);color:var(--text);font:inherit;font-size:12px;font-weight:800;padding:9px 10px;outline:none;}
+.ko-podium-pick select:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accentf);}
+.ko-podium-note{font-size:10px;color:var(--text2);font-weight:700;line-height:1.35;}
+.ko-scroll{margin:10px 0 24px;overflow-x:auto;overflow-y:visible;background:#dfeadf;border-top:1px solid rgba(22,80,45,.12);border-bottom:1px solid rgba(22,80,45,.12);box-shadow:inset 0 12px 26px rgba(40,80,45,.12);-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain;touch-action:pan-x pan-y;scrollbar-width:none;}
+.ko-scroll::-webkit-scrollbar{display:none;}
+.ko-scrollbar-proxy{display:none;}
+.ko-canvas{position:relative;min-width:100%;background:
+  radial-gradient(circle at 8% 8%,rgba(30,110,240,.12),transparent 18%),
+  radial-gradient(circle at 76% 22%,rgba(212,150,10,.14),transparent 16%),
+  linear-gradient(90deg,rgba(255,255,255,.42) 1px,transparent 1px),
+  linear-gradient(180deg,rgba(255,255,255,.34) 1px,transparent 1px),
+  linear-gradient(135deg,#f8fbf6,#dceadf 48%,#f3efe6);
+  background-size:auto,auto,64px 64px,64px 64px,auto;
+}
+.ko-lines{position:absolute;inset:0;z-index:1;pointer-events:none;}
+.ko-round-guide{position:absolute;z-index:0;top:44px;bottom:0;width:0;border-left:1px dashed rgba(31,41,55,.22);pointer-events:none;}
+.ko-round-label{position:absolute;z-index:2;top:8px;min-height:34px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;font-family:'Bebas Neue','Inter',sans-serif;font-size:22px;line-height:1;color:#1f2937;letter-spacing:0;font-weight:900;text-shadow:0 1px 0 rgba(255,255,255,.8);}
+.ko-round-label small{display:block;margin-top:3px;font-family:'Inter',sans-serif;font-size:11px;line-height:1;color:#4b5563;font-weight:900;}
+.ko-round-label.final{color:var(--gold);}
+.ko-line{fill:none;stroke:rgba(63,83,70,.56);stroke-width:7;stroke-linejoin:round;stroke-linecap:square;filter:drop-shadow(0 1px 2px rgba(255,255,255,.6));}
+.ko-line.on{stroke:#ff140f;filter:drop-shadow(0 0 7px rgba(255,20,15,.65));}
+.ko-line.third{stroke:rgba(63,83,70,.36);stroke-width:5;stroke-dasharray:10 8;}
+.ko-line.champion{stroke-width:8;}
+.ko-match-node{position:absolute;z-index:3;display:flex;flex-direction:column;text-align:left;border:1px solid rgba(255,255,255,.28);background:linear-gradient(180deg,rgba(255,255,255,.93),rgba(218,218,218,.92));color:#222;border-radius:8px;padding:0;overflow:hidden;box-shadow:0 12px 28px rgba(0,0,0,.28);font-family:inherit;cursor:pointer;}
+.ko-match-node:hover{filter:brightness(1.04);}
+.ko-match-node.readonly{cursor:default;}
+.ko-match-node:disabled{opacity:1;}
+.ko-match-node.predicted{box-shadow:0 0 0 2px rgba(255,20,15,.42),0 10px 24px rgba(0,0,0,.25);}
+.ko-match-node.actual{box-shadow:0 0 0 2px rgba(212,150,10,.7),0 10px 24px rgba(0,0,0,.25);}
+.ko-teams-line{height:58px;display:grid;grid-template-columns:minmax(0,1fr) 58px minmax(0,1fr);align-items:stretch;background:linear-gradient(180deg,rgba(255,255,255,.78),rgba(230,230,230,.86));}
+.ko-team-block{min-width:0;display:grid;grid-template-columns:18px minmax(0,1fr);grid-template-rows:1fr auto;align-items:center;column-gap:5px;padding:7px 6px 6px;border-right:1px solid rgba(0,0,0,.08);position:relative;}
+.ko-team-block:last-child{border-right:none;border-left:1px solid rgba(0,0,0,.08);}
+.ko-team-block.win{background:rgba(255,20,15,.12);}
+.ko-team-flag{display:flex;align-items:center;justify-content:center;}
+.ko-team-name{font-size:11px;font-weight:900;line-height:1.14;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;word-break:break-word;text-align:left;}
+.ko-win-mark{grid-column:1/-1;justify-self:center;margin-top:3px;font-size:9px;font-weight:900;color:#fff;background:#ff140f;border-radius:999px;padding:2px 8px;text-align:center;}
+.ko-actual-score{display:flex;align-items:center;justify-content:center;text-align:center;min-width:0;padding:0 4px;font-family:'Bebas Neue','Inter',sans-serif;font-size:17px;line-height:1.05;font-weight:900;color:#8a8a8a;background:rgba(255,255,255,.5);border-left:1px solid rgba(0,0,0,.08);border-right:1px solid rgba(0,0,0,.08);white-space:normal;}
+.ko-actual-score.on{font-family:'Inter',sans-serif;font-size:12px;color:#111;background:linear-gradient(180deg,#fff,#f6f1e8);}
+.ko-score-stack{border-top:1px solid rgba(0,0,0,.1);background:rgba(255,255,255,.72);display:grid;grid-template-columns:repeat(2,minmax(0,1fr));}
+.ko-pred-line{height:33px;display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;gap:5px;padding:4px 8px;font-size:10px;color:#555;font-weight:800;border-left:1px solid rgba(0,0,0,.06);min-width:0;}
+.ko-pred-line:first-child{border-left:none;}
+.ko-pred-line b{font-size:9px;color:#fff;border-radius:999px;padding:2px 6px;text-align:center;background:#64748b;white-space:nowrap;line-height:1.2;}
+.ko-pred-line.me b{background:#1e6ef0;}
+.ko-pred-line.opp b{background:#d4960a;}
+.ko-pred-line strong{font-family:'Inter',sans-serif;font-size:12px;line-height:1.1;color:#111;font-weight:900;letter-spacing:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.ko-pred-line em{font-style:normal;color:#ff140f;font-size:10px;font-weight:900;}
+.ko-champion-node{position:absolute;z-index:2;width:142px;min-height:88px;background:#fff;color:#111;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:12px;border:1px solid rgba(255,255,255,.28);box-shadow:0 12px 30px rgba(0,0,0,.3);}
+.ko-champion-node span{font-size:12px;font-weight:900;color:#777;letter-spacing:.4px;}
+.ko-champion-node strong{font-size:18px;line-height:1.25;font-weight:900;text-align:center;display:flex;align-items:center;justify-content:center;gap:6px;flex-wrap:wrap;}
+.ko-champion-node.on{box-shadow:0 0 0 3px #ff140f,0 12px 30px rgba(0,0,0,.3);}
+.ko-modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.48);z-index:350;display:block;padding:14px;}
+.ko-modal{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);z-index:351;width:min(calc(100vw - 28px),520px);max-height:calc(100vh - 36px);overflow:auto;background:var(--s1);border:1px solid var(--border);border-radius:20px;box-shadow:0 24px 80px rgba(0,0,0,.28);padding:16px;}
+.ko-modal-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:12px;}
+.ko-modal-head span{font-size:10px;color:var(--text2);font-weight:900;text-transform:uppercase;letter-spacing:.4px;}
+.ko-modal-head h3{font-size:20px;font-weight:900;margin-top:2px;}
+.ko-modal-head button,.ko-modal-actions button{border:1.5px solid var(--border);background:var(--s2);color:var(--text2);border-radius:10px;padding:9px 12px;font:inherit;font-size:12px;font-weight:900;cursor:pointer;}
+.ko-modal-teams{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;}
+.ko-modal-team{min-width:0;border:1px solid var(--border);background:var(--s2);border-radius:12px;padding:10px;display:flex;align-items:center;gap:8px;font-size:13px;font-weight:900;line-height:1.2;}
+.ko-modal-team span{min-width:0;overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;}
+.ko-score-editor{display:grid;grid-template-columns:1fr auto 1fr;gap:10px;align-items:center;margin:10px 0;}
+.ko-score-editor input{min-width:0;width:100%;padding:12px;border:1.5px solid var(--border);border-radius:12px;background:var(--s2);font-family:'Bebas Neue';font-size:32px;text-align:center;color:var(--text);outline:none;}
+.ko-score-editor input:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accentf);}
+.ko-score-editor span{font-family:'Bebas Neue';font-size:28px;color:var(--text2);}
+.ko-score-editor.pk input{font-size:24px;}
+.ko-pick-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:10px 0;}
+.ko-pick-row button{border:1.5px solid var(--border);background:var(--s2);color:var(--text2);border-radius:12px;padding:10px;font:inherit;font-size:13px;font-weight:900;cursor:pointer;}
+.ko-pick-row button.on{background:var(--accent);border-color:var(--accent);color:#fff;}
+.ko-pk-toggle{display:flex;align-items:center;gap:8px;padding:10px 0;font-size:13px;font-weight:900;color:var(--text);}
+.ko-pk-toggle input{width:18px;height:18px;accent-color:var(--accent);}
+.ko-modal-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:12px;}
+.ko-modal-actions .primary{background:var(--accent);border-color:var(--accent);color:#fff;}
+.ko-modal-actions .ghost{background:transparent;color:var(--red);border-color:var(--red);}
+
+@media (max-width: 720px){
+  .ko-toolbar{grid-template-columns:1fr;padding:10px 12px 0;}
+  .ko-summary-card{padding:10px 12px;}
+  .ko-summary-card strong{font-size:30px;}
+  .ko-podium-panel{margin:8px 12px 0;padding:9px;}
+  .ko-podium-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;}
+  .ko-podium-pick{padding:7px;gap:5px;border-radius:11px;}
+  .ko-podium-label{font-size:9px;}
+  .ko-podium-pick select{font-size:10px;padding:7px 6px;border-radius:8px;}
+  .ko-podium-note{font-size:9px;}
+  .ko-scroll{margin-top:8px;}
+  .ko-round-label{font-size:19px;}
+  .ko-match-node{border-radius:7px;}
+  .ko-modal{width:calc(100vw - 24px);padding:14px;border-radius:18px;}
+  .ko-modal-teams,.ko-pick-row{grid-template-columns:1fr;}
+  .ko-score-editor input{font-size:28px;padding:10px;}
+}
+
 @media (min-width: 920px){
   html,body{
     background:linear-gradient(180deg,#d9d2c6 0%,#ede6da 100%);
   }
   #root{
-    padding:20px;
+    padding:0;
   }
   .shell{
     width:min(100%,1500px);
-    min-height:calc(100vh - 40px);
+    min-height:100vh;
     height:auto;
     overflow:visible;
-    border:1px solid rgba(0,0,0,.08);
-    border-radius:28px;
-    box-shadow:0 20px 80px rgba(0,0,0,.12);
+    border-left:1px solid rgba(0,0,0,.08);
+    border-right:1px solid rgba(0,0,0,.08);
+    border-radius:0;
+    box-shadow:0 18px 70px rgba(0,0,0,.10);
+    padding-top:65px;
   }
   .page{
     overflow:visible;
-    padding-bottom:40px;
+    padding-bottom:0;
   }
   .page > *{
-    width:min(100%,1240px);
+    width:100%;
     margin-left:auto;
     margin-right:auto;
   }
@@ -708,15 +832,23 @@ html,body{background:#ddd8ce;color:var(--text);font-family:'Inter',sans-serif;mi
   }
   .bnav{
     order:-1;
-    position:sticky;
+    position:fixed;
     top:0;
-    z-index:40;
+    left:50%;
+    transform:translateX(-50%);
+    width:min(100vw,1500px);
+    z-index:240;
     gap:8px;
     padding:12px 18px;
     border-top:none;
     border-bottom:1px solid var(--border);
+    border-radius:0;
     box-shadow:0 8px 28px rgba(0,0,0,0.06);
   }
+  .ko-scrollbar-proxy{display:block;position:fixed;left:50%;bottom:0;transform:translateX(-50%);width:min(calc(100vw - 48px),1240px);height:18px;overflow-x:auto;overflow-y:hidden;z-index:210;background:rgba(255,255,255,.78);border:1px solid rgba(0,0,0,.08);border-radius:999px;box-shadow:0 8px 24px rgba(0,0,0,.12);}
+  .ko-scrollbar-proxy::-webkit-scrollbar{height:14px;}
+  .ko-scrollbar-proxy::-webkit-scrollbar-track{background:rgba(255,255,255,.75);border-radius:999px;}
+  .ko-scrollbar-proxy::-webkit-scrollbar-thumb{background:linear-gradient(90deg,var(--accent),var(--gold));border-radius:999px;border:3px solid rgba(255,255,255,.82);}
   .nitem{
     flex:0 0 auto;
     flex-direction:row;
@@ -782,16 +914,13 @@ html,body{background:#ddd8ce;color:var(--text);font-family:'Inter',sans-serif;mi
   .btn,.copy-btn,.gtab,.brtab,.filter-chip,.player-tab,.player-mini-btn,.ptsbtn,.timezone-chip,.tw-opt,.pbtn,.ubtn,.rank-country,.modal-close{
     border-radius:10px;
   }
-  .home-hero{
-    margin:18px auto 12px;
-    border-radius:28px;
-  }
+  .home-hero{margin:0 auto 12px;border-radius:0 0 28px 28px;}
   .room-bar,.stats-grid,.info-card,.pts-info-row,.gtabs-scroll,.standings,.mcard,.bkt-round-tabs,.rank-tabs,.rank-tools,.rank-meta,.set-sec,.bracket-board,.bkt-list,.lb-list{
     margin-left:auto;
     margin-right:auto;
   }
   .room-bar,.stats-grid,.info-card,.pts-info-row,.gtabs-scroll,.standings,.mcard,.bkt-round-tabs,.rank-tabs,.rank-tools,.rank-meta,.set-sec,.bracket-board,.bkt-list,.lb-list{
-    width:min(100%,1240px);
+    width:min(calc(100% - 48px),1240px);
   }
   .standings .sth,.standings .str{
     grid-template-columns:24px minmax(96px,1.05fr) repeat(8,minmax(0,.88fr));
@@ -877,10 +1006,10 @@ html,body{background:#ddd8ce;color:var(--text);font-family:'Inter',sans-serif;mi
 
 @media (min-width: 1280px){
   .page > *{
-    width:min(100%,1360px);
+    width:100%;
   }
   .room-bar,.stats-grid,.info-card,.pts-info-row,.gtabs-scroll,.standings,.mcard,.bkt-round-tabs,.rank-tabs,.rank-tools,.rank-meta,.set-sec,.bracket-board,.bkt-list,.lb-list{
-    width:min(100%,1360px);
+    width:min(calc(100% - 48px),1360px);
   }
   .modal-card{
     width:min(100%,1100px);
@@ -1038,19 +1167,9 @@ function formatTimestamp(value,timeZone='Asia/Tokyo'){
   if(Number.isNaN(d.getTime()))return value;
   return new Intl.DateTimeFormat('ja-JP',{year:'numeric',month:'numeric',day:'numeric',weekday:'short',hour:'2-digit',minute:'2-digit',hour12:false,timeZone}).format(d);
 }
-function koSeedLabel(label){
-  return (label||'')
-    .replace(/グループ([A-L])1位/g,'$1組1位')
-    .replace(/グループ([A-L])2位/g,'$1組2位')
-    .replace(/R32 第(\d+)試合勝者/g,'R32-$1勝者')
-    .replace(/R16 第(\d+)試合勝者/g,'R16-$1勝者')
-    .replace(/QF 第(\d+)試合勝者/g,'QF-$1勝者')
-    .replace(/準決勝(\d)勝者/g,'準決勝$1勝者')
-    .replace(/準決勝(\d)敗者/g,'準決勝$1敗者');
-}
 const BOOTSTRAP=window.__WC26_BOOTSTRAP__||null;
 const HAS_BACKEND=!!BOOTSTRAP?.state;
-const DEFAULT_ROOM_SETTINGS={resultPts:1,exactPts:2};
+const DEFAULT_ROOM_SETTINGS={resultPts:1,exactPts:2,koWinnerPts:1,koExactPts:2,koPenaltyPts:1,koChampionPts:5,koRunnerUpPts:3,koThirdPlacePts:2,koRunnerUpEnabled:false,koThirdPlaceEnabled:false};
 const DEFAULT_UI_SETTINGS={bgTheme:'cream',accentColor:'blue',timeZone:'Asia/Tokyo'};
 const BOOTSTRAP_PLAYERS=BOOTSTRAP?.playersByCountry&&Object.keys(BOOTSTRAP.playersByCountry).length
   ?BOOTSTRAP.playersByCountry
@@ -1260,13 +1379,19 @@ GROUP_MATCHES.forEach((match)=>{
   if(source?.kickoff)match.kickoff=source.kickoff;
 });
 const GROUP_TEAM_KEYS=[...new Set(GROUP_STAGE_DEFS.flatMap((g)=>g.teams))];
+const KO_SEED_PAIRS=[
+  ['A組1位','B組2位'],['C組1位','D組2位'],['E組1位','F組2位'],['G組1位','H組2位'],
+  ['I組1位','J組2位'],['K組1位','L組2位'],['B組1位','A組2位'],['D組1位','C組2位'],
+  ['F組1位','E組2位'],['H組1位','G組2位'],['J組1位','I組2位'],['L組1位','K組2位'],
+  ['3位枠1','3位枠2'],['3位枠3','3位枠4'],['3位枠5','3位枠6'],['3位枠7','3位枠8'],
+];
 const KO_ROUNDS=[
-  {id:'R32',label:'ラウンド32',en:'Round of 32',matches:Array.from({length:8},(_,i)=>({id:`R32-${i}`,home:`グループ${String.fromCharCode(65+i*2)}1位`,away:`グループ${String.fromCharCode(66+i*2)}2位`}))},
-  {id:'R16',label:'ベスト16',en:'Round of 16',matches:Array.from({length:8},(_,i)=>({id:`R16-${i}`,home:`R32 第${i*2+1}試合勝者`,away:`R32 第${i*2+2}試合勝者`}))},
-  {id:'QF',label:'準々決勝',en:'Quarter-Finals',matches:Array.from({length:4},(_,i)=>({id:`QF-${i}`,home:`R16 第${i*2+1}試合勝者`,away:`R16 第${i*2+2}試合勝者`}))},
-  {id:'SF',label:'準決勝',en:'Semi-Finals',matches:[{id:'SF-0',home:'QF 第1試合勝者',away:'QF 第2試合勝者'},{id:'SF-1',home:'QF 第3試合勝者',away:'QF 第4試合勝者'}]},
-  {id:'F',label:'決勝',en:'Final',matches:[{id:'F-0',home:'準決勝1勝者',away:'準決勝2勝者'}]},
-  {id:'3RD',label:'3位決定戦',en:'3rd Place Play-off',matches:[{id:'3RD-0',home:'準決勝1敗者',away:'準決勝2敗者'}]},
+  {id:'R32',label:'ラウンド32',short:'R32',en:'Round of 32',matches:KO_SEED_PAIRS.map((pair,i)=>({id:`R32-${i}`,home:pair[0],away:pair[1],date:'日程未定',stadium:'会場未定'}))},
+  {id:'R16',label:'ベスト16',short:'R16',en:'Round of 16',matches:Array.from({length:8},(_,i)=>({id:`R16-${i}`,home:`R32 第${i*2+1}試合勝者`,away:`R32 第${i*2+2}試合勝者`,date:'日程未定',stadium:'会場未定'}))},
+  {id:'QF',label:'準々決勝',short:'QF',en:'Quarter-Finals',matches:Array.from({length:4},(_,i)=>({id:`QF-${i}`,home:`R16 第${i*2+1}試合勝者`,away:`R16 第${i*2+2}試合勝者`,date:'日程未定',stadium:'会場未定'}))},
+  {id:'SF',label:'準決勝',short:'SF',en:'Semi-Finals',matches:[{id:'SF-0',home:'QF 第1試合勝者',away:'QF 第2試合勝者',date:'日程未定',stadium:'会場未定'},{id:'SF-1',home:'QF 第3試合勝者',away:'QF 第4試合勝者',date:'日程未定',stadium:'会場未定'}]},
+  {id:'F',label:'決勝',short:'Final',en:'Final',matches:[{id:'F-0',home:'準決勝1勝者',away:'準決勝2勝者',date:'日程未定',stadium:'会場未定'}]},
+  {id:'3RD',label:'3位決定戦',short:'3rd',en:'3rd Place Play-off',matches:[{id:'3RD-0',home:'準決勝1敗者',away:'準決勝2敗者',date:'日程未定',stadium:'会場未定'}]},
 ];
 const KO_ROUND_ORDER=KO_ROUNDS.map(r=>r.id);
 const KO_ROUND_INDEX=Object.fromEntries(KO_ROUND_ORDER.map((id,i)=>[id,i]));
@@ -1278,7 +1403,82 @@ const KO_SOURCES={
   '3RD':{prev:'SF',pair:[0,1],thirdPlace:true},
 };
 function koMatchKey(roundId,matchIndex){return `${roundId}-${matchIndex}`;}
-function koResolvedTeam(roundId,matchIndex,side,picks){
+function koGetRound(roundId){return KO_ROUNDS.find(r=>r.id===roundId);}
+function koGetMatch(roundId,matchIndex){return koGetRound(roundId)?.matches?.[matchIndex]||null;}
+function koSeedLabel(label){
+  return (label||'')
+    .replace(/グループ([A-L])1位/g,'$1組1位')
+    .replace(/グループ([A-L])2位/g,'$1組2位')
+    .replace(/Group ([A-L]) 1st/g,'$1組1位')
+    .replace(/Group ([A-L]) 2nd/g,'$1組2位')
+    .replace(/R32 第(\d+)試合勝者/g,'R32-$1勝者')
+    .replace(/R16 第(\d+)試合勝者/g,'R16-$1勝者')
+    .replace(/QF 第(\d+)試合勝者/g,'QF-$1勝者')
+    .replace(/準決勝(\d)勝者/g,'準決勝$1勝者')
+    .replace(/準決勝(\d)敗者/g,'準決勝$1敗者');
+}
+function koTeamName(team){
+  if(!team)return '未定';
+  return TEAM_JA[team]?teamJa(team):koSeedLabel(team);
+}
+function inferWinnerSide(home,away){
+  const h=Number(home),a=Number(away);
+  if(!Number.isFinite(h)||!Number.isFinite(a))return null;
+  if(h>a)return 'home';
+  if(a>h)return 'away';
+  return null;
+}
+function normalizeKoRecord(value){
+  if(!value)return null;
+  if(typeof value==='string'){
+    return {home:null,away:null,winnerSide:value,decidedBy:'REG',homePen:null,awayPen:null,locked:true};
+  }
+  const home=value.home ?? value.homeScore ?? null;
+  const away=value.away ?? value.awayScore ?? null;
+  const homePen=value.homePen ?? value.homePenalty ?? null;
+  const awayPen=value.awayPen ?? value.awayPenalty ?? null;
+  const decidedBy=value.decidedBy || (home!==null&&away!==null&&Number(home)===Number(away)&&homePen!==null&&awayPen!==null?'PK':'REG');
+  const penWinner=homePen!==null&&awayPen!==null ? inferWinnerSide(homePen,awayPen) : null;
+  return {
+    home:home===''||home===null?null:Number(home),
+    away:away===''||away===null?null:Number(away),
+    winnerSide:value.winnerSide||penWinner||inferWinnerSide(home,away)||null,
+    decidedBy,
+    homePen:homePen===''||homePen===null?null:Number(homePen),
+    awayPen:awayPen===''||awayPen===null?null:Number(awayPen),
+    locked:value.locked!==false,
+    updatedAt:value.updatedAt||null,
+  };
+}
+function koRecordHasScore(record){
+  return record&&Number.isFinite(record.home)&&Number.isFinite(record.away);
+}
+function koRecordScoreText(record){
+  if(!koRecordHasScore(record))return '未入力';
+  const base=`${record.home} - ${record.away}`;
+  if(record.decidedBy==='PK'&&Number.isFinite(record.homePen)&&Number.isFinite(record.awayPen)){
+    return `${base} PK ${record.homePen} - ${record.awayPen}`;
+  }
+  if(record.decidedBy==='PK')return `${base} PK`;
+  return base;
+}
+function koRecordWinnerSide(record){
+  const normalized=normalizeKoRecord(record);
+  if(!normalized)return null;
+  if(normalized.decidedBy==='PK'){
+    return inferWinnerSide(normalized.homePen,normalized.awayPen)||normalized.winnerSide;
+  }
+  return normalized.winnerSide||inferWinnerSide(normalized.home,normalized.away);
+}
+function koWinnerSideForMatch(match,picks={},results={}){
+  if(!match)return null;
+  const actual=normalizeKoRecord(results?.[match.id]);
+  const actualWinner=koRecordWinnerSide(actual);
+  if(actualWinner)return actualWinner;
+  const pred=normalizeKoRecord(picks?.[match.id]);
+  return koRecordWinnerSide(pred);
+}
+function koResolvedTeam(roundId,matchIndex,side,picks={},results={}){
   const round = KO_ROUNDS.find(r=>r.id===roundId);
   if(!round) return null;
   const match = round.matches[matchIndex];
@@ -1288,22 +1488,50 @@ function koResolvedTeam(roundId,matchIndex,side,picks){
   }
   const meta = KO_SOURCES[roundId];
   if(!meta) return side==='home'?match.home:match.away;
-  const sourceRound = KO_ROUNDS[KO_ROUND_INDEX[meta.prev]];
   const sourceMatchIndex = matchIndex * 2 + (side==='home'?meta.pair[0]:meta.pair[1]);
   const sourceLabel = match[side];
-  const winnerSide = picks?.[koMatchKey(meta.prev, sourceMatchIndex)];
-  if(!winnerSide || !sourceRound) return sourceLabel;
-  return koResolvedTeam(meta.prev, sourceMatchIndex, winnerSide, picks) || sourceLabel;
+  const sourceMatch = koGetMatch(meta.prev,sourceMatchIndex);
+  const winnerSide = koWinnerSideForMatch(sourceMatch,picks,results);
+  if(!winnerSide || !sourceMatch) return sourceLabel;
+  const resolvedSide = meta.thirdPlace ? (winnerSide==='home'?'away':'home') : winnerSide;
+  return koResolvedTeam(meta.prev, sourceMatchIndex, resolvedSide, picks, results) || sourceLabel;
 }
-function koWinnerLabel(roundId,matchIndex,picks){
-  const choice = picks?.[koMatchKey(roundId,matchIndex)];
+function koWinnerLabel(roundId,matchIndex,picks={},results={}){
+  const match=koGetMatch(roundId,matchIndex);
+  const choice = koWinnerSideForMatch(match,picks,results);
   if(!choice) return null;
-  return koResolvedTeam(roundId,matchIndex,choice,picks);
+  return koResolvedTeam(roundId,matchIndex,choice,picks,results);
 }
-function koLoserLabel(roundId,matchIndex,picks){
-  const choice = picks?.[koMatchKey(roundId,matchIndex)];
+function koLoserLabel(roundId,matchIndex,picks={},results={}){
+  const match=koGetMatch(roundId,matchIndex);
+  const choice = koWinnerSideForMatch(match,picks,results);
   if(!choice) return null;
-  return koResolvedTeam(roundId,matchIndex,choice==='home'?'away':'home',picks);
+  return koResolvedTeam(roundId,matchIndex,choice==='home'?'away':'home',picks,results);
+}
+function koPodiumCandidates(picks={},results={}){
+  const base=KO_SEED_PAIRS.flat().map(koSeedLabel);
+  const derived=[
+    koWinnerLabel('F',0,picks,results),
+    koLoserLabel('F',0,picks,results),
+    koWinnerLabel('3RD',0,picks,results),
+    koLoserLabel('3RD',0,picks,results),
+  ].filter(Boolean).map(koSeedLabel);
+  return [...new Set([...derived,...base])].filter(Boolean);
+}
+function koPodiumPredictions(userPreds={},results={}){
+  const explicit=userPreds?._podium||{};
+  return {
+    champion:explicit.champion||koWinnerLabel('F',0,userPreds,results)||'',
+    runnerUp:explicit.runnerUp||koLoserLabel('F',0,userPreds,results)||'',
+    third:explicit.third||koWinnerLabel('3RD',0,userPreds,results)||'',
+  };
+}
+function koActualPodium(results={}){
+  return {
+    champion:koWinnerLabel('F',0,{},results)||'',
+    runnerUp:koLoserLabel('F',0,{},results)||'',
+    third:koWinnerLabel('3RD',0,{},results)||'',
+  };
 }
 function normalizeSearchText(value){
   return String(value||'')
@@ -1398,7 +1626,7 @@ const T={
     roomCode:'ルームコード',copy:'コピー',copied:'✓ コピー済み',
     predicted:'予想済み',unpredicted:'未予想',confirmed:'結果確定',
     groupStage:'グループステージ',standings:'順位表',predictions:'試合予想',
-    bracket:'決勝T(未)',ranking:'得点ランキング(未)',settings:'設定',home:'ホーム',
+    bracket:'決勝T',ranking:'得点ランキング(未)',settings:'設定',home:'ホーム',
     predict:'予想する',confirm:'予想確定',unlock:'解除',
     oppPred:'対戦相手の予想:',noPred:'まだ未予想',
     pointSettings:'ポイント設定',resultPts:'勝敗的中',exactPts:'スコア的中',
@@ -1418,7 +1646,7 @@ const T={
     roomCode:'Room Code',copy:'Copy',copied:'✓ Copied',
     predicted:'Predicted',unpredicted:'Pending',confirmed:'Results In',
     groupStage:'Group Stage',standings:'Standings',predictions:'Predictions',
-    bracket:'Knockout (TBD)',ranking:'Scoring (TBD)',settings:'Settings',home:'Home',
+    bracket:'Knockout',ranking:'Scoring (TBD)',settings:'Settings',home:'Home',
     predict:'Predict',confirm:'Confirm',unlock:'Unlock',
     oppPred:'Opponent:',noPred:'Not predicted',
     pointSettings:'Point Settings',resultPts:'Correct Result',exactPts:'Exact Score',
@@ -1636,6 +1864,48 @@ function calcPointSummary(preds,results,userId,settings){
     if(pr===rr){total+=resultPts;resultHits+=1;resultPoints+=resultPts;}
   });
   return {total,resultHits,exactHits,resultPoints,exactPoints,resultPts,exactPts};
+}
+function calcKoPointSummary(koPreds,results,userId,settings){
+  const {
+    koWinnerPts=1,
+    koExactPts=2,
+    koPenaltyPts=1,
+    koChampionPts=5,
+    koRunnerUpPts=3,
+    koThirdPlacePts=2,
+    koRunnerUpEnabled=false,
+    koThirdPlaceEnabled=false,
+  }=settings||{};
+  const userPreds=koPreds?.[userId]||{};
+  let total=0,winnerHits=0,exactHits=0,penaltyHits=0,championHit=0,runnerUpHit=0,thirdPlaceHit=0;
+  KO_ROUNDS.flatMap((round)=>round.matches).forEach((match)=>{
+    const pred=normalizeKoRecord(userPreds[match.id]);
+    const actual=normalizeKoRecord(results?.[match.id]);
+    if(!pred||!actual)return;
+    const predWinner=koRecordWinnerSide(pred);
+    const actualWinner=koRecordWinnerSide(actual);
+    if(predWinner&&actualWinner&&predWinner===actualWinner){
+      total+=koWinnerPts;winnerHits+=1;
+    }
+    if(koRecordHasScore(pred)&&koRecordHasScore(actual)&&pred.home===actual.home&&pred.away===actual.away){
+      total+=koExactPts;exactHits+=1;
+    }
+    if(actual.decidedBy==='PK'&&pred.decidedBy==='PK'&&predWinner&&actualWinner&&predWinner===actualWinner){
+      total+=koPenaltyPts;penaltyHits+=1;
+    }
+  });
+  const predPodium=koPodiumPredictions(userPreds,{});
+  const actualPodium=koActualPodium(results);
+  if(predPodium.champion&&actualPodium.champion&&koSeedLabel(predPodium.champion)===koSeedLabel(actualPodium.champion)){
+    total+=koChampionPts;championHit=1;
+  }
+  if(koRunnerUpEnabled&&predPodium.runnerUp&&actualPodium.runnerUp&&koSeedLabel(predPodium.runnerUp)===koSeedLabel(actualPodium.runnerUp)){
+    total+=koRunnerUpPts;runnerUpHit=1;
+  }
+  if(koThirdPlaceEnabled&&predPodium.third&&actualPodium.third&&koSeedLabel(predPodium.third)===koSeedLabel(actualPodium.third)){
+    total+=koThirdPlacePts;thirdPlaceHit=1;
+  }
+  return {total,winnerHits,exactHits,penaltyHits,championHit,runnerUpHit,thirdPlaceHit,koWinnerPts,koExactPts,koPenaltyPts,koChampionPts,koRunnerUpPts,koThirdPlacePts};
 }
 function displayUserLabel(user,roomOrMembers){
   if(!user)return '--';
@@ -2049,7 +2319,7 @@ function BottomNav({screen,setScreen}){
   const tabs=[
     {id:'home',icon:'🏠',label:l.home},
     {id:'groups',icon:'⚽',label:'グループ'},
-    {id:'bracket',icon:'🏆',label:'決勝T(未)'},
+    {id:'bracket',icon:'🏆',label:'決勝T'},
     {id:'leaderboard',icon:'📊',label:'得点ランキング(未)'},
     {id:'settings',icon:'⚙️',label:l.settings},
   ];
@@ -2074,8 +2344,10 @@ function HomeScreen({user,onLogout}){
   const roomId=room?.id||user.roomId;
   const preds=grPred(roomId,{});
   const results=gr(roomId,'results',{});
-  const settings=gr(roomId,'settings',DEFAULT_ROOM_SETTINGS);
+  const koPreds=gr(roomId,'koPreds',{});
+  const settings={...DEFAULT_ROOM_SETTINGS,...gr(roomId,'settings',{})};
   const mySummary=calcPointSummary(preds,results,user.id,settings);
+  const myKoSummary=calcKoPointSummary(koPreds,results,user.id,settings);
   const users=gs('users',[]);
   const roomUsers=(() => {
     const byId=new Map();
@@ -2091,10 +2363,13 @@ function HomeScreen({user,onLogout}){
   const opp=roomMembers.find((m)=>m.id!==user.id)||null;
   const oppId=opp?.id||null;
   const oppSummary=oppId?calcPointSummary(preds,results,oppId,settings):{total:0,resultHits:0,exactHits:0};
+  const oppKoSummary=oppId?calcKoPointSummary(koPreds,results,oppId,settings):{total:0,winnerHits:0,exactHits:0};
   const myPredCount=Object.keys(preds[user.id]||{}).length;
   const resultCount=Object.keys(results).length;
   const myLabel=displayUserLabel(user,roomMembers);
   const oppLabel=displayUserLabel(opp,roomMembers);
+  const myTotal=mySummary.total+myKoSummary.total;
+  const oppTotal=oppSummary.total+oppKoSummary.total;
   const primaryActionLabel=user?.isGuest?'トップに戻る':l.logout;
   const primaryActionClass=user?.isGuest?'btn ghost':'btn ghost danger';
 
@@ -2108,25 +2383,35 @@ function HomeScreen({user,onLogout}){
           <div className="hpc me room-hero-score">
             <div className="hpc-tag">自分</div>
             <div className="hpc-user">{myLabel}</div>
-            <div className="n">{mySummary.total}</div>
+            <div className="n">{myTotal}</div>
             <div className="room-score-sub">
               <div>勝敗的中：{mySummary.resultHits}</div>
               <div>スコア的中：{mySummary.exactHits}</div>
+              <div>決勝T：+{myKoSummary.total}</div>
             </div>
           </div>
           <div className="vs-txt">VS</div>
           <div className="hpc opp room-hero-score">
             <div className="hpc-tag">相手</div>
             <div className="hpc-user">{oppLabel}</div>
-            <div className="n">{oppSummary.total}</div>
+            <div className="n">{oppTotal}</div>
             <div className="room-score-sub">
               <div>勝敗的中：{oppSummary.resultHits}</div>
               <div>スコア的中：{oppSummary.exactHits}</div>
+              <div>決勝T：+{oppKoSummary.total}</div>
             </div>
           </div>
         </div>}
         {(!room||!opp)&&<p style={{fontSize:13,color:'rgba(255,255,255,.7)',marginTop:16}}>同じルームコードの相手が参加すると比較できます</p>}
       </div>
+      {user.isGuest&&(
+        <div className="guest-notice">
+          <div>
+            <strong>ゲスト閲覧中</strong>
+            <span>ゲストのため閲覧のみです。友達と予想して競う場合は、チームを作成してログインしてください。</span>
+          </div>
+        </div>
+      )}
       {room&&<div className="room-bar">
         <div><div className="room-lbl">{l.roomCode}</div><div className="room-code">{room.code}</div></div>
         {user.isGuest
@@ -2140,15 +2425,39 @@ function HomeScreen({user,onLogout}){
         <div className="sc gold"><div className="n">{GROUP_MATCHES.length-myPredCount}</div><div className="l">{l.unpredicted}</div></div>
         <div className="sc grn"><div className="n">{resultCount}</div><div className="l">{l.confirmed}</div></div>
       </div>
-      {!user.isGuest&&<div style={{padding:'0 14px 20px'}}>
+      <div className="home-breakdown">
+        <div className="home-breakdown-title">ポイント内訳</div>
+        <div className="home-breakdown-grid">
+          <div className="home-break-card">
+            <h3>グループリーグ</h3>
+            <div className="home-break-total"><strong>{mySummary.total}</strong><span>pt</span></div>
+            <div className="home-break-lines">
+              <div><span>勝敗的中</span><b>{mySummary.resultHits}件 / +{mySummary.resultPoints}pt</b></div>
+              <div><span>スコア的中</span><b>{mySummary.exactHits}件 / +{mySummary.exactPoints}pt</b></div>
+              {opp&&<div><span>相手</span><b>{oppSummary.total}pt</b></div>}
+            </div>
+          </div>
+          <div className="home-break-card">
+            <h3>決勝トーナメント</h3>
+            <div className="home-break-total"><strong>{myKoSummary.total}</strong><span>pt</span></div>
+            <div className="home-break-lines">
+              <div><span>勝者的中</span><b>{myKoSummary.winnerHits}件</b></div>
+              <div><span>スコア / PK</span><b>{myKoSummary.exactHits}件 / {myKoSummary.penaltyHits}件</b></div>
+              <div><span>順位的中</span><b>優勝 {myKoSummary.championHit} / 2位 {myKoSummary.runnerUpHit} / 3位 {myKoSummary.thirdPlaceHit}</b></div>
+              {opp&&<div><span>相手</span><b>{oppKoSummary.total}pt</b></div>}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div style={{padding:'0 14px 20px'}}>
         <button className={primaryActionClass} onClick={onLogout}>{primaryActionLabel}</button>
-      </div>}
+      </div>
     </div>
   );
 }
 
 // ===== MATCH CARD =====
-function MatchCard({match,userId,opponentId,preds,results,onSave,roomId,syncToken}){
+function MatchCard({match,userId,opponentId,preds,results,onSave,roomId,syncToken,readOnly=false}){
   const lang=useContext(LangCtx);const l=T[lang];
   const users=gs('users',[]);
   const myPred=preds[userId]?.[match.id];
@@ -2172,6 +2481,7 @@ function MatchCard({match,userId,opponentId,preds,results,onSave,roomId,syncToke
   },[syncToken,myPred?.home,myPred?.away,isLocked,match.id]);
 
   function doConfirm(){
+    if(readOnly)return;
     onSave(match.id,{home,away});
     const lk=gr(roomId,'locked',{});
     const arr=[...(lk[userId]||[])];
@@ -2180,6 +2490,7 @@ function MatchCard({match,userId,opponentId,preds,results,onSave,roomId,syncToke
     setLocalLocked(true);
   }
   function doUnlock(){
+    if(readOnly)return;
     const lk=gr(roomId,'locked',{});
     lk[userId]=(lk[userId]||[]).filter(id=>id!==match.id);
     sr(roomId,'locked',lk);
@@ -2187,7 +2498,7 @@ function MatchCard({match,userId,opponentId,preds,results,onSave,roomId,syncToke
   }
   function getPts(pred,res){
     if(!pred||!res)return null;
-    const s=gr(roomId,'settings',DEFAULT_ROOM_SETTINGS);
+    const s={...DEFAULT_ROOM_SETTINGS,...gr(roomId,'settings',{})};
     if(pred.home===res.home&&pred.away===res.away)return{pts:s.exactPts,type:'exact'};
     const pr=pred.home>pred.away?'H':pred.home<pred.away?'A':'D';
     const rr=res.home>res.away?'H':res.home<res.away?'A':'D';
@@ -2225,7 +2536,7 @@ function MatchCard({match,userId,opponentId,preds,results,onSave,roomId,syncToke
               <span className="pred-role">自分</span>
               <div className="pred-name">{myUserName}</div>
             </div>
-            {localLocked
+            {(localLocked||readOnly)
               ?<div className="pred-score">
                 <div>
                   <div className="pred-value big">{myPred?`${myPred.home}–${myPred.away}`:l.noPred}</div>
@@ -2267,7 +2578,9 @@ function MatchCard({match,userId,opponentId,preds,results,onSave,roomId,syncToke
           </div>
         </div>
         <div className="mactions">
-          {localLocked
+          {readOnly
+            ?<div className="readonly-note">ゲスト閲覧中のため予想入力はできません</div>
+            :localLocked
             ?<button className="ubtn" onClick={doUnlock}>🔓 {l.unlock}</button>
             :<button className="pbtn" onClick={doConfirm}>{l.confirm}</button>
           }
@@ -2370,7 +2683,7 @@ function GroupsScreen({user,onOpenTeam,syncToken}){
       <div className="section-title">{l.predictions}</div>
       {matches.map(m=>(
         <MatchCard key={m.id} match={m} userId={user.id} opponentId={oppId}
-          preds={preds} results={results} onSave={savePred} roomId={roomId} syncToken={syncToken}/>
+          preds={preds} results={results} onSave={savePred} roomId={roomId} syncToken={syncToken} readOnly={!!user.isGuest}/>
       ))}
     </div>
   );
@@ -2382,99 +2695,354 @@ function BracketScreen({user,syncToken}){
   const rooms=gs('rooms',[]);
   const room=rooms.find(r=>r.id===user.roomId);
   const roomId=room?.id||user.roomId;
+  const users=gs('users',[]);
+  const roomUsers=(() => {
+    const byId=new Map();
+    users.filter((u)=>u.roomId===roomId).forEach((u)=>byId.set(u.id,u));
+    (room?.members||[])
+      .map((id)=>users.find((u)=>u.id===id))
+      .filter(Boolean)
+      .forEach((u)=>byId.set(u.id,u));
+    if(!byId.size&&user?.roomId===roomId)byId.set(user.id,user);
+    return [...byId.values()];
+  })();
+  const roomMembers=roomUsers.length?roomUsers:[user];
+  const opp=roomMembers.find((m)=>m.id!==user.id)||null;
+  const oppId=opp?.id||null;
   const [koPreds,setKoPreds]=useState(()=>gr(roomId,'koPreds',{}));
+  const [results,setResults]=useState(()=>gr(roomId,'results',{}));
+  const [editing,setEditing]=useState(null);
+  const [draft,setDraft]=useState(null);
+  const [status,setStatus]=useState('');
+  const scrollRef=useRef(null);
+  const scrollProxyRef=useRef(null);
   const myPreds=koPreds[user.id]||{};
-  const sfRound=KO_ROUNDS.find((round)=>round.id==='SF');
-  const finalRound=KO_ROUNDS.find((round)=>round.id==='F');
-  const thirdRound=KO_ROUNDS.find((round)=>round.id==='3RD');
+  const oppPreds=oppId?(koPreds[oppId]||{}):{};
+  const canEditKo=!user.isGuest;
+  const settings={...DEFAULT_ROOM_SETTINGS,...gr(roomId,'settings',{})};
+  const boardRounds=KO_ROUNDS.filter((round)=>['R32','R16','QF','SF','F'].includes(round.id));
+  const BOARD={x:24,y:50,w:260,h:92,gapX:314,gapY:120};
+  const BOARD_WIDTH=BOARD.x+BOARD.gapX*5+BOARD.w+190;
+  const BOARD_HEIGHT=BOARD.y+BOARD.gapY*16+230;
+  const podium=koPodiumPredictions(myPreds,{});
+  const podiumCandidates=koPodiumCandidates(myPreds,results);
+  const champion=podium.champion;
 
   useEffect(()=>{
     setKoPreds(gr(roomId,'koPreds',{}));
+    setResults(gr(roomId,'results',{}));
   },[syncToken,roomId]);
 
-  function pick(matchId,side){
-    const u={...koPreds,[user.id]:{...myPreds,[matchId]:side}};
-    setKoPreds(u);sr(roomId,'koPreds',u);
+  function roundX(roundId){
+    if(roundId==='3RD')return BOARD.x + 4 * BOARD.gapX;
+    const index=['R32','R16','QF','SF','F'].indexOf(roundId);
+    return BOARD.x + Math.max(0,index) * BOARD.gapX;
   }
-
-  function renderRound(round){
+  function centerY(roundId,index){
+    if(roundId==='3RD')return BOARD.y + BOARD.gapY*16 + 66;
+    if(roundId==='R32')return BOARD.y + index*BOARD.gapY + BOARD.h/2;
+    const meta=KO_SOURCES[roundId];
+    if(!meta)return BOARD.y + BOARD.h/2;
+    const a=centerY(meta.prev,index*2);
+    const b=centerY(meta.prev,index*2+1);
+    return (a+b)/2;
+  }
+  function cardY(roundId,index){return centerY(roundId,index)-BOARD.h/2;}
+  function sideY(roundId,index,side){return centerY(roundId,index);}
+  function syncBracketScroll(source){
+    const scroller=scrollRef.current;
+    const proxy=scrollProxyRef.current;
+    if(!scroller||!proxy)return;
+    if(source==='proxy'){
+      if(Math.abs(scroller.scrollLeft-proxy.scrollLeft)>1)scroller.scrollLeft=proxy.scrollLeft;
+    }else{
+      if(Math.abs(proxy.scrollLeft-scroller.scrollLeft)>1)proxy.scrollLeft=scroller.scrollLeft;
+    }
+  }
+  function matchPoints(match,predsForUser=myPreds){
+    const pred=normalizeKoRecord(predsForUser[match.id]);
+    const actual=normalizeKoRecord(results[match.id]);
+    if(!pred||!actual)return null;
+    let pts=0;
+    const pw=koRecordWinnerSide(pred), aw=koRecordWinnerSide(actual);
+    if(pw&&aw&&pw===aw)pts+=settings.koWinnerPts||0;
+    if(koRecordHasScore(pred)&&koRecordHasScore(actual)&&pred.home===actual.home&&pred.away===actual.away)pts+=settings.koExactPts||0;
+    if(actual.decidedBy==='PK'&&pred.decidedBy==='PK'&&pw&&aw&&pw===aw)pts+=settings.koPenaltyPts||0;
+    return pts;
+  }
+  function buildDraft(match){
+    const current=normalizeKoRecord(myPreds[match.id])||{};
+    const inferred=current.winnerSide||inferWinnerSide(current.home,current.away)||'home';
+    return {
+      home:String(current.home??0),
+      away:String(current.away??0),
+      winnerSide:inferred,
+      decidedBy:current.decidedBy==='PK'?'PK':'REG',
+      homePen:String(current.homePen??0),
+      awayPen:String(current.awayPen??0),
+    };
+  }
+  function openMatch(round,index){
+    if(!canEditKo)return;
+    const match=round.matches[index];
+    setEditing({roundId:round.id,index,match});
+    setDraft(buildDraft(match));
+    setStatus('');
+  }
+  function saveDraft(){
+    if(!editing||!draft||!canEditKo)return;
+    const home=Math.max(0,Number(draft.home)||0);
+    const away=Math.max(0,Number(draft.away)||0);
+    const tied=home===away;
+    const wantsPk=tied&&draft.decidedBy==='PK';
+    const homePen=wantsPk?Math.max(0,Number(draft.homePen)||0):null;
+    const awayPen=wantsPk?Math.max(0,Number(draft.awayPen)||0):null;
+    const scoreWinner=inferWinnerSide(home,away);
+    const pkWinner=wantsPk?inferWinnerSide(homePen,awayPen):null;
+    const winnerSide=scoreWinner||pkWinner||draft.winnerSide;
+    if(tied&&!winnerSide){setStatus('同点の場合は勝者を選んでください');return;}
+    if(wantsPk&&!pkWinner){setStatus('PKの得点差がつくように入力してください');return;}
+    const record={
+      home,away,
+      winnerSide,
+      decidedBy:wantsPk?'PK':'REG',
+      homePen,awayPen,
+      locked:true,
+      updatedAt:new Date().toISOString(),
+    };
+    const next={...koPreds,[user.id]:{...myPreds,[editing.match.id]:record}};
+    setKoPreds(next);sr(roomId,'koPreds',next);
+    setEditing(null);setDraft(null);setStatus('');
+  }
+  function clearDraft(){
+    if(!editing||!canEditKo)return;
+    const userKo={...(koPreds[user.id]||{})};
+    delete userKo[editing.match.id];
+    const next={...koPreds,[user.id]:userKo};
+    setKoPreds(next);sr(roomId,'koPreds',next);
+    setEditing(null);setDraft(null);setStatus('');
+  }
+  function updatePodium(key,value){
+    if(!canEditKo)return;
+    const nextUserPreds={...myPreds,_podium:{...(myPreds._podium||{}),[key]:value}};
+    if(!value)delete nextUserPreds._podium[key];
+    const next={...koPreds,[user.id]:nextUserPreds};
+    setKoPreds(next);sr(roomId,'koPreds',next);
+  }
+  function renderLines(){
+    const lines=[];
+    ['R32','R16','QF','SF'].forEach((roundId)=>{
+      const round=koGetRound(roundId);
+      const nextRoundId={R32:'R16',R16:'QF',QF:'SF',SF:'F'}[roundId];
+      round.matches.forEach((match,index)=>{
+        const winnerSide=koWinnerSideForMatch(match,myPreds,results);
+        const targetIndex=Math.floor(index/2);
+        const targetSide=index%2===0?'home':'away';
+        const x1=roundX(roundId)+BOARD.w;
+        const y1=winnerSide?sideY(roundId,index,winnerSide):centerY(roundId,index);
+        const x2=roundX(nextRoundId);
+        const y2=sideY(nextRoundId,targetIndex,targetSide);
+        const mid=x1+(x2-x1)/2;
+        lines.push(<path key={`${roundId}-${index}`} className={`ko-line${winnerSide?' on':''}`} d={`M ${x1} ${y1} H ${mid} V ${y2} H ${x2}`}/>);
+      });
+    });
+    const finalMatch=koGetMatch('F',0);
+    const finalWinner=koWinnerSideForMatch(finalMatch,myPreds,results);
+    const finalX=roundX('F')+BOARD.w;
+    const finalY=finalWinner?sideY('F',0,finalWinner):centerY('F',0);
+    lines.push(<path key="champion-line" className={`ko-line champion${finalWinner?' on':''}`} d={`M ${finalX} ${finalY} H ${finalX+150}`}/>);
+    [0,1].forEach((index)=>{
+      const match=koGetMatch('SF',index);
+      const winnerSide=koWinnerSideForMatch(match,myPreds,results);
+      const loserSide=winnerSide==='home'?'away':winnerSide==='away'?'home':null;
+      const x1=roundX('SF')+BOARD.w;
+      const y1=loserSide?sideY('SF',index,loserSide):centerY('SF',index);
+      const x2=roundX('F');
+      const y2=sideY('3RD',0,index===0?'home':'away');
+      const mid=x1+(x2-x1)/2;
+      lines.push(<path key={`third-${index}`} className="ko-line third" d={`M ${x1} ${y1} H ${mid} V ${y2} H ${x2}`}/>);
+    });
+    return lines;
+  }
+  function renderTeamBlock(roundId,index,side,label,winnerSide){
+    const isWinner=winnerSide===side;
     return(
-      <div className="bracket-col" key={round.id}>
-        <div className="bracket-col-hdr">{round.label}</div>
-        {round.matches.map((m,i)=>renderCard(round,m,i))}
+      <div className={`ko-team-block${isWinner?' win':''}`} key={side}>
+        <span className="ko-team-flag"><TeamFlag team={label}/></span>
+        <span className="ko-team-name">{koTeamName(label)}</span>
+        {isWinner&&<span className="ko-win-mark">勝</span>}
       </div>
     );
   }
-
-  function renderCard(round,m,i,final=false){
-    const isFinal=final||round.id==='F';
-    const winner=koWinnerLabel(round.id,i,myPreds);
-    const loser=koLoserLabel(round.id,i,myPreds);
-    return(
-      <div className={`bracket-card${isFinal?' final':' compact'}`} key={m.id}>
-        <div className="bracket-card-hdr">{round.label} / {m.id}</div>
-        {(winner||loser)&&(
-          <div className="bracket-summary">
-            {winner&&(
-              <span className={`bracket-pill${isFinal?' gold':''} on`}>
-                <TeamFlag team={winner}/> 勝者 {teamJa(winner)}
-              </span>
-            )}
-            {loser&&(
-              <span className="bracket-pill">
-                <TeamFlag team={loser}/> 敗者 {teamJa(loser)}
-              </span>
-            )}
-          </div>
-        )}
-        {['home','away'].map(side=>(
-          <div
-            key={side}
-            className={`bracket-team${myPreds[m.id]===side?' on':''}${winner===koResolvedTeam(round.id,i,side,myPreds)?' winner':''}${koResolvedTeam(round.id,i,side,myPreds)&&myPreds[m.id]?' resolved':''}`}
-            onClick={()=>pick(m.id,side)}
-          >
-            <span className="bracket-fl"><TeamFlag team={koResolvedTeam(round.id,i,side,myPreds)||m[side]}/></span>
-            <div className="bracket-name">{koSeedLabel(koResolvedTeam(round.id,i,side,myPreds)||m[side])}</div>
-            {myPreds[m.id]===side&&<span className="bracket-check">✓</span>}
-          </div>
-        ))}
+  function renderActualScore(record){
+    return (
+      <div className={`ko-actual-score${record?' on':''}`}>
+        {record?koRecordScoreText(record):'VS'}
       </div>
+    );
+  }
+  function renderPredictionLine(kind,label,record,pts=null){
+    return(
+      <div className={`ko-pred-line ${kind}`} key={kind}>
+        <b>{label}</b>
+        <strong>{koRecordScoreText(record)}</strong>
+        {pts!==null&&<em>+{pts}pt</em>}
+      </div>
+    );
+  }
+  function renderRoundLabels(){
+    return [
+      {id:'R32',label:'R32'},
+      {id:'R16',label:'R16'},
+      {id:'QF',label:'準々決勝'},
+      {id:'SF',label:'準決勝'},
+      {id:'F',label:'決勝',sub:'（3位決定戦）',final:true},
+    ].map((round)=>(
+      <div
+        key={`round-label-${round.id}`}
+        className={`ko-round-label${round.final?' final':''}`}
+        style={{left:roundX(round.id),width:BOARD.w}}
+      >
+        <span>{round.label}</span>
+        {round.sub&&<small>{round.sub}</small>}
+      </div>
+    ));
+  }
+  function renderRoundGuides(){
+    return ['R32','R16','QF','SF','F'].map((roundId)=>(
+      <div
+        key={`round-guide-${roundId}`}
+        className="ko-round-guide"
+        style={{left:roundX(roundId)+BOARD.w/2}}
+      ></div>
+    ));
+  }
+  function renderMatch(round,index){
+    const match=round.matches[index];
+    const actual=normalizeKoRecord(results[match.id]);
+    const pred=normalizeKoRecord(myPreds[match.id]);
+    const oppPred=oppId?normalizeKoRecord(oppPreds[match.id]):null;
+    const active=actual||pred;
+    const winnerSide=koRecordWinnerSide(active);
+    const homeLabel=koResolvedTeam(round.id,index,'home',myPreds,results)||match.home;
+    const awayLabel=koResolvedTeam(round.id,index,'away',myPreds,results)||match.away;
+    const pts=matchPoints(match,myPreds);
+    return(
+      <button
+        key={match.id}
+        className={`ko-match-node ${round.id.toLowerCase()}${actual?' actual':pred?' predicted':''}${canEditKo?'':' readonly'}`}
+        style={{left:roundX(round.id),top:cardY(round.id,index),width:BOARD.w,height:BOARD.h}}
+        onClick={()=>openMatch(round,index)}
+        disabled={!canEditKo}
+      >
+        <div className="ko-teams-line">
+          {renderTeamBlock(round.id,index,'home',homeLabel,winnerSide)}
+          {renderActualScore(actual)}
+          {renderTeamBlock(round.id,index,'away',awayLabel,winnerSide)}
+        </div>
+        <div className="ko-score-stack">
+          {renderPredictionLine('me','自分',pred,pts)}
+          {renderPredictionLine('opp','相手',oppId?oppPred:null,null)}
+        </div>
+      </button>
     );
   }
 
   return(
     <div className="page page-enter">
-      <div className="shdr"><h2>決勝T(未)</h2></div>
-      <div className="section-title">横画面でも全体を見渡せるトーナメント表</div>
-      <div className="bracket-tree">
-        <div className="bracket-board">
-          {KO_ROUNDS.filter((round)=>['R32','R16','QF'].includes(round.id)).map(renderRound)}
+      <div className="ko-nav-spacer" aria-hidden="true"></div>
+      <div className="ko-podium-panel">
+        <div className="ko-podium-grid">
+          {[
+            {key:'champion',label:'優勝予想',enabled:true,points:settings.koChampionPts},
+            {key:'runnerUp',label:'2位予想',enabled:settings.koRunnerUpEnabled,points:settings.koRunnerUpPts},
+            {key:'third',label:'3位予想',enabled:settings.koThirdPlaceEnabled,points:settings.koThirdPlacePts},
+          ].map(item=>(
+            <div className={`ko-podium-pick${item.enabled?'':' off'}`} key={item.key}>
+              <div className="ko-podium-label"><span>{item.label}</span></div>
+              <select
+                value={podium[item.key]||''}
+                disabled={!item.enabled||!canEditKo}
+                onChange={(e)=>updatePodium(item.key,e.target.value)}
+              >
+                <option value="">{item.enabled?'未選択':'設定で無効'}</option>
+                {podiumCandidates.map(candidate=><option key={`${item.key}-${candidate}`} value={candidate}>{koTeamName(candidate)}</option>)}
+              </select>
+              <div className="ko-podium-note">{!item.enabled?'採点しない場合はこのままでOK':canEditKo?`的中で +${item.points}pt`:'ゲストは閲覧のみ'}</div>
+            </div>
+          ))}
         </div>
-        <div className="connector"/>
-        <div className="bkt-final-section">
-          <div className="bkt-sf-row">
-            {sfRound.matches.map((m,i)=>renderCard(sfRound,m,i))}
-          </div>
-          <div className="connector"/>
-          <div className="bkt-end-row">
-            {finalRound.matches.map((m,i)=>renderCard(finalRound,m,i,true))}
-            {thirdRound.matches.map((m,i)=>renderCard(thirdRound,m,i))}
-          </div>
-        </div>
-        <div className="info-card" style={{margin:'12px 0 18px'}}>
-          <div className="itag">🏆 予想の状態</div>
-          <div className="isub">
-            {koWinnerLabel('F',0,myPreds)
-              ?<><TeamFlag team={koWinnerLabel('F',0,myPreds)}/> 優勝予想: {teamJa(koWinnerLabel('F',0,myPreds))}</>
-              :'優勝チームをタップして選んでください'}
-          </div>
-          <div className="isub" style={{marginTop:4}}>
-            {koWinnerLabel('3RD',0,myPreds)
-              ?<><TeamFlag team={koWinnerLabel('3RD',0,myPreds)}/> 3位予想: {teamJa(koWinnerLabel('3RD',0,myPreds))}</>
-              :'3位決定戦も選べます'}
+      </div>
+      <div className="ko-scroll" ref={scrollRef} onScroll={()=>syncBracketScroll('board')}>
+        <div className="ko-canvas" style={{width:BOARD_WIDTH,height:BOARD_HEIGHT}}>
+          {renderRoundGuides()}
+          <svg className="ko-lines" width="100%" height="100%" viewBox={`0 0 ${BOARD_WIDTH} ${BOARD_HEIGHT}`} preserveAspectRatio="none">
+            {renderLines()}
+          </svg>
+          {renderRoundLabels()}
+          {boardRounds.map((round)=>round.matches.map((m,i)=>renderMatch(round,i)))}
+          {KO_ROUNDS.find(r=>r.id==='3RD').matches.map((m,i)=>renderMatch(KO_ROUNDS.find(r=>r.id==='3RD'),i))}
+          <div className={`ko-champion-node${champion?' on':''}`} style={{left:roundX('F')+BOARD.w+124,top:centerY('F',0)-54}}>
+            <span>優勝</span>
+            <strong>{champion?<><TeamFlag team={champion}/> {koTeamName(champion)}</>:'未定'}</strong>
           </div>
         </div>
       </div>
+      {ReactDOM.createPortal(
+        <div className="ko-scrollbar-proxy" ref={scrollProxyRef} onScroll={()=>syncBracketScroll('proxy')} aria-label="決勝トーナメント表の横スクロール">
+          <div style={{width:BOARD_WIDTH,height:1}}></div>
+        </div>,
+        document.body
+      )}
+      {editing&&draft&&(
+        <div className="ko-modal-backdrop" onClick={()=>setEditing(null)}>
+          <div className="ko-modal" onClick={(e)=>e.stopPropagation()}>
+            <div className="ko-modal-head">
+              <div>
+                <span>{koGetRound(editing.roundId)?.label} / {editing.match.id}</span>
+                <h3>予想を入力</h3>
+              </div>
+              <button onClick={()=>setEditing(null)}>閉じる</button>
+            </div>
+            <div className="ko-modal-teams">
+              {['home','away'].map((side)=>(
+                <div className="ko-modal-team" key={side}>
+                  <TeamFlag team={koResolvedTeam(editing.roundId,editing.index,side,myPreds,results)||editing.match[side]}/>
+                  <span>{koTeamName(koResolvedTeam(editing.roundId,editing.index,side,myPreds,results)||editing.match[side])}</span>
+                </div>
+              ))}
+            </div>
+            <div className="ko-score-editor">
+              <input type="number" min="0" value={draft.home} onChange={(e)=>setDraft({...draft,home:e.target.value})}/>
+              <span>-</span>
+              <input type="number" min="0" value={draft.away} onChange={(e)=>setDraft({...draft,away:e.target.value})}/>
+            </div>
+            <div className="ko-pick-row">
+              {['home','away'].map(side=>(
+                <button key={side} className={draft.winnerSide===side?'on':''} onClick={()=>setDraft({...draft,winnerSide:side})}>
+                  {side==='home'?'左側':'右側'}が勝利
+                </button>
+              ))}
+            </div>
+            <label className="ko-pk-toggle">
+              <input type="checkbox" checked={draft.decidedBy==='PK'} onChange={(e)=>setDraft({...draft,decidedBy:e.target.checked?'PK':'REG'})}/>
+              PK戦で決着
+            </label>
+            {draft.decidedBy==='PK'&&(
+              <div className="ko-score-editor pk">
+                <input type="number" min="0" value={draft.homePen} onChange={(e)=>setDraft({...draft,homePen:e.target.value})}/>
+                <span>PK</span>
+                <input type="number" min="0" value={draft.awayPen} onChange={(e)=>setDraft({...draft,awayPen:e.target.value})}/>
+              </div>
+            )}
+            {status&&<div className="errmsg">{status}</div>}
+            <div className="ko-modal-actions">
+              <button className="ghost" onClick={clearDraft}>クリア</button>
+              <button className="primary" onClick={saveDraft}>保存</button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
@@ -2591,14 +3159,14 @@ function SettingsScreen({user,syncToken,onRenameUser}){
   const rooms=gs('rooms',[]);
   const room=rooms.find(r=>r.id===user.roomId);
   const roomId=room?.id||user.roomId;
-  const [pointSettings,setPointSettings]=useState(()=>gr(roomId,'settings',DEFAULT_ROOM_SETTINGS));
+  const [pointSettings,setPointSettings]=useState(()=>({...DEFAULT_ROOM_SETTINGS,...gr(roomId,'settings',{})}));
   const [uiSettings,setUiSettings]=useState(()=>gs('settings',DEFAULT_UI_SETTINGS));
   const [nameDraft,setNameDraft]=useState(user?.username||'');
   const [savingName,setSavingName]=useState(false);
   const [toast,setToast]=useState('');
 
   useEffect(()=>{
-    setPointSettings(gr(roomId,'settings',DEFAULT_ROOM_SETTINGS));
+    setPointSettings({...DEFAULT_ROOM_SETTINGS,...gr(roomId,'settings',{})});
   },[syncToken,roomId]);
   useEffect(()=>{
     setNameDraft(user?.username||'');
@@ -2704,7 +3272,7 @@ function SettingsScreen({user,syncToken,onRenameUser}){
         <h3>🎯 {l.pointSettings}</h3>
         <>
           <div className="set-row">
-            <div className="sl">{l.resultPts}<span>勝敗予想が当たった場合</span></div>
+            <div className="sl">グループリーグ 勝敗的中<span>グループリーグの勝敗予想が当たった場合</span></div>
             <div className="pts-ctrl">
               <button className="ptsbtn" onClick={()=>changePts('resultPts',-1)}>−</button>
               <div className="pts-val">{pointSettings.resultPts}</div>
@@ -2712,13 +3280,79 @@ function SettingsScreen({user,syncToken,onRenameUser}){
             </div>
           </div>
           <div className="set-row">
-            <div className="sl">{l.exactPts}<span>スコアが完全一致した場合</span></div>
+            <div className="sl">グループリーグ スコア的中<span>グループリーグのスコアが完全一致した場合</span></div>
             <div className="pts-ctrl">
               <button className="ptsbtn" onClick={()=>changePts('exactPts',-1)}>−</button>
               <div className="pts-val">{pointSettings.exactPts}</div>
               <button className="ptsbtn" onClick={()=>changePts('exactPts',1)}>+</button>
             </div>
           </div>
+          <div className="set-row">
+            <div className="sl">決勝トーナメント 勝者的中<span>決勝トーナメントで勝ち上がるチームが当たった場合</span></div>
+            <div className="pts-ctrl">
+              <button className="ptsbtn" onClick={()=>changePts('koWinnerPts',-1)}>−</button>
+              <div className="pts-val">{pointSettings.koWinnerPts}</div>
+              <button className="ptsbtn" onClick={()=>changePts('koWinnerPts',1)}>+</button>
+            </div>
+          </div>
+          <div className="set-row">
+            <div className="sl">決勝トーナメント スコア的中<span>決勝トーナメントの通常スコアが完全一致した場合</span></div>
+            <div className="pts-ctrl">
+              <button className="ptsbtn" onClick={()=>changePts('koExactPts',-1)}>−</button>
+              <div className="pts-val">{pointSettings.koExactPts}</div>
+              <button className="ptsbtn" onClick={()=>changePts('koExactPts',1)}>+</button>
+            </div>
+          </div>
+          <div className="set-row">
+            <div className="sl">PK的中<span>PK決着の勝者が当たった場合</span></div>
+            <div className="pts-ctrl">
+              <button className="ptsbtn" onClick={()=>changePts('koPenaltyPts',-1)}>−</button>
+              <div className="pts-val">{pointSettings.koPenaltyPts}</div>
+              <button className="ptsbtn" onClick={()=>changePts('koPenaltyPts',1)}>+</button>
+            </div>
+          </div>
+          <div className="set-row">
+            <div className="sl">優勝的中<span>決勝の勝者が実際の優勝国と一致した場合</span></div>
+            <div className="pts-ctrl">
+              <button className="ptsbtn" onClick={()=>changePts('koChampionPts',-1)}>−</button>
+              <div className="pts-val">{pointSettings.koChampionPts}</div>
+              <button className="ptsbtn" onClick={()=>changePts('koChampionPts',1)}>+</button>
+            </div>
+          </div>
+          <div className="set-row">
+            <div className="sl">2位予想を採点<span>不要な場合はオフ。優勝のみのルールにできます。</span></div>
+            <label className="toggle">
+              <input type="checkbox" checked={!!pointSettings.koRunnerUpEnabled} onChange={(e)=>updPointSetting('koRunnerUpEnabled',e.target.checked)} />
+              <span className="tslider"></span>
+            </label>
+          </div>
+          {pointSettings.koRunnerUpEnabled&&(
+            <div className="set-row">
+              <div className="sl">2位的中<span>決勝の敗者が実際の準優勝国と一致した場合</span></div>
+              <div className="pts-ctrl">
+                <button className="ptsbtn" onClick={()=>changePts('koRunnerUpPts',-1)}>−</button>
+                <div className="pts-val">{pointSettings.koRunnerUpPts}</div>
+                <button className="ptsbtn" onClick={()=>changePts('koRunnerUpPts',1)}>+</button>
+              </div>
+            </div>
+          )}
+          <div className="set-row">
+            <div className="sl">3位予想を採点<span>不要な場合はオフ。3位決定戦を点数対象外にできます。</span></div>
+            <label className="toggle">
+              <input type="checkbox" checked={!!pointSettings.koThirdPlaceEnabled} onChange={(e)=>updPointSetting('koThirdPlaceEnabled',e.target.checked)} />
+              <span className="tslider"></span>
+            </label>
+          </div>
+          {pointSettings.koThirdPlaceEnabled&&(
+            <div className="set-row">
+              <div className="sl">3位的中<span>3位決定戦の勝者が実際の3位国と一致した場合</span></div>
+              <div className="pts-ctrl">
+                <button className="ptsbtn" onClick={()=>changePts('koThirdPlacePts',-1)}>−</button>
+                <div className="pts-val">{pointSettings.koThirdPlacePts}</div>
+                <button className="ptsbtn" onClick={()=>changePts('koThirdPlacePts',1)}>+</button>
+              </div>
+            </div>
+          )}
         </>
       </div>
     </div>

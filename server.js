@@ -106,7 +106,19 @@ function ensureStateShape() {
     next.results ||= {};
     next.locked ||= {};
     next.koPreds ||= {};
-    next.settings ||= { resultPts: 1, exactPts: 2 };
+    next.settings = {
+      resultPts: 1,
+      exactPts: 2,
+      koWinnerPts: 1,
+      koExactPts: 2,
+      koPenaltyPts: 1,
+      koChampionPts: 5,
+      koRunnerUpPts: 3,
+      koThirdPlacePts: 2,
+      koRunnerUpEnabled: false,
+      koThirdPlaceEnabled: false,
+      ...(next.settings || {}),
+    };
     return [roomId, next];
   }));
   state.rooms = state.rooms.map((room) => ({
@@ -146,7 +158,18 @@ function makeRoomState() {
     results: {},
     locked: {},
     koPreds: {},
-    settings: { resultPts: 1, exactPts: 2 },
+    settings: {
+      resultPts: 1,
+      exactPts: 2,
+      koWinnerPts: 1,
+      koExactPts: 2,
+      koPenaltyPts: 1,
+      koChampionPts: 5,
+      koRunnerUpPts: 3,
+      koThirdPlacePts: 2,
+      koRunnerUpEnabled: false,
+      koThirdPlaceEnabled: false,
+    },
   };
 }
 
@@ -159,7 +182,19 @@ function ensureRoomState(roomId) {
     state.roomStates[roomId].results ||= {};
     state.roomStates[roomId].locked ||= {};
     state.roomStates[roomId].koPreds ||= {};
-    state.roomStates[roomId].settings ||= { resultPts: 1, exactPts: 2 };
+    state.roomStates[roomId].settings = {
+      resultPts: 1,
+      exactPts: 2,
+      koWinnerPts: 1,
+      koExactPts: 2,
+      koPenaltyPts: 1,
+      koChampionPts: 5,
+      koRunnerUpPts: 3,
+      koThirdPlacePts: 2,
+      koRunnerUpEnabled: false,
+      koThirdPlaceEnabled: false,
+      ...(state.roomStates[roomId].settings || {}),
+    };
   }
   return state.roomStates[roomId];
 }
@@ -595,7 +630,19 @@ const server = http.createServer(async (req, res) => {
       const current = ensureRoomState(body.roomId);
       state.roomStates[body.roomId] = {
         ...makeRoomState(),
-        settings: current.settings || { resultPts: 1, exactPts: 2 },
+        settings: {
+          resultPts: 1,
+          exactPts: 2,
+          koWinnerPts: 1,
+          koExactPts: 2,
+          koPenaltyPts: 1,
+          koChampionPts: 5,
+          koRunnerUpPts: 3,
+          koThirdPlacePts: 2,
+          koRunnerUpEnabled: false,
+          koThirdPlaceEnabled: false,
+          ...(current.settings || {}),
+        },
       };
       saveAndRespond(res, { ok: true, roomState: state.roomStates[body.roomId] });
       return;

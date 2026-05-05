@@ -1,11 +1,15 @@
 {
-  "generatedAt": "2026-04-19T12:38:02.643Z",
+  "generatedAt": "2026-04-21T12:57:05.569Z",
   "sources": {
     "googleScheduleSearch": "https://www.google.com/search?num=10&sa=X&sca_esv=f6913a6b03d5cca2&rlz=1C1JCYX_jaJP1059JP1059&sxsrf=ANbL-n70He_OogrO5hSbIWeTQHISUMbceg:1776594446411&q=%E3%83%AF%E3%83%BC%E3%83%AB%E3%83%89%E3%82%AB%E3%83%83%E3%83%97&si=AL3DRZGlEbdhA7XmWJj80t1CsOZGFzUh_Eb-GlfbqiISmN5DEgu7LWf3OmvACopQM184n8KPXnQtYFGFP0r94M5Ok1EiKiL_zxwaGqExIOUt_YuH9NJkgl0ob1JeaC4dvKMbGv7soNpq&ved=2ahUKEwjz2JWb2vmTAxUxoa8BHSukHTwQyNoBKAB6BAgNEAA&ictx=1&biw=2560&bih=1271&dpr=1",
     "fifaTeamsPage": "https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026/teams",
     "fifaSchedulePage": "https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026/articles/match-schedule-fixtures-results-teams-stadiums",
+    "worldcdbNationalNews": "https://worldcdb.com/nationalnews.htm",
+    "roiblogSchedule": "https://www.roiblog.jp/worldcup2026-schedule",
     "googlePlayersSearch": "https://www.google.com/search?num=10&sa=X&sca_esv=f6913a6b03d5cca2&rlz=1C1JCYX_jaJP1059JP1059&sxsrf=ANbL-n4eph4utZl15Srha4gcUj9dWARAdQ:1776594488491&q=%E3%83%AF%E3%83%BC%E3%83%AB%E3%83%89%E3%82%AB%E3%83%83%E3%83%97+%E9%81%B8%E6%89%8B&si=AL3DRZEfo4x4mCMyFKNZ4H3-98dSXe5LY9KwB5l8qBOUjkxVyw0ZhHJb4n9mSENU-1jmVUNXp9DHbomV47UpbsL0cHG3w83hKY6S-PP0SdylHAz6p9s_cPAHuB5_DnVMe1c2lYwZgBHvM-pGMTqP89k2XyfngYpRmoTXl3Pu90ul2k3ho2292B4%3D&ved=2ahUKEwjz2JWb2vmTAxUxoa8BHSukHTwQyNoBKAB6BAgSEAA&ictx=1&cshid=1776594504404437&biw=2560&bih=1271&dpr=1",
     "fifaPlayersPage": "https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026/teams",
+    "worldcdbNationalNewsPlayers": "https://worldcdb.com/nationalnews.htm",
+    "roiblogSchedulePlayers": "https://www.roiblog.jp/worldcup2026-schedule",
     "playersCsv": "https://pub-e682421888d945d684bcae8890b0ec20.r2.dev/data/players.csv.gz",
     "appearancesCsv": "https://pub-e682421888d945d684bcae8890b0ec20.r2.dev/data/appearances.csv.gz",
     "nationalTeamsCsv": "https://pub-e682421888d945d684bcae8890b0ec20.r2.dev/data/national_teams.csv.gz"
