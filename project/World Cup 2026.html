@@ -732,12 +732,12 @@ html,body{background:#ddd8ce;color:var(--text);font-family:'Inter',sans-serif;mi
 .ko-match-node.predicted{box-shadow:0 0 0 2px rgba(255,20,15,.42),0 10px 24px rgba(0,0,0,.25);}
 .ko-match-node.actual{box-shadow:0 0 0 2px rgba(212,150,10,.7),0 10px 24px rgba(0,0,0,.25);}
 .ko-teams-line{height:58px;display:grid;grid-template-columns:minmax(0,1fr) 58px minmax(0,1fr);align-items:stretch;background:linear-gradient(180deg,rgba(255,255,255,.78),rgba(230,230,230,.86));}
-.ko-team-block{min-width:0;display:grid;grid-template-columns:18px minmax(0,1fr);grid-template-rows:1fr auto;align-items:center;column-gap:5px;padding:7px 6px 6px;border-right:1px solid rgba(0,0,0,.08);position:relative;}
+.ko-team-block{min-width:0;display:grid;grid-template-columns:18px minmax(0,1fr) auto;align-items:center;column-gap:5px;padding:7px 6px 6px;border-right:1px solid rgba(0,0,0,.08);position:relative;}
 .ko-team-block:last-child{border-right:none;border-left:1px solid rgba(0,0,0,.08);}
 .ko-team-block.win{background:rgba(255,20,15,.12);}
 .ko-team-flag{display:flex;align-items:center;justify-content:center;}
 .ko-team-name{font-size:11px;font-weight:900;line-height:1.14;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;word-break:break-word;text-align:left;}
-.ko-win-mark{grid-column:1/-1;justify-self:center;margin-top:3px;font-size:9px;font-weight:900;color:#fff;background:#ff140f;border-radius:999px;padding:2px 8px;text-align:center;}
+.ko-win-mark{justify-self:end;font-size:9px;font-weight:900;color:#fff;background:#ff140f;border-radius:999px;padding:2px 7px;text-align:center;white-space:nowrap;}
 .ko-actual-score{display:flex;align-items:center;justify-content:center;text-align:center;min-width:0;padding:0 4px;font-family:'Bebas Neue','Inter',sans-serif;font-size:17px;line-height:1.05;font-weight:900;color:#8a8a8a;background:rgba(255,255,255,.5);border-left:1px solid rgba(0,0,0,.08);border-right:1px solid rgba(0,0,0,.08);white-space:normal;}
 .ko-actual-score.on{font-family:'Inter',sans-serif;font-size:12px;color:#111;background:linear-gradient(180deg,#fff,#f6f1e8);}
 .ko-score-stack{border-top:1px solid rgba(0,0,0,.1);background:rgba(255,255,255,.72);display:grid;grid-template-columns:repeat(2,minmax(0,1fr));}
