@@ -1024,6 +1024,7 @@ html,body{background:#ddd8ce;color:var(--text);font-family:'Inter',sans-serif;mi
 <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/@koozaki/romaji-conv@2.0.35/dist/romaji-conv.js"></script>
 <script src="./bootstrap-data.js"></script>
+<script src="./flags-data.js"></script>
 <script type="text/babel">
 const {useState,useEffect,useRef,useContext,createContext}=React;
 
@@ -1071,7 +1072,16 @@ const TEAM_FLAG_FILES={
   'England':'england.svg','Ghana':'GH.gif','Panama':'PA.gif',
 };
 const FLAG_PATH='flags/';
-function teamFlagSrc(team){return TEAM_FLAG_FILES[team] ? FLAG_PATH + TEAM_FLAG_FILES[team] : null;}
+const TEAM_FLAG_DATA=typeof window!=='undefined' && window.FLAG_DATA_URLS ? window.FLAG_DATA_URLS : {};
+function teamFlagSrc(team){return TEAM_FLAG_DATA[team] || (TEAM_FLAG_FILES[team] ? FLAG_PATH + TEAM_FLAG_FILES[team] : null);}
+function FlagAsset({src,alt,className='',fallback='🏳️'}){
+  const [failed,setFailed]=useState(false);
+  useEffect(()=>{setFailed(false);},[src]);
+  if(!src || failed){
+    return <span className={('flag-fallback ' + className).trim()} title={alt} aria-label={alt}>{fallback}</span>;
+  }
+  return <img className={className} src={src} alt={alt} loading="lazy" decoding="async" onError={()=>setFailed(true)}/>;
+}
 function TeamFlag({team,className=''}){
   const meta=teamMeta(team);
   const parts=String(team||'').split('/').map((s)=>s.trim()).filter(Boolean);
@@ -1080,18 +1090,14 @@ function TeamFlag({team,className=''}){
       <span className={('flag-duo ' + className).trim()} title={meta.ja} aria-label={meta.ja + 'の国旗'}>
         {parts.map((part,index)=>{
           const src=teamFlagSrc(part);
-          return src
-            ?<img key={`${part}-${index}`} className="flag-ico" src={src} alt={teamMeta(part).ja + 'の国旗'} loading="lazy" decoding="async"/>
-            :<span key={`${part}-${index}`} className="flag-fallback flag-ico" aria-hidden="true">🏳️</span>;
+          const partMeta=teamMeta(part);
+          return <FlagAsset key={`${part}-${index}`} className="flag-ico" src={src} alt={partMeta.ja + 'の国旗'} fallback={partMeta.f}/>;
         })}
       </span>
     );
   }
   const src=teamFlagSrc(team);
-  if(src){
-    return <img className={('flag-ico ' + className).trim()} src={src} alt={meta.ja + 'の国旗'} loading="lazy" decoding="async"/>;
-  }
-  return <span className={('flag-fallback ' + className).trim()} aria-hidden="true">{meta.f}</span>;
+  return <FlagAsset className={('flag-ico ' + className).trim()} src={src} alt={meta.ja + 'の国旗'} fallback={meta.f}/>;
 }
 const PLAYER_CLUBS=['レアル・サンプル','インテル・サンプル','サンプルFC','シティ・サンプル','アトラスSC','ユナイテッドSC','オリンピア・サンプル','メトロFC','ノヴァSC','サンプル・クラブ'];
 const PLAYER_ROLES=[

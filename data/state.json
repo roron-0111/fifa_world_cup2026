@@ -176,7 +176,11 @@
         "koWinnerPts": 1,
         "koExactPts": 2,
         "koPenaltyPts": 1,
-        "koChampionPts": 5
+        "koChampionPts": 5,
+        "koRunnerUpPts": 3,
+        "koThirdPlacePts": 2,
+        "koRunnerUpEnabled": false,
+        "koThirdPlaceEnabled": false
       },
       "predictionsV2": {}
     },
@@ -207,7 +211,11 @@
         "koWinnerPts": 1,
         "koExactPts": 2,
         "koPenaltyPts": 1,
-        "koChampionPts": 5
+        "koChampionPts": 5,
+        "koRunnerUpPts": 3,
+        "koThirdPlacePts": 2,
+        "koRunnerUpEnabled": false,
+        "koThirdPlaceEnabled": false
       },
       "predictionsV2": {}
     },
@@ -225,7 +233,11 @@
         "koWinnerPts": 1,
         "koExactPts": 2,
         "koPenaltyPts": 1,
-        "koChampionPts": 5
+        "koChampionPts": 5,
+        "koRunnerUpPts": 3,
+        "koThirdPlacePts": 2,
+        "koRunnerUpEnabled": false,
+        "koThirdPlaceEnabled": false
       },
       "predictionsV2": {
         "u-1776593778651-361r": {
@@ -261,7 +273,11 @@
         "koWinnerPts": 1,
         "koExactPts": 2,
         "koPenaltyPts": 1,
-        "koChampionPts": 5
+        "koChampionPts": 5,
+        "koRunnerUpPts": 3,
+        "koThirdPlacePts": 2,
+        "koRunnerUpEnabled": false,
+        "koThirdPlaceEnabled": false
       },
       "predictionsV2": {
         "u-1776599215207-uc44": {
@@ -308,7 +324,11 @@
         "koWinnerPts": 1,
         "koExactPts": 2,
         "koPenaltyPts": 1,
-        "koChampionPts": 5
+        "koChampionPts": 5,
+        "koRunnerUpPts": 3,
+        "koThirdPlacePts": 2,
+        "koRunnerUpEnabled": false,
+        "koThirdPlaceEnabled": false
       }
     },
     "room-1776602144345": {
@@ -338,7 +358,11 @@
         "koWinnerPts": 1,
         "koExactPts": 2,
         "koPenaltyPts": 1,
-        "koChampionPts": 5
+        "koChampionPts": 5,
+        "koRunnerUpPts": 3,
+        "koThirdPlacePts": 2,
+        "koRunnerUpEnabled": false,
+        "koThirdPlaceEnabled": false
       }
     },
     "room-1776602654600": {
@@ -391,7 +415,11 @@
         "koWinnerPts": 1,
         "koExactPts": 2,
         "koPenaltyPts": 1,
-        "koChampionPts": 5
+        "koChampionPts": 5,
+        "koRunnerUpPts": 3,
+        "koThirdPlacePts": 2,
+        "koRunnerUpEnabled": false,
+        "koThirdPlaceEnabled": false
       }
     },
     "room-1776605164304": {
@@ -405,7 +433,11 @@
         "koWinnerPts": 1,
         "koExactPts": 2,
         "koPenaltyPts": 1,
-        "koChampionPts": 5
+        "koChampionPts": 5,
+        "koRunnerUpPts": 3,
+        "koThirdPlacePts": 2,
+        "koRunnerUpEnabled": false,
+        "koThirdPlaceEnabled": false
       }
     },
     "room-1777955460631": {
