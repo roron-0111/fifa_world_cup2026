@@ -10,6 +10,8 @@ const DATA_DIR = path.join(ROOT, 'data');
 const OUT_FILE = path.join(DATA_DIR, 'players.generated.json');
 const SOURCES_FILE = path.join(DATA_DIR, 'sources.json');
 const NAME_OVERRIDES_FILE = path.join(DATA_DIR, 'player-name-overrides.json');
+const SEASON_START = new Date('2025-07-01T00:00:00Z');
+const SEASON_END = new Date('2026-07-01T00:00:00Z');
 
 const TEAM_SPECS = [
   { country: 'Mexico', ja: 'メキシコ', aliases: ['Mexico'] },
@@ -288,6 +290,13 @@ function readJsonFile(file, fallback) {
   }
 }
 
+function isSeasonDate(dateValue) {
+  if (!dateValue) return false;
+  const d = new Date(`${String(dateValue).trim()}T00:00:00Z`);
+  if (Number.isNaN(d.getTime())) return false;
+  return d >= SEASON_START && d < SEASON_END;
+}
+
 function loadNameOverrides() {
   return readJsonFile(NAME_OVERRIDES_FILE, {});
 }
@@ -386,6 +395,7 @@ async function main() {
 
   const playersByCountry = new Map();
   const playersById = new Map();
+  const japanRows = [];
 
   await readCsv(sources.players.playersCsv, (row) => {
     let team = targetTeams.get(row.current_national_team_id);
@@ -403,7 +413,13 @@ async function main() {
       }
     }
     if (!team) return;
-    if (team.country === 'Japan') return;
+    if (team.country === 'Japan') {
+      japanRows.push({
+        ...row,
+        team,
+      });
+      return;
+    }
     const player = {
       id: row.player_id,
       name: row.name,
@@ -434,20 +450,39 @@ async function main() {
     playersByCountry.get(team.country).push(player);
   });
 
-  const japanRoster = JAPAN_OFFICIAL_ROSTER.map((player, index) => ({
-    ...player,
-    rank: index + 1,
-    clubGoals: 0,
-    internationalGoals: 0,
-    goals: 0,
-    internationalCaps: 0,
-    marketValue: 0,
-    lastSeason: '',
-    imageUrl: '',
-    profileUrl: '',
-    currentNationalTeamId: 'Japan-official',
-    displayNameJa: player.officialNameJa,
-  }));
+  const japanRowsByName = new Map();
+  japanRows.forEach((row) => {
+    const key = normalizeKey(row.name);
+    if (!japanRowsByName.has(key)) japanRowsByName.set(key, row);
+  });
+  const japanRoster = JAPAN_OFFICIAL_ROSTER.map((player, index) => {
+    const matched = japanRowsByName.get(normalizeKey(player.name));
+    return {
+      id: matched?.player_id || player.id,
+      name: matched?.name || player.name,
+      officialNameJa: player.officialNameJa,
+      displayNameJa: player.officialNameJa,
+      firstName: matched?.first_name || player.name.split(' ')[0] || '',
+      lastName: matched?.last_name || player.name.split(' ').slice(1).join(' ') || '',
+      country: 'Japan',
+      countryJa: '日本',
+      countryName: matched?.country_name || player.countryName || 'Japan',
+      position: matched?.sub_position || matched?.position || player.position,
+      subPosition: matched?.sub_position || player.subPosition || '',
+      club: matched?.current_club_name || player.club,
+      clubId: matched?.current_club_id || '',
+      clubGoals: 0,
+      internationalGoals: Number(matched?.international_goals || 0),
+      goals: Number(matched?.international_goals || 0),
+      internationalCaps: Number(matched?.international_caps || 0),
+      marketValue: Number(matched?.market_value_in_eur || 0),
+      lastSeason: matched?.last_season || '',
+      imageUrl: matched?.image_url || '',
+      profileUrl: matched?.url || '',
+      currentNationalTeamId: matched?.current_national_team_id || 'Japan-official',
+      rank: index + 1,
+    };
+  });
   playersByCountry.set('Japan', japanRoster);
   japanRoster.forEach((player) => {
     playersById.set(player.id, player);
@@ -458,7 +493,7 @@ async function main() {
     if (!candidateIds.has(row.player_id)) return;
     const player = playersById.get(row.player_id);
     if (!player) return;
-    if (String(row.player_club_id) !== String(player.clubId)) return;
+    if (!isSeasonDate(row.date)) return;
     player.clubGoals += Number(row.goals || 0);
   });
 

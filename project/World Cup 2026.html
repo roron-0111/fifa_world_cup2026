@@ -2185,7 +2185,7 @@ function CountryModal({team,onClose}){
                     <span className="player-meta-line">{positionJa(p.position)}</span>
                     <span className="player-meta-line">{p.club||'Unknown'}</span>
                     <span className="player-meta-line">2026ワールドカップ得点 {p.worldCupGoals??0}</span>
-                    <span className="player-meta-line">クラブ得点 {p.clubGoals}</span>
+                    <span className="player-meta-line">2025-26シーズン得点 {p.clubGoals}</span>
                   </div>
                 </div>
               </div>
@@ -2222,7 +2222,7 @@ function CountryModal({team,onClose}){
               <input type="number" min="0" step="1" value={draft?.worldCupGoals||0} onChange={(e)=>updateDraft('worldCupGoals',e.target.value)} />
             </div>
             <div className="player-field">
-              <label>クラブ得点</label>
+              <label>2025-26シーズン得点</label>
               <input type="number" min="0" step="1" value={draft?.clubGoals||0} onChange={(e)=>updateDraft('clubGoals',e.target.value)} />
             </div>
           </div>
