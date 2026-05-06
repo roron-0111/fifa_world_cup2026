@@ -16,7 +16,7 @@
   --text:#1c1e2e;--text2:#7a7886;--border:rgba(0,0,0,0.09);--r:14px;
   --shadow:0 2px 12px rgba(0,0,0,0.08);
 }
-html,body{background:#ddd8ce;color:var(--text);font-family:'Inter',sans-serif;min-height:100%;overflow:auto;}
+html,body{background:#ddd8ce;color:var(--text);font-family:'Inter',sans-serif;min-height:100%;overflow:auto;font-size:14px;line-height:1.45;}
 #root{min-height:100dvh;display:flex;justify-content:center;align-items:stretch;}
 .shell{width:min(100%,1440px);height:100dvh;display:flex;flex-direction:column;position:relative;overflow:visible;background:var(--bg);}
 .display{font-family:'Bebas Neue',sans-serif;letter-spacing:.03em;}
@@ -253,6 +253,8 @@ html,body{background:#ddd8ce;color:var(--text);font-family:'Inter',sans-serif;mi
 }
 .sth{display:grid;grid-template-columns:24px minmax(112px,1.25fr) repeat(8,minmax(0,.82fr));gap:4px;padding:9px 10px;background:var(--s2);font-size:10px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.5px;align-items:center;border-bottom:1px solid var(--border);}
 .str{display:grid;grid-template-columns:24px minmax(112px,1.25fr) repeat(8,minmax(0,.82fr));gap:4px;padding:9px 10px;background:var(--s1);border-top:1px solid var(--border);align-items:center;font-size:12px;}
+.str.qual{background:linear-gradient(90deg,rgba(51,124,255,.14),rgba(51,124,255,.06));box-shadow:inset 3px 0 0 rgba(51,124,255,.85);}
+.str.qual:hover{background:linear-gradient(90deg,rgba(51,124,255,.18),rgba(51,124,255,.08));}
 .str:hover{background:var(--accentf);}
 .str .pos{color:var(--text2);font-weight:700;font-size:11px;text-align:center;}
 .str .team-n{display:flex;align-items:center;gap:6px;font-weight:700;min-width:0;}
@@ -275,20 +277,28 @@ html,body{background:#ddd8ce;color:var(--text);font-family:'Inter',sans-serif;mi
   box-shadow:var(--shadow);
 }
 .mcard-hdr{padding:9px 12px 6px;background:var(--s2);font-size:10px;color:var(--text2);font-weight:700;display:flex;justify-content:space-between;align-items:center;}
-.mcard-body{padding:12px 12px 10px;}
-.mteams{display:grid;grid-template-columns:1fr auto 1fr;align-items:flex-start;gap:6px;}
+.mcard-body{padding:4px 8px 6px;}
+.mteams{display:grid;grid-template-columns:minmax(0,.9fr) clamp(34px,6vw,48px) minmax(0,.9fr);align-items:center;gap:0;}
+.mteams{padding:4px 0 0;}
 .mt{
   display:flex;
   flex-direction:column;
   align-items:center;
-  justify-content:flex-start;
+  justify-content:center;
+  gap:5px;
   text-align:center;
+  justify-self:center;
+  min-height:44px;
+  width:min(100%,136px);
+  margin:0 auto;
 }
-.mt .fl{display:flex;align-items:center;justify-content:center;height:18px;margin-bottom:4px;min-height:18px;}
-.mt .fl .flag-ico{width:24px;height:16px;}
+.mteams > .mt:first-child{justify-self:end;margin-right:1px;}
+.mteams > .mt:last-child{justify-self:start;margin-left:1px;}
+.mt .fl{display:flex;align-items:center;justify-content:center;height:clamp(18px,3vw,25px);min-height:clamp(18px,3vw,25px);margin-bottom:2px;}
+.mt .fl .flag-ico{width:clamp(32px,6vw,46px);height:clamp(19px,3.8vw,27px);}
 .mt .nm{
-  font-size:11px;
-  font-weight:800;
+  font-size:clamp(12px,2.9vw,14px);
+  font-weight:900;
   line-height:1.2;
   max-width:100%;
   display:-webkit-box;
@@ -296,8 +306,9 @@ html,body{background:#ddd8ce;color:var(--text);font-family:'Inter',sans-serif;mi
   -webkit-line-clamp:2;
   overflow:hidden;
   white-space:normal;
-  min-height:2.4em;
+  min-height:1.35em;
 }
+.result-display{justify-self:center;min-width:clamp(40px,6vw,54px);padding:0;gap:2px;align-self:center;margin-bottom:0;transform:translateY(-1px);}
 .score-ctrl{display:flex;align-items:center;gap:8px;}
 .scw{display:flex;flex-direction:column;align-items:center;gap:3px;}
 .sarr{width:30px;height:22px;border:none;background:var(--s2);color:var(--text2);border-radius:5px;cursor:pointer;font-size:12px;display:flex;align-items:center;justify-content:center;transition:all .15s;}
@@ -461,7 +472,7 @@ html,body{background:#ddd8ce;color:var(--text);font-family:'Inter',sans-serif;mi
 .player-row:hover{border-color:var(--accent);box-shadow:0 0 0 3px var(--accentf);}
 .player-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;}
 .player-main{min-width:0;flex:1;}
-.player-name{font-size:clamp(11px,2.7vw,14px);font-weight:800;line-height:1.18;word-break:break-word;}
+.player-name{font-size:clamp(11px,2.4vw,13px);font-weight:800;line-height:1.18;word-break:break-word;}
 .player-meta{font-size:clamp(9px,2.4vw,11px);color:var(--text2);margin-top:4px;line-height:1.42;display:flex;flex-direction:column;gap:3px;}
 .player-meta-line{display:block;word-break:break-word;}
 .player-badges{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px;}
@@ -531,22 +542,28 @@ html,body{background:#ddd8ce;color:var(--text);font-family:'Inter',sans-serif;mi
 .pred-compare{
   display:grid;
   grid-template-columns:minmax(0,1fr) minmax(0,1fr);
-  gap:10px;
-  margin-top:12px;
+  gap:3px;
+  margin-top:0;
 }
 .pred-box{
-  background:linear-gradient(180deg,var(--s2),var(--s1));
+  background:linear-gradient(180deg,rgba(255,255,255,.84),rgba(250,248,243,.94));
   border:1px solid var(--border);
   border-radius:14px;
-  padding:10px 10px 9px;
+  padding:6px 7px 5px;
   min-width:0;
   display:flex;
   flex-direction:column;
-  gap:6px;
+  gap:2px;
+  justify-content:space-between;
   box-shadow:0 6px 16px rgba(0,0,0,.05);
 }
-.pred-box.me{background:linear-gradient(180deg,rgba(30,110,240,.14),rgba(30,110,240,.08));border-color:rgba(30,110,240,.22);}
-.pred-box.opp{background:linear-gradient(180deg,rgba(212,150,10,.14),rgba(212,150,10,.08));border-color:rgba(212,150,10,.22);}
+.pred-box.me{background:linear-gradient(180deg,rgba(30,110,240,.11),rgba(30,110,240,.06));border-color:rgba(30,110,240,.26);}
+.pred-box.opp{
+  background:linear-gradient(180deg,rgba(212,150,10,.11),rgba(212,150,10,.06));
+  border-color:rgba(212,150,10,.26);
+  justify-content:flex-start;
+  min-height:100%;
+}
 .pred-head{display:flex;align-items:center;justify-content:space-between;gap:8px;min-width:0;}
 .pred-role{
   display:inline-flex;
@@ -559,13 +576,14 @@ html,body{background:#ddd8ce;color:var(--text);font-family:'Inter',sans-serif;mi
   font-weight:900;
   letter-spacing:.2px;
   line-height:1;
-  color:var(--text2);
-  background:var(--s1);
-  border:1px solid var(--border);
+  color:#fff;
+  background:var(--text2);
+  border:1px solid transparent;
   flex:0 0 auto;
+  box-shadow:0 2px 8px rgba(0,0,0,.08);
 }
-.pred-box.me .pred-role{color:var(--accent);border-color:rgba(30,110,240,.18);background:rgba(30,110,240,.08);}
-.pred-box.opp .pred-role{color:var(--gold);border-color:rgba(212,150,10,.18);background:rgba(212,150,10,.08);}
+.pred-box.me .pred-role{background:var(--accent);}
+.pred-box.opp .pred-role{background:var(--gold);}
 .pred-name{
   flex:1;
   min-width:0;
@@ -580,10 +598,18 @@ html,body{background:#ddd8ce;color:var(--text);font-family:'Inter',sans-serif;mi
 }
 .pred-score{
   display:flex;
-  align-items:flex-end;
-  justify-content:space-between;
+  align-items:center;
+  justify-content:center;
   gap:8px;
   min-width:0;
+  text-align:center;
+  margin-top:auto;
+  margin-bottom:auto;
+}
+.pred-score > div{
+  flex:1;
+  min-width:0;
+  text-align:center;
 }
 .pred-value{
   font-family:'Bebas Neue';
@@ -601,6 +627,7 @@ html,body{background:#ddd8ce;color:var(--text);font-family:'Inter',sans-serif;mi
   color:var(--text2);
   font-weight:700;
   line-height:1.2;
+  text-align:center;
 }
 .pred-edit{
   display:flex;
@@ -609,6 +636,8 @@ html,body{background:#ddd8ce;color:var(--text);font-family:'Inter',sans-serif;mi
   gap:6px;
   flex-wrap:nowrap;
   padding-top:2px;
+  margin-top:auto;
+  margin-bottom:auto;
 }
 .pred-edit .snum{width:42px;height:42px;font-size:27px;border-radius:10px;}
 .pred-edit .sarr{width:26px;height:20px;font-size:11px;border-radius:5px;}
@@ -629,8 +658,12 @@ html,body{background:#ddd8ce;color:var(--text);font-family:'Inter',sans-serif;mi
   .player-list{gap:6px;}
   .player-row{padding:10px;}
   .player-mini-btn,.btn.ghost,.modal-close{font-size:11px;}
-  .rank-card-top{flex-direction:column;align-items:flex-start;}
-  .rank-score-sub{text-align:left;}
+  .rank-card{padding:10px;}
+  .rank-card-top{grid-template-columns:minmax(0,1fr) auto;gap:8px;align-items:center;}
+  .rank-card-name{font-size:13px;}
+  .rank-card-meta{margin-top:4px;gap:4px;}
+  .rank-score{font-size:30px;}
+  .rank-score-sub{text-align:right;}
 }
 
 /* RANKING */
@@ -639,17 +672,33 @@ html,body{background:#ddd8ce;color:var(--text);font-family:'Inter',sans-serif;mi
 .rank-tab.on{background:var(--accent);border-color:var(--accent);color:#fff;}
 .rank-list{display:flex;flex-direction:column;gap:8px;margin:0 14px 14px;}
 .rank-card{background:var(--s1);border:1px solid var(--border);border-radius:16px;padding:12px;box-shadow:var(--shadow);}
-.rank-card-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;}
+.rank-card-top{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:12px;}
 .rank-card-left{min-width:0;flex:1;}
 .rank-card-rank{font-family:'Bebas Neue';font-size:28px;line-height:1;color:var(--accent);}
-.rank-card-name{font-size:15px;font-weight:900;line-height:1.25;}
-.rank-card-meta{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px;font-size:11px;color:var(--text2);}
+.rank-card-name{font-size:14px;font-weight:900;line-height:1.25;}
+.rank-card-meta{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px;font-size:10px;color:var(--text2);}
 .rank-card-foot{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-top:10px;padding-top:10px;border-top:1px solid var(--border);font-size:11px;color:var(--text2);}
 .rank-score{font-family:'Bebas Neue';font-size:34px;line-height:1;color:var(--accent);}
 .rank-score-sub{font-size:10px;color:var(--text2);margin-top:2px;text-align:right;}
 .rank-tools{display:flex;gap:8px;align-items:center;padding:10px 14px 0;flex-wrap:wrap;}
 .rank-search{flex:1;min-width:180px;padding:11px 14px;border:1.5px solid var(--border);border-radius:12px;background:var(--s1);font:inherit;color:var(--text);outline:none;}
 .rank-search:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accentf);}
+@media (min-width: 640px){
+  .mteams > .mt:first-child{margin-right:0;}
+  .mteams > .mt:last-child{margin-left:0;}
+  .mt{width:min(100%,160px);}
+  .pred-box.me .pred-score{
+    justify-content:flex-start;
+    padding-left:clamp(72px,10vw,110px);
+  }
+  .pred-box.me .pred-score > div{
+    flex:0 0 auto;
+  }
+  .pred-box.me .pred-value.big{
+    display:inline-block;
+    transform:none;
+  }
+}
 .filter-wrap{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;max-width:100%;padding-bottom:2px;}
 .filter-wrap::-webkit-scrollbar{display:none;}
 .filter-chip{flex:0 0 auto;padding:8px 12px;border:1.5px solid var(--border);border-radius:100px;background:var(--s1);color:var(--text2);font-size:12px;font-weight:800;cursor:pointer;font-family:inherit;white-space:nowrap;display:inline-flex;align-items:center;gap:6px;}
@@ -1196,6 +1245,14 @@ const FALLBACK_PLAYER_DATA=Object.fromEntries(Object.entries(TEAM_JA).map(([team
 }));
 let PLAYER_DATA=BOOTSTRAP_PLAYERS||FALLBACK_PLAYER_DATA;
 let PLAYER_DATA_BASE=BOOTSTRAP_PLAYERS||FALLBACK_PLAYER_DATA;
+function withWorldCupGoals(data){
+  return Object.fromEntries(Object.entries(data||{}).map(([country,players])=>[
+    country,
+    (players||[]).map((player)=>({...player,worldCupGoals:Number(player?.worldCupGoals??0)}))
+  ]));
+}
+PLAYER_DATA=withWorldCupGoals(PLAYER_DATA);
+PLAYER_DATA_BASE=withWorldCupGoals(PLAYER_DATA_BASE);
 let ALL_PLAYERS=Object.values(PLAYER_DATA).flat();
 let PLAYER_DATA_META={generatedAt:BOOTSTRAP?.generatedAt||null,sources:BOOTSTRAP?.sources||{}};
 function emptyPlayerOverrides(){
@@ -1218,16 +1275,17 @@ function saveCurrentPlayerOverrides(overrides){
 }
 function normalizePlayerRecord(player){
   const merged={...player};
-  for(const key of ['goals','clubGoals','internationalGoals','internationalCaps','marketValue']){
+  for(const key of ['goals','clubGoals','internationalGoals','internationalCaps','marketValue','worldCupGoals']){
     if(merged[key]!==undefined&&merged[key]!==null&&merged[key]!==''){
       merged[key]=Number(merged[key])||0;
     }
   }
-  merged.displayNameJa=toJapaneseName(merged.name||merged.displayNameJa||'');
+  merged.officialNameJa=String(merged.officialNameJa||'').trim();
+  merged.displayNameJa=merged.officialNameJa||merged.name||merged.displayNameJa||'';
   return merged;
 }
 function playerDisplayName(player){
-  return player?.displayNameJa || player?.name || '';
+  return player?.officialNameJa || player?.name || player?.displayNameJa || '';
 }
 function applyPlayerOverrides(base,overrides){
   const deletedIds=new Set((overrides?.deletedIds||[]).map(id=>String(id)));
@@ -1632,7 +1690,7 @@ const T={
     roomCode:'ルームコード',copy:'コピー',copied:'✓ コピー済み',
     predicted:'予想済み',unpredicted:'未予想',confirmed:'結果確定',
     groupStage:'グループステージ',standings:'順位表',predictions:'試合予想',
-    bracket:'決勝T',ranking:'得点ランキング(未)',settings:'設定',home:'ホーム',
+    bracket:'決勝T',ranking:'得点ランキング',settings:'設定',home:'ホーム',
     predict:'予想する',confirm:'予想確定',unlock:'解除',
     oppPred:'対戦相手の予想:',noPred:'まだ未予想',
     pointSettings:'ポイント設定',resultPts:'勝敗的中',exactPts:'スコア的中',
@@ -1652,7 +1710,7 @@ const T={
     roomCode:'Room Code',copy:'Copy',copied:'✓ Copied',
     predicted:'Predicted',unpredicted:'Pending',confirmed:'Results In',
     groupStage:'Group Stage',standings:'Standings',predictions:'Predictions',
-    bracket:'Knockout',ranking:'Scoring (TBD)',settings:'Settings',home:'Home',
+    bracket:'Knockout',ranking:'Top Scorers',settings:'Settings',home:'Home',
     predict:'Predict',confirm:'Confirm',unlock:'Unlock',
     oppPred:'Opponent:',noPred:'Not predicted',
     pointSettings:'Point Settings',resultPts:'Correct Result',exactPts:'Exact Score',
@@ -1935,7 +1993,7 @@ function CountryModal({team,onClose}){
   if(!team)return null;
   const players=PLAYER_DATA[team]||[];
   const meta=teamMeta(team);
-  const blankDraft={name:'',position:'FW',club:'',goals:'0',clubGoals:'0'};
+  const blankDraft={name:'',position:'FW',club:'',worldCupGoals:'0',clubGoals:'0'};
   const [selectedPlayerId,setSelectedPlayerId]=useState('new');
   const [draft,setDraft]=useState(()=>({...blankDraft}));
   const [saving,setSaving]=useState(false);
@@ -1983,7 +2041,7 @@ function CountryModal({team,onClose}){
       name:p.name||'',
       position:normalizePosition(p.position),
       club:p.club||'',
-      goals:String(p.goals??0),
+      worldCupGoals:String(p.worldCupGoals??0),
       clubGoals:String(p.clubGoals??0),
     });
   }
@@ -2005,7 +2063,7 @@ function CountryModal({team,onClose}){
       name:draft.name?.trim(),
       position:normalizePosition(draft.position),
       club:draft.club?.trim(),
-      goals:Number(draft.goals||0),
+      worldCupGoals:Number(draft.worldCupGoals||0),
       clubGoals:Number(draft.clubGoals||0),
     };
     Object.entries(nextValues).forEach(([key,value])=>{
@@ -2055,7 +2113,7 @@ function CountryModal({team,onClose}){
           position:normalizePosition(draft.position),
           club:(draft.club||'').trim()||'Unknown',
           clubGoals:Number(draft.clubGoals||0),
-          goals:Number(draft.goals||0),
+          worldCupGoals:Number(draft.worldCupGoals||0),
           source:'manual',
           _added:true,
         };
@@ -2118,10 +2176,9 @@ function CountryModal({team,onClose}){
                 <div className="player-main">
                   <div className="player-name">{playerDisplayName(p)}{p._added&&<span className="player-badge" style={{marginLeft:8}}>追加</span>}{p._edited&&<span className="player-badge" style={{marginLeft:8}}>修正済み</span>}</div>
                   <div className="player-meta">
-                    <span className="player-meta-line">{teamJa(team)}</span>
                     <span className="player-meta-line">{positionJa(p.position)}</span>
                     <span className="player-meta-line">{p.club||'Unknown'}</span>
-                    <span className="player-meta-line">2026ワールドカップ得点 {p.goals}</span>
+                    <span className="player-meta-line">2026ワールドカップ得点 {p.worldCupGoals??0}</span>
                     <span className="player-meta-line">クラブ得点 {p.clubGoals}</span>
                   </div>
                 </div>
@@ -2156,7 +2213,7 @@ function CountryModal({team,onClose}){
             </div>
             <div className="player-field">
               <label>2026ワールドカップ得点</label>
-              <input type="number" min="0" step="1" value={draft?.goals||0} onChange={(e)=>updateDraft('goals',e.target.value)} />
+              <input type="number" min="0" step="1" value={draft?.worldCupGoals||0} onChange={(e)=>updateDraft('worldCupGoals',e.target.value)} />
             </div>
             <div className="player-field">
               <label>クラブ得点</label>
@@ -2326,7 +2383,7 @@ function BottomNav({screen,setScreen}){
     {id:'home',icon:'🏠',label:l.home},
     {id:'groups',icon:'⚽',label:'グループ'},
     {id:'bracket',icon:'🏆',label:'決勝T'},
-    {id:'leaderboard',icon:'📊',label:'得点ランキング(未)'},
+    {id:'leaderboard',icon:'📊',label:'得点ランキング'},
     {id:'settings',icon:'⚙️',label:l.settings},
   ];
   return(
@@ -2546,7 +2603,6 @@ function MatchCard({match,userId,opponentId,preds,results,onSave,roomId,syncToke
               ?<div className="pred-score">
                 <div>
                   <div className="pred-value big">{myPred?`${myPred.home}–${myPred.away}`:l.noPred}</div>
-                  <div className="pred-note">自分の予想</div>
                 </div>
                 {myScore&&<div style={{fontSize:11,fontWeight:800,padding:'6px 10px',borderRadius:10,
                   background:myScore.type==='exact'?'var(--goldf)':myScore.type==='result'?'var(--greenf)':'rgba(100,100,100,.08)',
@@ -2577,8 +2633,7 @@ function MatchCard({match,userId,opponentId,preds,results,onSave,roomId,syncToke
             </div>
             <div className="pred-score">
               <div>
-                <div className="pred-value">{oppPred?`${oppPred.home}–${oppPred.away}`:l.noPred}</div>
-                <div className="pred-note">相手の予想</div>
+                <div className="pred-value">{oppPred?`${oppPred.home}–${oppPred.away}`:'未予想'}</div>
               </div>
             </div>
           </div>
@@ -2657,7 +2712,7 @@ function GroupsScreen({user,onOpenTeam,syncToken}){
         </div>
       </div>
       <div className="section-title">{l.standings}</div>
-      <div style={{padding:'0 16px 8px',fontSize:11,color:'var(--text2)'}}>国名をタップすると選手一覧が開きます</div>
+      <div style={{padding:'0 16px 8px',fontSize:11,color:'var(--text2)'}}>国名をタップすると選手一覧が開きます。上位2チームが決勝トーナメント進出です。</div>
       <div className="standings">
         <div className="sth">
           <span></span>
@@ -2672,7 +2727,7 @@ function GroupsScreen({user,onOpenTeam,syncToken}){
           <span style={{textAlign:'center'}}>勝点</span>
         </div>
         {standings.map((t,i)=>(
-          <div className="str" key={t.name} style={{cursor:'pointer'}} onClick={()=>onOpenTeam?.(t.name)}>
+          <div className={`str${i<2?' qual':''}`} key={t.name} style={{cursor:'pointer'}} onClick={()=>onOpenTeam?.(t.name)}>
             <span className="pos">{i+1}</span>
             <span className="team-n"><div className="qi" style={{background:qualColors[i]||'transparent'}}/><span style={{fontSize:18}}><TeamFlag team={t.name}/></span><span className="team-name" style={{fontSize:11}}>{t.name.startsWith('TBD-')?placeholderLabel(t.name):teamJa(t.name)}</span></span>
             <span className="sv">{t.p}</span>
@@ -3056,91 +3111,48 @@ function BracketScreen({user,syncToken}){
 // ===== LEADERBOARD =====
 function LeaderboardScreen({user,onOpenTeam}){
   const lang=useContext(LangCtx);const l=T[lang];
-  const [query,setQuery]=useState('');
-  const [countryFilter,setCountryFilter]=useState('all');
   const players=[...ALL_PLAYERS];
-  const countries=[...GROUP_TEAM_KEYS].sort((a,b)=>teamJa(a).localeCompare(teamJa(b),'ja'));
-  const queryNorm=normalizeSearchText(query);
-  const filteredPlayers=players.filter((p)=>{
-    if(countryFilter!=='all'&&p.country!==countryFilter)return false;
-    if(!queryNorm)return true;
-      const hay=normalizeSearchText([
-      p.name,
-      p.displayNameJa,
-      p.countryJa||teamJa(p.country),
-      p.country,
-      p.position,
-      p.club,
-      p.goals,
-      p.clubGoals,
-    ].join(' '));
-    return hay.includes(queryNorm);
-  }).sort((a,b)=>b.goals-a.goals||playerDisplayName(a).localeCompare(playerDisplayName(b),'ja'));
-  const top=[...filteredPlayers].sort((a,b)=>b.goals-a.goals||playerDisplayName(a).localeCompare(playerDisplayName(b),'ja'))[0]
-    ||[...players].sort((a,b)=>b.goals-a.goals||b.clubGoals-a.clubGoals||playerDisplayName(a).localeCompare(playerDisplayName(b),'ja'))[0];
+  const rankedPlayers=[...players].sort((a,b)=>Number(b.worldCupGoals||0)-Number(a.worldCupGoals||0)||playerDisplayName(a).localeCompare(playerDisplayName(b),'ja'));
+  const top=rankedPlayers[0]
+    ||[...players].sort((a,b)=>Number(b.worldCupGoals||0)-Number(a.worldCupGoals||0)||playerDisplayName(a).localeCompare(playerDisplayName(b),'ja'))[0];
   const uiSettings=gs('settings',DEFAULT_UI_SETTINGS);
   const dataStamp=PLAYER_DATA_META.generatedAt ? formatTimestamp(PLAYER_DATA_META.generatedAt,uiSettings.timeZone) : '';
 
   return(
     <div className="page page-enter">
-      <div className="shdr"><h2>得点ランキング(未)</h2></div>
+      <div className="shdr"><h2>得点ランキング</h2></div>
       <div className="lb-hero">
         <div className="lb-bg-txt">W杯</div>
-        <div className="lb-label">ワールドカップ得点</div>
         {dataStamp&&<div style={{fontSize:10,color:'rgba(255,255,255,.68)',marginTop:4}}>公開データ更新: {dataStamp}</div>}
         <div className="lb-vs-row" style={{gridTemplateColumns:'1fr'}}>
           <div className="lb-pl">
             <div className="lb-pl-name">トップスコアラー</div>
-            <div className="lb-pl-pts">{top?.goals??0}</div>
-            <div style={{fontSize:9,color:'rgba(255,255,255,.6)',marginTop:2}}>{playerDisplayName(top)||'--'}</div>
+            <div className="lb-pl-pts">{top?.worldCupGoals??0}</div>
+            {Number(top?.worldCupGoals||0)>0&&<div style={{fontSize:9,color:'rgba(255,255,255,.6)',marginTop:2}}>{playerDisplayName(top)||''}</div>}
           </div>
         </div>
-        <div style={{fontSize:10,color:'rgba(255,255,255,.68)',marginTop:8}}>対象国数: {GROUP_TEAM_KEYS.length}</div>
       </div>
-      <div className="rank-tools">
-        <input
-          className="rank-search"
-          value={query}
-          onChange={(e)=>setQuery(e.target.value)}
-          placeholder="選手名・国名・クラブ・ポジションで検索"
-        />
-      </div>
-      <div className="rank-tools" style={{paddingTop:8}}>
-        <div className="filter-wrap">
-          <button className={`filter-chip${countryFilter==='all'?' on':''}`} onClick={()=>setCountryFilter('all')}>全て</button>
-          {countries.map(country=>(
-            <button
-              key={country}
-              className={`filter-chip${countryFilter===country?' on':''}`}
-              onClick={()=>setCountryFilter(country)}
-            >
-              <TeamFlag team={country}/> {teamJa(country)}
-            </button>
-          ))}
-        </div>
-      </div>
-      <div className="rank-meta">
-        <span>表示 {filteredPlayers.length} / {players.length}</span>
-        <span>{countryFilter==='all'?'国フィルタなし':teamJa(countryFilter)}</span>
+      <div className="rank-meta" style={{paddingTop:10}}>
+        <span>表示 {rankedPlayers.length} 人</span>
+        <span>2026ワールドカップ得点順</span>
       </div>
       <div className="section-title">選手一覧</div>
       <div className="rank-list">
-        {filteredPlayers.length===0&&<div style={{padding:24,textAlign:'center',color:'var(--text2)',fontSize:13}}>条件に合う選手がいません</div>}
-        {filteredPlayers.map((p,i)=>(
+        {rankedPlayers.length===0&&<div style={{padding:24,textAlign:'center',color:'var(--text2)',fontSize:13}}>選手データがありません</div>}
+        {rankedPlayers.map((p,i)=>(
           <div className="rank-card" key={p.id}>
             <div className="rank-card-top">
               <div className="rank-card-left">
                 <div className="rank-card-rank">#{i+1}</div>
                 <div className="rank-card-name">{playerDisplayName(p)}</div>
                 <div className="rank-card-meta">
-                  <button className="rank-country" onClick={()=>onOpenTeam?.(p.country)}><TeamFlag team={p.country}/> <span>{teamJa(p.country)}</span></button>
                   <span>{positionJa(p.position)}</span>
                   <span>{p.club}</span>
                 </div>
               </div>
               <div style={{textAlign:'right'}}>
-                <div className="rank-score">{p.goals}</div>
-                <div className="rank-score-sub">W杯得点</div>
+                <div className="rank-score">{p.worldCupGoals??0}</div>
+                <div className="rank-score-sub">得点</div>
               </div>
             </div>
           </div>

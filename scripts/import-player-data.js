@@ -9,6 +9,7 @@ const ROOT = path.join(__dirname, '..');
 const DATA_DIR = path.join(ROOT, 'data');
 const OUT_FILE = path.join(DATA_DIR, 'players.generated.json');
 const SOURCES_FILE = path.join(DATA_DIR, 'sources.json');
+const NAME_OVERRIDES_FILE = path.join(DATA_DIR, 'player-name-overrides.json');
 
 const TEAM_SPECS = [
   { country: 'Mexico', ja: 'メキシコ', aliases: ['Mexico'] },
@@ -70,6 +71,15 @@ const FALLBACK_ROLES = [
   { pos: 'FW', suffix: 'のエース' },
   { pos: 'MF', suffix: 'の司令塔' },
   { pos: 'DF', suffix: 'の守備職人' },
+];
+
+const JAPAN_OFFICIAL_ROSTER = [
+  { id: 'Japan-official-1', name: 'Kaoru Mitoma', officialNameJa: '三笘 薫', country: 'Japan', countryJa: '日本', countryName: 'Japan', position: 'MF/FW', subPosition: 'MF/FW', club: 'Brighton & Hove Albion FC / England' },
+  { id: 'Japan-official-2', name: 'Takumi Minamino', officialNameJa: '南野 拓実', country: 'Japan', countryJa: '日本', countryName: 'Japan', position: 'MF/FW', subPosition: 'MF/FW', club: 'AS Monaco / France' },
+  { id: 'Japan-official-3', name: 'Junya Ito', officialNameJa: '伊東 純也', country: 'Japan', countryJa: '日本', countryName: 'Japan', position: 'MF/FW', subPosition: 'MF/FW', club: 'KRC Genk / Belgium' },
+  { id: 'Japan-official-4', name: 'Daichi Kamada', officialNameJa: '鎌田 大地', country: 'Japan', countryJa: '日本', countryName: 'Japan', position: 'MF/FW', subPosition: 'MF/FW', club: 'Crystal Palace / England' },
+  { id: 'Japan-official-5', name: 'Ayase Ueda', officialNameJa: '上田 綺世', country: 'Japan', countryJa: '日本', countryName: 'Japan', position: 'FW', subPosition: 'FW', club: 'Feyenoord / Netherlands' },
+  { id: 'Japan-official-6', name: 'Ritsu Doan', officialNameJa: '堂安 律', country: 'Japan', countryJa: '日本', countryName: 'Japan', position: 'MF/FW', subPosition: 'MF/FW', club: 'Eintracht Frankfurt / Germany' },
 ];
 
 const JAPANESE_LATIN_REPLACEMENTS = [
@@ -270,6 +280,18 @@ function getSources() {
   return JSON.parse(fs.readFileSync(SOURCES_FILE, 'utf8'));
 }
 
+function readJsonFile(file, fallback) {
+  try {
+    return JSON.parse(fs.readFileSync(file, 'utf8'));
+  } catch {
+    return fallback;
+  }
+}
+
+function loadNameOverrides() {
+  return readJsonFile(NAME_OVERRIDES_FILE, {});
+}
+
 function buildCountryLookup(nationalTeams) {
   const byName = new Map();
   nationalTeams.forEach((row) => {
@@ -296,6 +318,7 @@ function buildFallbackPlayers(spec) {
   return FALLBACK_ROLES.map((role, index) => ({
     id: `${spec.country}-fallback-${index + 1}`,
     name: `${spec.ja}${role.suffix}`,
+    officialNameJa: `${spec.ja}${role.suffix}`,
     displayNameJa: `${spec.ja}${role.suffix}`,
     firstName: spec.ja,
     lastName: role.suffix,
@@ -320,9 +343,24 @@ function buildFallbackPlayers(spec) {
   }));
 }
 
+function resolveOfficialNameJa(nameOverrides, country, playerName) {
+  const countryOverrides = nameOverrides?.[country];
+  if (!countryOverrides) return '';
+  const raw = String(playerName || '').trim();
+  if (!raw) return '';
+  const direct = countryOverrides[raw] ?? countryOverrides[normalizeKey(raw)];
+  if (!direct) return '';
+  if (typeof direct === 'string') return direct.trim();
+  if (typeof direct === 'object') {
+    return String(direct.officialNameJa || direct.displayNameJa || direct.nameJa || '').trim();
+  }
+  return '';
+}
+
 async function main() {
   fs.mkdirSync(DATA_DIR, { recursive: true });
   const sources = getSources();
+  const nameOverrides = loadNameOverrides();
 
   const nationalTeams = [];
   await readCsv(sources.players.nationalTeamsCsv, (row) => {
@@ -365,10 +403,12 @@ async function main() {
       }
     }
     if (!team) return;
+    if (team.country === 'Japan') return;
     const player = {
       id: row.player_id,
       name: row.name,
-      displayNameJa: transliterateNameToJa(row.name),
+      officialNameJa: resolveOfficialNameJa(nameOverrides, team.country, row.name),
+      displayNameJa: resolveOfficialNameJa(nameOverrides, team.country, row.name) || row.name,
       firstName: row.first_name,
       lastName: row.last_name,
       country: team.country,
@@ -392,6 +432,25 @@ async function main() {
     playersById.set(player.id, player);
     if (!playersByCountry.has(team.country)) playersByCountry.set(team.country, []);
     playersByCountry.get(team.country).push(player);
+  });
+
+  const japanRoster = JAPAN_OFFICIAL_ROSTER.map((player, index) => ({
+    ...player,
+    rank: index + 1,
+    clubGoals: 0,
+    internationalGoals: 0,
+    goals: 0,
+    internationalCaps: 0,
+    marketValue: 0,
+    lastSeason: '',
+    imageUrl: '',
+    profileUrl: '',
+    currentNationalTeamId: 'Japan-official',
+    displayNameJa: player.officialNameJa,
+  }));
+  playersByCountry.set('Japan', japanRoster);
+  japanRoster.forEach((player) => {
+    playersById.set(player.id, player);
   });
 
   const candidateIds = new Set(playersById.keys());
