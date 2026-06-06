@@ -220,10 +220,11 @@ html,body{background:#ddd8ce;color:var(--text);font-family:'Inter',sans-serif;mi
 .stats-table{display:flex;flex-direction:column;gap:6px;}
 .stats-head,.stats-row{display:grid;grid-template-columns:minmax(0,1fr) minmax(52px,.7fr) minmax(52px,.7fr);gap:8px;align-items:center;}
 .stats-head{font-size:10px;color:var(--text2);font-weight:900;letter-spacing:.4px;padding-bottom:6px;border-bottom:1px solid var(--border);}
+.stats-head span:nth-child(2),.stats-head span:nth-child(3){text-align:center;}
 .stats-row{padding:6px 0;border-top:1px solid var(--border);font-size:11px;font-weight:800;color:var(--text2);}
 .stats-row:first-of-type{border-top:none;padding-top:0;}
 .stats-row span{min-width:0;}
-.stats-row b{display:block;text-align:right;font-variant-numeric:tabular-nums;color:var(--text);font-size:13px;}
+.stats-row b{display:block;text-align:center;font-variant-numeric:tabular-nums;color:var(--text);font-size:13px;}
 .stats-row b.me{color:var(--accent);}
 .stats-row b.opp{color:var(--gold);}
 .stats-row.total b{font-size:14px;}
