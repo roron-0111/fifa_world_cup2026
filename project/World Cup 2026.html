@@ -786,6 +786,9 @@ html,body{background:#ddd8ce;color:var(--text);font-family:'Inter',sans-serif;mi
 .ko-match-node:disabled{opacity:1;}
 .ko-match-node.predicted{box-shadow:0 0 0 2px rgba(255,20,15,.42),0 10px 24px rgba(0,0,0,.25);}
 .ko-match-node.actual{box-shadow:0 0 0 2px rgba(212,150,10,.7),0 10px 24px rgba(0,0,0,.25);}
+.ko-match-meta{height:23px;display:flex;align-items:center;justify-content:space-between;gap:6px;padding:4px 7px;background:linear-gradient(90deg,rgba(17,24,39,.88),rgba(30,41,59,.82));color:#fff;font-size:9px;font-weight:900;line-height:1;letter-spacing:.15px;}
+.ko-match-meta span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.ko-match-meta em{font-style:normal;color:#facc15;white-space:nowrap;}
 .ko-teams-line{height:58px;display:grid;grid-template-columns:minmax(0,1fr) 58px minmax(0,1fr);align-items:stretch;background:linear-gradient(180deg,rgba(255,255,255,.78),rgba(230,230,230,.86));}
 .ko-team-block{min-width:0;display:grid;grid-template-columns:18px minmax(0,1fr) auto;align-items:center;column-gap:5px;padding:7px 6px 6px;border-right:1px solid rgba(0,0,0,.08);position:relative;}
 .ko-team-block:last-child{border-right:none;border-left:1px solid rgba(0,0,0,.08);}
@@ -1095,7 +1098,7 @@ const TEAMS={
   'Spain':{f:'🇪🇸'},'Cabo Verde':{f:'🇨🇻'},'Saudi Arabia':{f:'🇸🇦'},'Uruguay':{f:'🇺🇾'},
   'France':{f:'🇫🇷'},'Senegal':{f:'🇸🇳'},'Iraq':{f:'🇮🇶'},'Norway':{f:'🇳🇴'},
   'Argentina':{f:'🇦🇷'},'Algeria':{f:'🇩🇿'},'Austria':{f:'🇦🇹'},'Jordan':{f:'🇯🇴'},
-  'Portugal':{f:'🇵🇹'},'Congo':{f:'🇨🇬'},'Uzbekistan':{f:'🇺🇿'},'Colombia':{f:'🇨🇴'},
+  'Portugal':{f:'🇵🇹'},'Congo':{f:'🇨🇩'},'Uzbekistan':{f:'🇺🇿'},'Colombia':{f:'🇨🇴'},
   'England':{f:'🏴'},'Croatia':{f:'🇭🇷'},'Ghana':{f:'🇬🇭'},'Panama':{f:'🇵🇦'},
 };
 const TEAM_JA={
@@ -1109,7 +1112,7 @@ const TEAM_JA={
   'Spain':'スペイン','Cabo Verde':'カーボベルデ','Saudi Arabia':'サウジアラビア','Uruguay':'ウルグアイ',
   'France':'フランス','Senegal':'セネガル','Iraq':'イラク','Norway':'ノルウェー',
   'Argentina':'アルゼンチン','Algeria':'アルジェリア','Austria':'オーストリア','Jordan':'ヨルダン',
-  'Portugal':'ポルトガル','Congo':'コンゴ','Uzbekistan':'ウズベキスタン','Colombia':'コロンビア',
+  'Portugal':'ポルトガル','Congo':'コンゴ民主共和国','Uzbekistan':'ウズベキスタン','Colombia':'コロンビア',
   'England':'イングランド','Croatia':'クロアチア','Ghana':'ガーナ','Panama':'パナマ',
 };
 const TEAM_FLAG_FILES={
@@ -1261,6 +1264,7 @@ PLAYER_DATA=withWorldCupGoals(PLAYER_DATA);
 PLAYER_DATA_BASE=withWorldCupGoals(PLAYER_DATA_BASE);
 let ALL_PLAYERS=Object.values(PLAYER_DATA).flat();
 let PLAYER_DATA_META={generatedAt:BOOTSTRAP?.generatedAt||null,sources:BOOTSTRAP?.sources||{}};
+let DATA_STATUS=BOOTSTRAP?.dataStatus||{};
 function emptyPlayerOverrides(){
   return {updatedAt:null,players:{},deletedIds:[],additionsByCountry:{}};
 }
@@ -1281,7 +1285,7 @@ function saveCurrentPlayerOverrides(overrides){
 }
 function normalizePlayerRecord(player){
   const merged={...player};
-  for(const key of ['goals','clubGoals','internationalGoals','internationalCaps','marketValue','worldCupGoals']){
+  for(const key of ['goals','clubGoals','internationalGoals','internationalCaps','marketValue','worldCupGoals','age','heightCm']){
     if(merged[key]!==undefined&&merged[key]!==null&&merged[key]!==''){
       merged[key]=Number(merged[key])||0;
     }
@@ -1292,6 +1296,13 @@ function normalizePlayerRecord(player){
 }
 function playerDisplayName(player){
   return player?.officialNameJa || player?.name || player?.displayNameJa || '';
+}
+function playerPhysicalMeta(player){
+  const parts=[];
+  if(player?.age)parts.push(`${player.age}歳`);
+  if(player?.heightCm)parts.push(`${player.heightCm}cm`);
+  if(player?.dateOfBirth)parts.push(player.dateOfBirth);
+  return parts.join(' / ');
 }
 function applyPlayerOverrides(base,overrides){
   const deletedIds=new Set((overrides?.deletedIds||[]).map(id=>String(id)));
@@ -1337,6 +1348,9 @@ function setPlayerData(next,meta={},shouldNotify=true){
   PLAYER_DATA_META={...PLAYER_DATA_META,...meta};
   refreshPlayerDataView();
   if(shouldNotify)notifyStateChange();
+}
+function setDataStatus(next){
+  DATA_STATUS={...DATA_STATUS,...(next||{})};
 }
 const GROUP_STAGE_DEFS=[
   {id:'A',teams:['Mexico','South Africa','Korea Republic','Czechia'],matches:[
@@ -1450,31 +1464,83 @@ GROUP_MATCHES.forEach((match)=>{
 });
 const GROUP_TEAM_KEYS=[...new Set(GROUP_STAGE_DEFS.flatMap((g)=>g.teams))];
 const KO_SEED_PAIRS=[
-  ['A組1位','B組2位'],['C組1位','D組2位'],['E組1位','F組2位'],['G組1位','H組2位'],
-  ['I組1位','J組2位'],['K組1位','L組2位'],['B組1位','A組2位'],['D組1位','C組2位'],
-  ['F組1位','E組2位'],['H組1位','G組2位'],['J組1位','I組2位'],['L組1位','K組2位'],
-  ['3位枠1','3位枠2'],['3位枠3','3位枠4'],['3位枠5','3位枠6'],['3位枠7','3位枠8'],
+  ['A組2位','B組2位'],['E組1位','A/B/C/D/F組3位'],['F組1位','C組2位'],['C組1位','F組2位'],
+  ['I組1位','C/D/F/G/H組3位'],['E組2位','I組2位'],['A組1位','C/E/F/H/I組3位'],['L組1位','E/H/I/J/K組3位'],
+  ['D組1位','B/E/F/I/J組3位'],['G組1位','A/E/H/I/J組3位'],['K組2位','L組2位'],['H組1位','J組2位'],
+  ['B組1位','E/F/G/I/J組3位'],['J組1位','H組2位'],['K組1位','D/E/I/J/L組3位'],['D組2位','G組2位'],
 ];
 const KO_ROUNDS=[
-  {id:'R32',label:'ラウンド32',short:'R32',en:'Round of 32',matches:KO_SEED_PAIRS.map((pair,i)=>({id:`R32-${i}`,home:pair[0],away:pair[1],date:'日程未定',stadium:'会場未定'}))},
-  {id:'R16',label:'ベスト16',short:'R16',en:'Round of 16',matches:Array.from({length:8},(_,i)=>({id:`R16-${i}`,home:`R32 第${i*2+1}試合勝者`,away:`R32 第${i*2+2}試合勝者`,date:'日程未定',stadium:'会場未定'}))},
-  {id:'QF',label:'準々決勝',short:'QF',en:'Quarter-Finals',matches:Array.from({length:4},(_,i)=>({id:`QF-${i}`,home:`R16 第${i*2+1}試合勝者`,away:`R16 第${i*2+2}試合勝者`,date:'日程未定',stadium:'会場未定'}))},
-  {id:'SF',label:'準決勝',short:'SF',en:'Semi-Finals',matches:[{id:'SF-0',home:'QF 第1試合勝者',away:'QF 第2試合勝者',date:'日程未定',stadium:'会場未定'},{id:'SF-1',home:'QF 第3試合勝者',away:'QF 第4試合勝者',date:'日程未定',stadium:'会場未定'}]},
-  {id:'F',label:'決勝',short:'Final',en:'Final',matches:[{id:'F-0',home:'準決勝1勝者',away:'準決勝2勝者',date:'日程未定',stadium:'会場未定'}]},
-  {id:'3RD',label:'3位決定戦',short:'3rd',en:'3rd Place Play-off',matches:[{id:'3RD-0',home:'準決勝1敗者',away:'準決勝2敗者',date:'日程未定',stadium:'会場未定'}]},
+  {id:'R32',label:'ラウンド32',short:'R32',en:'Round of 32',matches:[
+    {id:'R32-0',matchNo:73,home:'A組2位',away:'B組2位',date:'2026-06-28',kickoff:'19:00',stadium:'Los Angeles Stadium',venueLocal:'6/28 12:00'},
+    {id:'R32-1',matchNo:74,home:'E組1位',away:'A/B/C/D/F組3位',date:'2026-06-29',kickoff:'20:30',stadium:'Boston Stadium',venueLocal:'6/29 16:30'},
+    {id:'R32-2',matchNo:75,home:'F組1位',away:'C組2位',date:'2026-06-30',kickoff:'01:00',stadium:'Estadio Monterrey',venueLocal:'6/29 19:00'},
+    {id:'R32-3',matchNo:76,home:'C組1位',away:'F組2位',date:'2026-06-29',kickoff:'17:00',stadium:'Houston Stadium',venueLocal:'6/29 12:00'},
+    {id:'R32-4',matchNo:77,home:'I組1位',away:'C/D/F/G/H組3位',date:'2026-06-30',kickoff:'21:00',stadium:'New York New Jersey Stadium',venueLocal:'6/30 17:00'},
+    {id:'R32-5',matchNo:78,home:'E組2位',away:'I組2位',date:'2026-06-30',kickoff:'17:00',stadium:'Dallas Stadium',venueLocal:'6/30 12:00'},
+    {id:'R32-6',matchNo:79,home:'A組1位',away:'C/E/F/H/I組3位',date:'2026-07-01',kickoff:'01:00',stadium:'Mexico City Stadium',venueLocal:'6/30 19:00'},
+    {id:'R32-7',matchNo:80,home:'L組1位',away:'E/H/I/J/K組3位',date:'2026-07-01',kickoff:'16:00',stadium:'Atlanta Stadium',venueLocal:'7/1 12:00'},
+    {id:'R32-8',matchNo:81,home:'D組1位',away:'B/E/F/I/J組3位',date:'2026-07-02',kickoff:'00:00',stadium:'San Francisco Bay Area Stadium',venueLocal:'7/1 17:00'},
+    {id:'R32-9',matchNo:82,home:'G組1位',away:'A/E/H/I/J組3位',date:'2026-07-01',kickoff:'20:00',stadium:'Seattle Stadium',venueLocal:'7/1 13:00'},
+    {id:'R32-10',matchNo:83,home:'K組2位',away:'L組2位',date:'2026-07-02',kickoff:'23:00',stadium:'Toronto Stadium',venueLocal:'7/2 19:00'},
+    {id:'R32-11',matchNo:84,home:'H組1位',away:'J組2位',date:'2026-07-02',kickoff:'19:00',stadium:'Los Angeles Stadium',venueLocal:'7/2 12:00'},
+    {id:'R32-12',matchNo:85,home:'B組1位',away:'E/F/G/I/J組3位',date:'2026-07-03',kickoff:'03:00',stadium:'BC Place Vancouver',venueLocal:'7/2 20:00'},
+    {id:'R32-13',matchNo:86,home:'J組1位',away:'H組2位',date:'2026-07-03',kickoff:'22:00',stadium:'Miami Stadium',venueLocal:'7/3 18:00'},
+    {id:'R32-14',matchNo:87,home:'K組1位',away:'D/E/I/J/L組3位',date:'2026-07-04',kickoff:'01:30',stadium:'Kansas City Stadium',venueLocal:'7/3 20:30'},
+    {id:'R32-15',matchNo:88,home:'D組2位',away:'G組2位',date:'2026-07-03',kickoff:'18:00',stadium:'Dallas Stadium',venueLocal:'7/3 13:00'},
+  ]},
+  {id:'R16',label:'ベスト16',short:'R16',en:'Round of 16',matches:[
+    {id:'R16-0',matchNo:89,home:'M74勝者',away:'M77勝者',date:'2026-07-04',kickoff:'21:00',stadium:'Philadelphia Stadium',venueLocal:'7/4 17:00',sourceRefs:{home:{round:'R32',index:1},away:{round:'R32',index:4}}},
+    {id:'R16-1',matchNo:90,home:'M73勝者',away:'M75勝者',date:'2026-07-04',kickoff:'17:00',stadium:'Houston Stadium',venueLocal:'7/4 12:00',sourceRefs:{home:{round:'R32',index:0},away:{round:'R32',index:2}}},
+    {id:'R16-2',matchNo:91,home:'M76勝者',away:'M78勝者',date:'2026-07-05',kickoff:'20:00',stadium:'New York New Jersey Stadium',venueLocal:'7/5 16:00',sourceRefs:{home:{round:'R32',index:3},away:{round:'R32',index:5}}},
+    {id:'R16-3',matchNo:92,home:'M79勝者',away:'M80勝者',date:'2026-07-06',kickoff:'00:00',stadium:'Mexico City Stadium',venueLocal:'7/5 18:00',sourceRefs:{home:{round:'R32',index:6},away:{round:'R32',index:7}}},
+    {id:'R16-4',matchNo:93,home:'M83勝者',away:'M84勝者',date:'2026-07-06',kickoff:'19:00',stadium:'Dallas Stadium',venueLocal:'7/6 14:00',sourceRefs:{home:{round:'R32',index:10},away:{round:'R32',index:11}}},
+    {id:'R16-5',matchNo:94,home:'M81勝者',away:'M82勝者',date:'2026-07-07',kickoff:'00:00',stadium:'Seattle Stadium',venueLocal:'7/6 17:00',sourceRefs:{home:{round:'R32',index:8},away:{round:'R32',index:9}}},
+    {id:'R16-6',matchNo:95,home:'M86勝者',away:'M88勝者',date:'2026-07-07',kickoff:'16:00',stadium:'Atlanta Stadium',venueLocal:'7/7 12:00',sourceRefs:{home:{round:'R32',index:13},away:{round:'R32',index:15}}},
+    {id:'R16-7',matchNo:96,home:'M85勝者',away:'M87勝者',date:'2026-07-07',kickoff:'20:00',stadium:'BC Place Vancouver',venueLocal:'7/7 13:00',sourceRefs:{home:{round:'R32',index:12},away:{round:'R32',index:14}}},
+  ]},
+  {id:'QF',label:'準々決勝',short:'QF',en:'Quarter-Finals',matches:[
+    {id:'QF-0',matchNo:97,home:'M89勝者',away:'M90勝者',date:'2026-07-09',kickoff:'20:00',stadium:'Boston Stadium',venueLocal:'7/9 16:00',sourceRefs:{home:{round:'R16',index:0},away:{round:'R16',index:1}}},
+    {id:'QF-1',matchNo:98,home:'M93勝者',away:'M94勝者',date:'2026-07-10',kickoff:'19:00',stadium:'Los Angeles Stadium',venueLocal:'7/10 12:00',sourceRefs:{home:{round:'R16',index:4},away:{round:'R16',index:5}}},
+    {id:'QF-2',matchNo:99,home:'M91勝者',away:'M92勝者',date:'2026-07-11',kickoff:'21:00',stadium:'Miami Stadium',venueLocal:'7/11 17:00',sourceRefs:{home:{round:'R16',index:2},away:{round:'R16',index:3}}},
+    {id:'QF-3',matchNo:100,home:'M95勝者',away:'M96勝者',date:'2026-07-12',kickoff:'01:00',stadium:'Kansas City Stadium',venueLocal:'7/11 20:00',sourceRefs:{home:{round:'R16',index:6},away:{round:'R16',index:7}}},
+  ]},
+  {id:'SF',label:'準決勝',short:'SF',en:'Semi-Finals',matches:[
+    {id:'SF-0',matchNo:101,home:'M97勝者',away:'M98勝者',date:'2026-07-14',kickoff:'19:00',stadium:'Dallas Stadium',venueLocal:'7/14 14:00',sourceRefs:{home:{round:'QF',index:0},away:{round:'QF',index:1}}},
+    {id:'SF-1',matchNo:102,home:'M99勝者',away:'M100勝者',date:'2026-07-15',kickoff:'19:00',stadium:'Atlanta Stadium',venueLocal:'7/15 15:00',sourceRefs:{home:{round:'QF',index:2},away:{round:'QF',index:3}}},
+  ]},
+  {id:'F',label:'決勝',short:'Final',en:'Final',matches:[
+    {id:'F-0',matchNo:104,home:'M101勝者',away:'M102勝者',date:'2026-07-19',kickoff:'19:00',stadium:'New York New Jersey Stadium',venueLocal:'7/19 15:00',sourceRefs:{home:{round:'SF',index:0},away:{round:'SF',index:1}}},
+  ]},
+  {id:'3RD',label:'3位決定戦',short:'3rd',en:'3rd Place Play-off',matches:[
+    {id:'3RD-0',matchNo:103,home:'M101敗者',away:'M102敗者',date:'2026-07-18',kickoff:'21:00',stadium:'Miami Stadium',venueLocal:'7/18 17:00',sourceRefs:{home:{round:'SF',index:0,loser:true},away:{round:'SF',index:1,loser:true}}},
+  ]},
 ];
 const KO_ROUND_ORDER=KO_ROUNDS.map(r=>r.id);
 const KO_ROUND_INDEX=Object.fromEntries(KO_ROUND_ORDER.map((id,i)=>[id,i]));
-const KO_SOURCES={
-  R16:{prev:'R32',pair:[0,1]},
-  QF:{prev:'R16',pair:[0,1]},
-  SF:{prev:'QF',pair:[0,1]},
-  F:{prev:'SF',pair:[0,1]},
-  '3RD':{prev:'SF',pair:[0,1],thirdPlace:true},
-};
 function koMatchKey(roundId,matchIndex){return `${roundId}-${matchIndex}`;}
 function koGetRound(roundId){return KO_ROUNDS.find(r=>r.id===roundId);}
 function koGetMatch(roundId,matchIndex){return koGetRound(roundId)?.matches?.[matchIndex]||null;}
+function koSourceRef(roundId,matchIndex,side){
+  const match=koGetMatch(roundId,matchIndex);
+  if(match?.sourceRefs?.[side])return match.sourceRefs[side];
+  if(roundId==='R32')return null;
+  const order=['R32','R16','QF','SF','F'];
+  const pos=order.indexOf(roundId);
+  if(pos<=0)return null;
+  return {round:order[pos-1],index:matchIndex*2+(side==='home'?0:1)};
+}
+function koFindTarget(roundId,matchIndex){
+  for(const round of KO_ROUNDS){
+    for(let index=0;index<round.matches.length;index+=1){
+      const match=round.matches[index];
+      for(const side of ['home','away']){
+        const ref=match.sourceRefs?.[side];
+        if(ref?.round===roundId&&ref.index===matchIndex)return {roundId:round.id,index,side};
+      }
+    }
+  }
+  return null;
+}
 function koSeedLabel(label){
   return (label||'')
     .replace(/グループ([A-L])1位/g,'$1組1位')
@@ -1556,15 +1622,14 @@ function koResolvedTeam(roundId,matchIndex,side,picks={},results={}){
   if(roundId==='R32'){
     return side==='home'?match.home:match.away;
   }
-  const meta = KO_SOURCES[roundId];
-  if(!meta) return side==='home'?match.home:match.away;
-  const sourceMatchIndex = matchIndex * 2 + (side==='home'?meta.pair[0]:meta.pair[1]);
+  const sourceRef = koSourceRef(roundId,matchIndex,side);
+  if(!sourceRef) return side==='home'?match.home:match.away;
   const sourceLabel = match[side];
-  const sourceMatch = koGetMatch(meta.prev,sourceMatchIndex);
+  const sourceMatch = koGetMatch(sourceRef.round,sourceRef.index);
   const winnerSide = koWinnerSideForMatch(sourceMatch,picks,results);
   if(!winnerSide || !sourceMatch) return sourceLabel;
-  const resolvedSide = meta.thirdPlace ? (winnerSide==='home'?'away':'home') : winnerSide;
-  return koResolvedTeam(meta.prev, sourceMatchIndex, resolvedSide, picks, results) || sourceLabel;
+  const resolvedSide = sourceRef.loser ? (winnerSide==='home'?'away':'home') : winnerSide;
+  return koResolvedTeam(sourceRef.round, sourceRef.index, resolvedSide, picks, results) || sourceLabel;
 }
 function koWinnerLabel(roundId,matchIndex,picks={},results={}){
   const match=koGetMatch(roundId,matchIndex);
@@ -1999,7 +2064,7 @@ function CountryModal({team,onClose}){
   if(!team)return null;
   const players=PLAYER_DATA[team]||[];
   const meta=teamMeta(team);
-  const blankDraft={name:'',position:'FW',club:'',worldCupGoals:'0',clubGoals:'0'};
+  const blankDraft={name:'',position:'FW',club:'',age:'',heightCm:'',dateOfBirth:'',worldCupGoals:'0',clubGoals:'0'};
   const [selectedPlayerId,setSelectedPlayerId]=useState('new');
   const [draft,setDraft]=useState(()=>({...blankDraft}));
   const [saving,setSaving]=useState(false);
@@ -2047,6 +2112,9 @@ function CountryModal({team,onClose}){
       name:p.name||'',
       position:normalizePosition(p.position),
       club:p.club||'',
+      age:String(p.age||''),
+      heightCm:String(p.heightCm||''),
+      dateOfBirth:p.dateOfBirth||'',
       worldCupGoals:String(p.worldCupGoals??0),
       clubGoals:String(p.clubGoals??0),
     });
@@ -2069,6 +2137,9 @@ function CountryModal({team,onClose}){
       name:draft.name?.trim(),
       position:normalizePosition(draft.position),
       club:draft.club?.trim(),
+      age:Number(draft.age||0),
+      heightCm:Number(draft.heightCm||0),
+      dateOfBirth:draft.dateOfBirth?.trim(),
       worldCupGoals:Number(draft.worldCupGoals||0),
       clubGoals:Number(draft.clubGoals||0),
     };
@@ -2118,6 +2189,9 @@ function CountryModal({team,onClose}){
           name,
           position:normalizePosition(draft.position),
           club:(draft.club||'').trim()||'Unknown',
+          age:Number(draft.age||0),
+          heightCm:Number(draft.heightCm||0),
+          dateOfBirth:(draft.dateOfBirth||'').trim(),
           clubGoals:Number(draft.clubGoals||0),
           worldCupGoals:Number(draft.worldCupGoals||0),
           source:'manual',
@@ -2184,6 +2258,7 @@ function CountryModal({team,onClose}){
                   <div className="player-meta">
                     <span className="player-meta-line">{positionJa(p.position)}</span>
                     <span className="player-meta-line">{p.club||'Unknown'}</span>
+                    {playerPhysicalMeta(p)&&<span className="player-meta-line">{playerPhysicalMeta(p)}</span>}
                     <span className="player-meta-line">2026ワールドカップ得点 {p.worldCupGoals??0}</span>
                     <span className="player-meta-line">2025-26シーズン得点 {p.clubGoals}</span>
                   </div>
@@ -2216,6 +2291,18 @@ function CountryModal({team,onClose}){
             <div className="player-field">
               <label>所属クラブ</label>
               <input value={draft?.club||''} onChange={(e)=>updateDraft('club',e.target.value)} placeholder="所属クラブ" />
+            </div>
+            <div className="player-field">
+              <label>年齢</label>
+              <input type="number" min="0" step="1" value={draft?.age||''} onChange={(e)=>updateDraft('age',e.target.value)} placeholder="年齢" />
+            </div>
+            <div className="player-field">
+              <label>身長 cm</label>
+              <input type="number" min="0" step="1" value={draft?.heightCm||''} onChange={(e)=>updateDraft('heightCm',e.target.value)} placeholder="身長" />
+            </div>
+            <div className="player-field">
+              <label>生年月日</label>
+              <input value={draft?.dateOfBirth||''} onChange={(e)=>updateDraft('dateOfBirth',e.target.value)} placeholder="YYYY-MM-DD" />
             </div>
             <div className="player-field">
               <label>2026ワールドカップ得点</label>
@@ -2405,7 +2492,7 @@ function BottomNav({screen,setScreen}){
 }
 
 // ===== HOME =====
-function HomeScreen({user,onLogout}){
+function HomeScreen({user,onLogout,syncToken}){
   const lang=useContext(LangCtx);const l=T[lang];
   const [copied,setCopied]=useState(false);
   const rooms=gs('rooms',[]);
@@ -2441,6 +2528,15 @@ function HomeScreen({user,onLogout}){
   const oppTotal=oppSummary.total+oppKoSummary.total;
   const primaryActionLabel=user?.isGuest?'トップに戻る':l.logout;
   const primaryActionClass=user?.isGuest?'btn ghost':'btn ghost danger';
+  const uiSettings=gs('settings',DEFAULT_UI_SETTINGS);
+  const latestDataAt=DATA_STATUS.lastUpdatedAt||PLAYER_DATA_META.generatedAt||'';
+  const latestDataStamp=latestDataAt?formatTimestamp(latestDataAt,uiSettings.timeZone||'Asia/Tokyo'):'';
+  const sourceLabel=(source)=>{
+    if(source==='world-football-archive')return 'World Football Archive';
+    if(source==='fifa-official-squad')return 'FIFA公式スカッド';
+    return source||'選手データ';
+  };
+  const latestDataSource=DATA_STATUS.lastUpdatedAt?sourceLabel(DATA_STATUS.source):sourceLabel(PLAYER_DATA_META.playerSource||'world-football-archive');
 
   return(
     <div className="page page-enter">
@@ -2494,6 +2590,13 @@ function HomeScreen({user,onLogout}){
         <div className="sc gold"><div className="n">{GROUP_MATCHES.length-myPredCount}</div><div className="l">{l.unpredicted}</div></div>
         <div className="sc grn"><div className="n">{resultCount}</div><div className="l">{l.confirmed}</div></div>
       </div>
+      {latestDataStamp&&(
+        <div className="info-card" style={{borderColor:'rgba(22,163,74,.24)',background:'linear-gradient(135deg,var(--s1),rgba(22,163,74,.08))'}}>
+          <div className="itag">情報更新ステータス</div>
+          <div className="ival" style={{color:'var(--green)',fontSize:24}}>更新済み: {latestDataStamp}</div>
+          <div className="isub">{latestDataSource} を基準に表示しています。時刻は選択中の表示タイムゾーン基準です。</div>
+        </div>
+      )}
       <div className="home-breakdown">
         <div className="home-breakdown-title">ポイント内訳</div>
         <div className="home-breakdown-grid">
@@ -2783,12 +2886,14 @@ function BracketScreen({user,syncToken}){
   const [status,setStatus]=useState('');
   const scrollRef=useRef(null);
   const scrollProxyRef=useRef(null);
+  const uiSettings=gs('settings',DEFAULT_UI_SETTINGS);
+  const timeZone=uiSettings.timeZone||DEFAULT_UI_SETTINGS.timeZone;
   const myPreds=koPreds[user.id]||{};
   const oppPreds=oppId?(koPreds[oppId]||{}):{};
   const canEditKo=!user.isGuest;
   const settings={...DEFAULT_ROOM_SETTINGS,...gr(roomId,'settings',{})};
   const boardRounds=KO_ROUNDS.filter((round)=>['R32','R16','QF','SF','F'].includes(round.id));
-  const BOARD={x:24,y:50,w:260,h:92,gapX:314,gapY:120};
+  const BOARD={x:24,y:50,w:260,h:115,gapX:314,gapY:140};
   const BOARD_WIDTH=BOARD.x+BOARD.gapX*5+BOARD.w+190;
   const BOARD_HEIGHT=BOARD.y+BOARD.gapY*16+230;
   const podium=koPodiumPredictions(myPreds,{});
@@ -2808,10 +2913,11 @@ function BracketScreen({user,syncToken}){
   function centerY(roundId,index){
     if(roundId==='3RD')return BOARD.y + BOARD.gapY*16 + 66;
     if(roundId==='R32')return BOARD.y + index*BOARD.gapY + BOARD.h/2;
-    const meta=KO_SOURCES[roundId];
-    if(!meta)return BOARD.y + BOARD.h/2;
-    const a=centerY(meta.prev,index*2);
-    const b=centerY(meta.prev,index*2+1);
+    const homeRef=koSourceRef(roundId,index,'home');
+    const awayRef=koSourceRef(roundId,index,'away');
+    if(!homeRef||!awayRef)return BOARD.y + BOARD.h/2;
+    const a=centerY(homeRef.round,homeRef.index);
+    const b=centerY(awayRef.round,awayRef.index);
     return (a+b)/2;
   }
   function cardY(roundId,index){return centerY(roundId,index)-BOARD.h/2;}
@@ -2900,15 +3006,14 @@ function BracketScreen({user,syncToken}){
     const lines=[];
     ['R32','R16','QF','SF'].forEach((roundId)=>{
       const round=koGetRound(roundId);
-      const nextRoundId={R32:'R16',R16:'QF',QF:'SF',SF:'F'}[roundId];
       round.matches.forEach((match,index)=>{
+        const target=koFindTarget(roundId,index);
+        if(!target||target.roundId==='3RD')return;
         const winnerSide=koWinnerSideForMatch(match,myPreds,results);
-        const targetIndex=Math.floor(index/2);
-        const targetSide=index%2===0?'home':'away';
         const x1=roundX(roundId)+BOARD.w;
         const y1=winnerSide?sideY(roundId,index,winnerSide):centerY(roundId,index);
-        const x2=roundX(nextRoundId);
-        const y2=sideY(nextRoundId,targetIndex,targetSide);
+        const x2=roundX(target.roundId);
+        const y2=sideY(target.roundId,target.index,target.side);
         const mid=x1+(x2-x1)/2;
         lines.push(<path key={`${roundId}-${index}`} className={`ko-line${winnerSide?' on':''}`} d={`M ${x1} ${y1} H ${mid} V ${y2} H ${x2}`}/>);
       });
@@ -3002,6 +3107,10 @@ function BracketScreen({user,syncToken}){
         onClick={()=>openMatch(round,index)}
         disabled={!canEditKo}
       >
+        <div className="ko-match-meta">
+          <span>{match.matchNo?`M${match.matchNo} `:''}{formatMatchDate(match.date,match.kickoff,timeZone)}</span>
+          <em>{match.stadium}</em>
+        </div>
         <div className="ko-teams-line">
           {renderTeamBlock(round.id,index,'home',homeLabel,winnerSide)}
           {renderActualScore(actual)}
@@ -3154,6 +3263,7 @@ function LeaderboardScreen({user,onOpenTeam}){
                 <div className="rank-card-meta">
                   <span>{positionJa(p.position)}</span>
                   <span>{p.club}</span>
+                  {playerPhysicalMeta(p)&&<span>{playerPhysicalMeta(p)}</span>}
                 </div>
               </div>
               <div style={{textAlign:'right'}}>
@@ -3188,6 +3298,8 @@ function SettingsScreen({user,syncToken,onRenameUser}){
   const [nameDraft,setNameDraft]=useState(user?.username||'');
   const [savingName,setSavingName]=useState(false);
   const [toast,setToast]=useState('');
+  const [adminToken,setAdminToken]=useState(()=>sessionStorage.getItem('wc26AdminToken')||'');
+  const [adminRefreshing,setAdminRefreshing]=useState(false);
 
   useEffect(()=>{
     setPointSettings({...DEFAULT_ROOM_SETTINGS,...gr(roomId,'settings',{})});
@@ -3224,6 +3336,29 @@ function SettingsScreen({user,syncToken,onRenameUser}){
       setToast('ユーザー名を更新しました');
     }finally{
       setSavingName(false);
+    }
+  }
+  async function refreshOfficialData(){
+    if(!HAS_BACKEND){setToast('サーバー接続時のみ更新できます');return;}
+    const token=String(adminToken||'').trim();
+    if(!token){setToast('管理者トークンを入力してください');return;}
+    sessionStorage.setItem('wc26AdminToken',token);
+    setAdminRefreshing(true);
+    try{
+      const res=await api('/api/admin/refresh-players',{adminToken:token});
+      if(!res?.ok){
+        setToast(res?.error||'更新できませんでした');
+        if(res?.dataStatus)setDataStatus(res.dataStatus);
+        return;
+      }
+      if(res.playersByCountry&&Object.keys(res.playersByCountry).length){
+        setPlayerData(res.playersByCountry,{generatedAt:res.generatedAt||PLAYER_DATA_META.generatedAt},false);
+      }
+      if(res.dataStatus)setDataStatus(res.dataStatus);
+      setToast('選手データを更新しました');
+      notifyStateChange();
+    }finally{
+      setAdminRefreshing(false);
     }
   }
   return(
@@ -3289,6 +3424,22 @@ function SettingsScreen({user,syncToken,onRenameUser}){
           <div className="sl">確定トリガー<span>試合結果が `results` に入った瞬間に、勝敗とスコアを判定してポイントを再計算します。</span></div>
           <div style={{fontSize:12,color:'var(--text2)',lineHeight:1.6}}>
             いま表示される「結果確定」は、その試合の実スコアが保存された状態を意味します。
+          </div>
+        </div>
+      </div>
+      <div className="set-sec">
+        <h3>🔐 管理者更新</h3>
+        <div className="set-row" style={{flexDirection:'column',alignItems:'flex-start',gap:10}}>
+          <div className="sl">選手データ更新<span>World Football Archiveを取得し、選手一覧・所属クラブ・年齢・身長・更新時刻を更新します。取得できない場合のみFIFA公式スカッドPDFへフォールバックします。</span></div>
+          <div className="player-field" style={{marginTop:0,width:'100%'}}>
+            <label>管理者トークン</label>
+            <input type="password" value={adminToken} onChange={(e)=>setAdminToken(e.target.value)} placeholder="WC26_ADMIN_TOKEN" />
+          </div>
+          <button className="btn" style={{width:'auto',padding:'10px 18px'}} onClick={refreshOfficialData} disabled={adminRefreshing}>
+            {adminRefreshing?'更新中…':'選手データを更新'}
+          </button>
+          <div style={{fontSize:12,color:'var(--text2)',lineHeight:1.5}}>
+            最終更新: {DATA_STATUS.lastUpdatedAt?formatTimestamp(DATA_STATUS.lastUpdatedAt,uiSettings.timeZone||'Asia/Tokyo'):'未更新'}
           </div>
         </div>
       </div>
@@ -3461,6 +3612,7 @@ function App(){
         if(!alive)return;
         if(Array.isArray(data.rooms))ss('rooms',data.rooms);
         if(Array.isArray(data.users))ss('users',data.users);
+        if(data.dataStatus)setDataStatus(data.dataStatus);
         if(data.playersByCountry&&Object.keys(data.playersByCountry).length){
           setPlayerData(data.playersByCountry,{
             generatedAt:data.generatedAt||PLAYER_DATA_META.generatedAt,

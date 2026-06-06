@@ -458,5 +458,14 @@
         "koThirdPlaceEnabled": false
       }
     }
+  },
+  "meta": {
+    "dataRefresh": {
+      "lastUpdatedAt": "2026-06-06T06:36:19.162Z",
+      "source": "world-football-archive",
+      "generatedAt": "2026-06-06T06:36:19.162Z",
+      "status": "success",
+      "error": ""
+    }
   }
 }

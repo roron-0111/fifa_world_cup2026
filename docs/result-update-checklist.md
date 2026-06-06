@@ -145,6 +145,24 @@ Current storage:
 - server API: `POST /api/state/result`
 - browser fallback: room-local localStorage when running the HTML directly
 
+Player data refresh:
+
+- Admin UI: Settings -> 管理者更新 -> 選手データを更新
+- API: `POST /api/admin/refresh-players`
+- Required server env: `WC26_ADMIN_TOKEN`
+- Cooldown: none. The admin can refresh again on the same Japan date when a correction or a replacement player is registered.
+- Primary roster source: World Football Archive in `data/sources.json` as `players.worldFootballArchive`.
+- Imported player fields: Japanese or source display name, English/source name, position, shirt number, club, date of birth, age, height, representative debut, World Cup history, and final-member note.
+- Supplement source: FIFA official squad PDF fills blank birth date, age, height, or club values only when the player can be matched safely.
+- Fallback roster source: FIFA official squad PDF in `data/sources.json` as `players.officialSquadPdf` when World Football Archive cannot be fetched or parsed.
+
+When the refresh succeeds:
+
+- `data/players.generated.json` is regenerated.
+- `data/state.json.meta.dataRefresh.lastUpdatedAt` is set by the server.
+- The home page shows the latest update time in the user's selected display time zone. Japan time is the default.
+- The settings page shows the same latest update time in the admin refresh section.
+
 Preferred update path while using the local server:
 
 1. Read the current room id from `data/state.json` or the active user.
@@ -211,4 +229,3 @@ Only commit unrelated generated files such as `data/players.generated.json` when
 - Automated daily result fetch job.
 - Official scorer import for the top scorer ranking.
 - Match kickoff locking based on real kickoff time.
-

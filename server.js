@@ -3,6 +3,12 @@ const path = require('path');
 const http = require('http');
 const { execFile } = require('child_process');
 const { URL } = require('url');
+const {
+  verifyAdminToken,
+  makeDataRefreshStatus,
+  applyDataRefreshSuccess,
+  applyDataRefreshFailure,
+} = require('./lib/admin');
 
 const ROOT = __dirname;
 const PROJECT_HTML = path.join(ROOT, 'project', 'World Cup 2026.html');
@@ -16,6 +22,7 @@ const DEFAULT_STATE = {
   rooms: [],
   users: [],
   roomStates: {},
+  meta: {},
 };
 
 function readJson(file, fallback) {
@@ -42,7 +49,7 @@ function loadPlayerData() {
   };
 }
 
-const AUTO_REFRESH_PLAYERS = process.env.WC26_AUTO_REFRESH_PLAYERS !== '0';
+const AUTO_REFRESH_PLAYERS = process.env.WC26_AUTO_REFRESH_PLAYERS === '1';
 const PLAYER_REFRESH_INTERVAL_MS = Number(process.env.WC26_PLAYER_REFRESH_INTERVAL_MS || 6 * 60 * 60 * 1000);
 let playerRefreshPromise = null;
 
@@ -73,9 +80,19 @@ async function runPlayerRefresh(trigger) {
   try {
     const data = await refreshPlayerData();
     const ts = data.generatedAt ? new Date(data.generatedAt).toISOString() : 'unknown';
+    applyDataRefreshSuccess(state, {
+      source: data.meta?.playerSource || 'player-refresh',
+      generatedAt: data.generatedAt || '',
+    });
+    persistState();
     console.log(`[player-data] refreshed via ${trigger} at ${ts}`);
     return data;
   } catch (error) {
+    applyDataRefreshFailure(state, {
+      source: 'player-refresh',
+      error: error.message,
+    });
+    persistState();
     console.error(`[player-data] refresh failed via ${trigger}: ${error.message}`);
     return null;
   }
@@ -99,6 +116,7 @@ function ensureStateShape() {
   state.rooms ||= [];
   state.users ||= [];
   state.roomStates ||= {};
+  state.meta ||= {};
   state.roomStates = Object.fromEntries(Object.entries(state.roomStates).map(([roomId, roomState]) => {
     const next = { ...(roomState || {}) };
     next.predictionsV2 = next.predictionsV2 || next.predictions || {};
@@ -234,6 +252,7 @@ function bootstrapPayload() {
     playersByCountry: playerData.playersByCountry || {},
     sources,
     generatedAt: playerData.generatedAt || null,
+    dataStatus: makeDataRefreshStatus(state),
   };
 }
 
@@ -507,13 +526,57 @@ const server = http.createServer(async (req, res) => {
 
     if (req.method === 'GET' && pathname === '/api/bootstrap') {
       const roomId = requestUrl.searchParams.get('roomId') || '';
-      sendJson(res, 200, buildPublicState(roomId));
+      sendJson(res, 200, {
+        ...buildPublicState(roomId),
+        generatedAt: loadPlayerData().generatedAt || null,
+        dataStatus: makeDataRefreshStatus(state),
+      });
       return;
     }
 
     if (req.method === 'GET' && pathname.startsWith('/api/room/')) {
       const roomId = pathname.split('/').pop();
-      sendJson(res, 200, buildPublicState(roomId));
+      sendJson(res, 200, {
+        ...buildPublicState(roomId),
+        generatedAt: loadPlayerData().generatedAt || null,
+        dataStatus: makeDataRefreshStatus(state),
+      });
+      return;
+    }
+
+    if (req.method === 'GET' && pathname === '/api/admin/status') {
+      sendJson(res, 200, { ok: true, dataStatus: makeDataRefreshStatus(state) });
+      return;
+    }
+
+    if (req.method === 'POST' && pathname === '/api/admin/refresh-players') {
+      const body = await readBody(req);
+      const tokenCheck = verifyAdminToken(body.adminToken, process.env.WC26_ADMIN_TOKEN);
+      if (!tokenCheck.ok) {
+        sendJson(res, tokenCheck.status, { ok: false, error: tokenCheck.error });
+        return;
+      }
+      try {
+        const data = await refreshPlayerData();
+        applyDataRefreshSuccess(state, {
+          source: data.meta?.playerSource || 'fifa-official-squad',
+          generatedAt: data.generatedAt || '',
+        });
+        persistState();
+        sendJson(res, 200, {
+          ok: true,
+          generatedAt: data.generatedAt || null,
+          playersByCountry: data.playersByCountry || {},
+          dataStatus: makeDataRefreshStatus(state),
+        });
+      } catch (error) {
+        applyDataRefreshFailure(state, {
+          source: 'fifa-official-squad',
+          error: error.message,
+        });
+        persistState();
+        sendJson(res, 500, { ok: false, error: error.message, dataStatus: makeDataRefreshStatus(state) });
+      }
       return;
     }
 

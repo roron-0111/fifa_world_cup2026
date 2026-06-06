@@ -4,10 +4,22 @@ const https = require('https');
 const zlib = require('zlib');
 const readline = require('readline');
 const romajiConv = require('@koozaki/romaji-conv');
+const { PDFParse } = require('pdf-parse');
+const {
+  fillMissingPlayerFieldsFromOfficial,
+  parseOfficialSquadText,
+  mergeOfficialSquadsWithExistingPlayers,
+  normalizeCountryName,
+} = require('./official-squad-data');
+const {
+  buildWorldFootballArchiveTeamUrl,
+  parseWorldFootballArchiveTeamText,
+} = require('./world-football-archive');
 
 const ROOT = path.join(__dirname, '..');
 const DATA_DIR = path.join(ROOT, 'data');
 const OUT_FILE = path.join(DATA_DIR, 'players.generated.json');
+const PROJECT_OUT_FILE = path.join(ROOT, 'project', 'players.generated.json');
 const SOURCES_FILE = path.join(DATA_DIR, 'sources.json');
 const NAME_OVERRIDES_FILE = path.join(DATA_DIR, 'player-name-overrides.json');
 const SEASON_START = new Date('2025-07-01T00:00:00Z');
@@ -15,10 +27,11 @@ const SEASON_END = new Date('2026-07-01T00:00:00Z');
 
 const TEAM_SPECS = [
   { country: 'Mexico', ja: 'メキシコ', aliases: ['Mexico'] },
-  { country: 'South Africa', ja: '南アフリカ', aliases: ['South Africa'] },
+  { country: 'South Africa', ja: '南アフリカ', wfaSlug: '南アフリカ共和国', aliases: ['South Africa'] },
   { country: 'Korea Republic', ja: '韓国', aliases: ['South Korea', 'Korea, South', 'Korea Republic'] },
   { country: 'Czechia', ja: 'チェコ', aliases: ['Czechia', 'Czech Republic'] },
   { country: 'Canada', ja: 'カナダ', aliases: ['Canada'] },
+  { country: 'Bosnia and Herzegovina', ja: 'ボスニア・ヘルツェゴビナ', aliases: ['Bosnia and Herzegovina', 'Bosnia And Herzegovina'] },
   { country: 'Switzerland', ja: 'スイス', aliases: ['Switzerland'] },
   { country: 'Qatar', ja: 'カタール', aliases: ['Qatar'] },
   { country: 'Brazil', ja: 'ブラジル', aliases: ['Brazil'] },
@@ -28,6 +41,7 @@ const TEAM_SPECS = [
   { country: 'USA', ja: 'アメリカ', aliases: ['USA', 'United States', 'United States of America'] },
   { country: 'Australia', ja: 'オーストラリア', aliases: ['Australia'] },
   { country: 'Paraguay', ja: 'パラグアイ', aliases: ['Paraguay'] },
+  { country: 'Türkiye', ja: 'トルコ', aliases: ['Türkiye', 'Turkey', 'Turkiye'] },
   { country: 'Germany', ja: 'ドイツ', aliases: ['Germany'] },
   { country: 'Ecuador', ja: 'エクアドル', aliases: ['Ecuador'] },
   { country: "Côte d'Ivoire", ja: 'コートジボワール', aliases: ['Ivory Coast', "Cote d'Ivoire", "Côte d'Ivoire"] },
@@ -53,6 +67,7 @@ const TEAM_SPECS = [
   { country: 'Algeria', ja: 'アルジェリア', aliases: ['Algeria'] },
   { country: 'Jordan', ja: 'ヨルダン', aliases: ['Jordan'] },
   { country: 'Portugal', ja: 'ポルトガル', aliases: ['Portugal'] },
+  { country: 'Congo', ja: 'コンゴ民主共和国', aliases: ['Congo', 'Congo DR', 'DR Congo', 'Democratic Republic of the Congo'] },
   { country: 'Colombia', ja: 'コロンビア', aliases: ['Colombia'] },
   { country: 'Uzbekistan', ja: 'ウズベキスタン', aliases: ['Uzbekistan'] },
   { country: 'England', ja: 'イングランド', aliases: ['England'] },
@@ -278,6 +293,14 @@ async function readCsv(url, onRow) {
   }
 }
 
+async function streamToBuffer(stream) {
+  const chunks = [];
+  for await (const chunk of stream) {
+    chunks.push(Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk));
+  }
+  return Buffer.concat(chunks);
+}
+
 function getSources() {
   return JSON.parse(fs.readFileSync(SOURCES_FILE, 'utf8'));
 }
@@ -323,6 +346,147 @@ function buildTeamAliasLookup() {
   return lookup;
 }
 
+async function readOfficialSquadPdf(url) {
+  if (!url) return null;
+  const stream = await download(url);
+  const buffer = await streamToBuffer(stream);
+  const parser = new PDFParse({ data: buffer });
+  try {
+    const result = await parser.getText();
+    return result.text || '';
+  } finally {
+    await parser.destroy?.();
+  }
+}
+
+async function readTextUrl(url) {
+  const stream = await download(url);
+  const buffer = await streamToBuffer(stream);
+  return buffer.toString('utf8');
+}
+
+function mergeWfaPlayersWithExisting(wfaByCountry, existingByCountry = {}) {
+  const merged = {};
+  for (const [country, wfaPlayers] of Object.entries(wfaByCountry || {})) {
+    const existingPlayers = existingByCountry[country] || [];
+    merged[country] = wfaPlayers.map((player, index) => {
+      const existing = existingPlayers.find((candidate) => normalizeKey(candidate.name) === normalizeKey(player.name)) || {};
+      return {
+        ...existing,
+        ...player,
+        id: existing.id || player.id,
+        clubGoals: Number(existing.clubGoals || 0),
+        internationalGoals: Number(existing.internationalGoals || 0),
+        goals: Number(existing.goals || 0),
+        worldCupGoals: Number(existing.worldCupGoals || 0),
+        internationalCaps: Number(existing.internationalCaps || 0),
+        marketValue: Number(existing.marketValue || 0),
+        imageUrl: existing.imageUrl || '',
+        profileUrl: existing.profileUrl || '',
+        source: 'world-football-archive',
+        rank: index + 1,
+      };
+    });
+  }
+  return merged;
+}
+
+async function buildWorldFootballArchivePlayersByCountry(existingPlayersByCountry) {
+  const playersByCountry = {};
+  const failedTeams = [];
+  const updatedAtLabels = {};
+
+  for (const spec of TEAM_SPECS) {
+    const url = buildWorldFootballArchiveTeamUrl(spec);
+    try {
+      const html = await readTextUrl(url);
+      const parsed = parseWorldFootballArchiveTeamText(html, spec);
+      if (parsed.players.length < 20) {
+        throw new Error(`only ${parsed.players.length} players parsed`);
+      }
+      playersByCountry[spec.country] = parsed.players;
+      updatedAtLabels[spec.country] = parsed.updatedAtLabel;
+    } catch (error) {
+      failedTeams.push(`${spec.country}: ${error.message}`);
+    }
+  }
+
+  if (Object.keys(playersByCountry).length < 48) {
+    throw new Error(`World Football Archive yielded ${Object.keys(playersByCountry).length} teams; failed ${failedTeams.join(', ')}`);
+  }
+
+  return {
+    playersByCountry: mergeWfaPlayersWithExisting(playersByCountry, existingPlayersByCountry),
+    updatedAtLabels,
+  };
+}
+
+function applyCountryMetadata(playersByCountry) {
+  const specsByCountry = new Map(TEAM_SPECS.map((spec) => [spec.country, spec]));
+  for (const [country, players] of Object.entries(playersByCountry)) {
+    const spec = specsByCountry.get(country);
+    players.forEach((player, index) => {
+      player.country = country;
+      player.countryJa = spec?.ja || player.countryJa || country;
+      player.countryName = country;
+      player.rank = index + 1;
+    });
+  }
+  return playersByCountry;
+}
+
+function applyJapaneseNameOverrides(playersByCountry, nameOverrides) {
+  for (const [country, players] of Object.entries(playersByCountry)) {
+    players.forEach((player) => {
+      const override = resolveOfficialNameJa(nameOverrides, country, player.name);
+      if (override) {
+        player.officialNameJa = override;
+        player.displayNameJa = override;
+      } else if (!player.displayNameJa) {
+        player.displayNameJa = transliterateNameToJa(player.name);
+      }
+    });
+  }
+  return playersByCountry;
+}
+
+async function buildOfficialSquadPlayersByCountry(sources) {
+  const officialText = await readOfficialSquadPdf(sources.players.officialSquadPdf);
+  if (!officialText) return null;
+  const teamAliasLookup = buildTeamAliasLookup();
+  const pages = parseOfficialSquadText(officialText);
+  if (pages.length < 48) {
+    throw new Error(`Official squad PDF yielded ${pages.length} teams; expected 48`);
+  }
+
+  const officialByCountry = {};
+  for (const page of pages) {
+    const normalizedCountry = normalizeCountryName(page.country);
+    const spec =
+      teamAliasLookup.get(normalizeKey(normalizedCountry)) ||
+      teamAliasLookup.get(normalizeKey(page.country));
+    const country = spec?.country || normalizedCountry;
+    officialByCountry[country] = page.players.map((player) => ({
+      ...player,
+      country,
+      countryJa: spec?.ja || country,
+      countryName: country,
+    }));
+  }
+
+  return officialByCountry;
+}
+
+async function buildOfficialPlayersByCountry(sources, existingPlayersByCountry, nameOverrides) {
+  const officialByCountry = await buildOfficialSquadPlayersByCountry(sources);
+  if (!officialByCountry) return null;
+
+  return applyJapaneseNameOverrides(
+    applyCountryMetadata(mergeOfficialSquadsWithExistingPlayers(officialByCountry, existingPlayersByCountry)),
+    nameOverrides,
+  );
+}
+
 function buildFallbackPlayers(spec) {
   return FALLBACK_ROLES.map((role, index) => ({
     id: `${spec.country}-fallback-${index + 1}`,
@@ -358,10 +522,11 @@ function resolveOfficialNameJa(nameOverrides, country, playerName) {
   const raw = String(playerName || '').trim();
   if (!raw) return '';
   const direct = countryOverrides[raw] ?? countryOverrides[normalizeKey(raw)];
-  if (!direct) return '';
-  if (typeof direct === 'string') return direct.trim();
-  if (typeof direct === 'object') {
-    return String(direct.officialNameJa || direct.displayNameJa || direct.nameJa || '').trim();
+  const normalizedDirect = direct || Object.entries(countryOverrides).find(([key]) => normalizeKey(key) === normalizeKey(raw))?.[1];
+  if (!normalizedDirect) return '';
+  if (typeof normalizedDirect === 'string') return normalizedDirect.trim();
+  if (typeof normalizedDirect === 'object') {
+    return String(normalizedDirect.officialNameJa || normalizedDirect.displayNameJa || normalizedDirect.nameJa || '').trim();
   }
   return '';
 }
@@ -497,7 +662,7 @@ async function main() {
     player.clubGoals += Number(row.goals || 0);
   });
 
-  const finalPlayersByCountry = {};
+  let finalPlayersByCountry = {};
   for (const [country, players] of playersByCountry.entries()) {
     const sorted = players
       .slice()
@@ -516,6 +681,47 @@ async function main() {
     finalPlayersByCountry[country] = sorted;
   }
 
+  let playerSource = 'supplemental-csv';
+  let worldFootballArchiveUpdatedAt = {};
+  try {
+    const wfa = await buildWorldFootballArchivePlayersByCountry(finalPlayersByCountry);
+    if (wfa.playersByCountry && Object.keys(wfa.playersByCountry).length >= 48) {
+      finalPlayersByCountry = wfa.playersByCountry;
+      worldFootballArchiveUpdatedAt = wfa.updatedAtLabels;
+      playerSource = 'world-football-archive';
+      try {
+        const officialByCountry = await buildOfficialSquadPlayersByCountry(sources);
+        if (officialByCountry) {
+          finalPlayersByCountry = fillMissingPlayerFieldsFromOfficial(
+            finalPlayersByCountry,
+            officialByCountry,
+            new Date(),
+          );
+        }
+      } catch (error) {
+        console.warn(`Official squad supplement failed; keeping World Football Archive fields only: ${error.message}`);
+      }
+    }
+  } catch (error) {
+    console.warn(`World Football Archive import failed; trying FIFA official squad PDF: ${error.message}`);
+  }
+
+  try {
+    if (playerSource !== 'world-football-archive') {
+      const officialPlayersByCountry = await buildOfficialPlayersByCountry(
+        sources,
+        finalPlayersByCountry,
+        nameOverrides,
+      );
+      if (officialPlayersByCountry && Object.keys(officialPlayersByCountry).length >= 48) {
+        finalPlayersByCountry = officialPlayersByCountry;
+        playerSource = 'fifa-official-squad';
+      }
+    }
+  } catch (error) {
+    console.warn(`Official squad import failed; using supplemental CSV data: ${error.message}`);
+  }
+
   const missingTeams = TEAM_SPECS.filter((spec) => !finalPlayersByCountry[spec.country]);
   for (const spec of missingTeams) {
     finalPlayersByCountry[spec.country] = buildFallbackPlayers(spec);
@@ -530,6 +736,10 @@ async function main() {
       worldcdbNationalNews: sources.teams.worldcdbNationalNews,
       roiblogSchedule: sources.teams.roiblogSchedule,
       googlePlayersSearch: sources.players.googlePlayersSearch,
+      worldFootballArchive: sources.players.worldFootballArchive,
+      officialSquadPdf: sources.players.officialSquadPdf,
+      fifaSquadsConfirmedJa: sources.players.fifaSquadsConfirmedJa,
+      jfaJapanSquad: sources.players.jfaJapanSquad,
       fifaPlayersPage: sources.players.fifaTeamsPage,
       worldcdbNationalNewsPlayers: sources.players.worldcdbNationalNews,
       roiblogSchedulePlayers: sources.players.roiblogSchedule,
@@ -541,11 +751,16 @@ async function main() {
     meta: {
       totalCountries: Object.keys(finalPlayersByCountry).length,
       fallbackTeams: missingTeams.map((spec) => spec.country),
+      playerSource,
+      worldFootballArchiveUpdatedAt,
     },
   };
 
-  fs.writeFileSync(OUT_FILE, JSON.stringify(output, null, 2));
+  const serializedOutput = JSON.stringify(output, null, 2);
+  fs.writeFileSync(OUT_FILE, serializedOutput);
+  fs.writeFileSync(PROJECT_OUT_FILE, serializedOutput);
   console.log(`Wrote ${OUT_FILE}`);
+  console.log(`Wrote ${PROJECT_OUT_FILE}`);
   console.log(`Countries: ${output.meta.totalCountries}`);
   if (output.meta.fallbackTeams.length) {
     console.log(`Fallback: ${output.meta.fallbackTeams.join(', ')}`);

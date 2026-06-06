@@ -5,10 +5,12 @@
   "type": "commonjs",
   "scripts": {
     "start": "node server.js",
-    "import:data": "node scripts/import-player-data.js"
+    "import:data": "node scripts/import-player-data.js",
+    "test": "node --test"
   },
   "dependencies": {
     "@koozaki/romaji-conv": "^2.0.35",
+    "pdf-parse": "^2.4.5",
     "puppeteer": "^24.41.0",
     "wanakana": "^5.3.1"
   },
