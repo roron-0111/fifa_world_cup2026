@@ -27,7 +27,7 @@
     "FIFA's official squad PDF supplements blank World Football Archive birth date, age, height, and club fields when the player can be matched safely.",
     "FIFA's official squad PDF is also retained as the canonical fallback when World Football Archive cannot be fetched or parsed.",
     "JFA's World Cup squad page is retained as a cross-check source for Japan.",
-    "Player current club, position, market value, and international goals are sourced from the public dataset used as supplemental player metadata.",
-    "Club goals are computed from appearance goals where the player's club matches the current club, using the same dataset."
+    "Player current club, position, market value, and international goals are sourced from the public Transfermarkt-derived dataset used as supplemental player metadata.",
+    "2025-26 club goals are computed from the same public appearances CSV for matches dated from 2025-07-01 through 2026-06-30 when the player can be safely matched; unmatched players are displayed as '-'."
   ]
 }

@@ -371,11 +371,13 @@ function mergeWfaPlayersWithExisting(wfaByCountry, existingByCountry = {}) {
     const existingPlayers = existingByCountry[country] || [];
     merged[country] = wfaPlayers.map((player, index) => {
       const existing = existingPlayers.find((candidate) => normalizeKey(candidate.name) === normalizeKey(player.name)) || {};
+      const hasExistingStats = Boolean(existing.id);
       return {
         ...existing,
         ...player,
         id: existing.id || player.id,
         clubGoals: Number(existing.clubGoals || 0),
+        clubGoalsKnown: hasExistingStats,
         internationalGoals: Number(existing.internationalGoals || 0),
         goals: Number(existing.goals || 0),
         worldCupGoals: Number(existing.worldCupGoals || 0),
@@ -662,6 +664,16 @@ async function main() {
     player.clubGoals += Number(row.goals || 0);
   });
 
+  const supplementalPlayersByCountry = {};
+  for (const [country, players] of playersByCountry.entries()) {
+    supplementalPlayersByCountry[country] = players
+      .slice()
+      .map((p, index) => ({
+        ...p,
+        rank: index + 1,
+      }));
+  }
+
   let finalPlayersByCountry = {};
   for (const [country, players] of playersByCountry.entries()) {
     const sorted = players
@@ -684,7 +696,7 @@ async function main() {
   let playerSource = 'supplemental-csv';
   let worldFootballArchiveUpdatedAt = {};
   try {
-    const wfa = await buildWorldFootballArchivePlayersByCountry(finalPlayersByCountry);
+    const wfa = await buildWorldFootballArchivePlayersByCountry(supplementalPlayersByCountry);
     if (wfa.playersByCountry && Object.keys(wfa.playersByCountry).length >= 48) {
       finalPlayersByCountry = wfa.playersByCountry;
       worldFootballArchiveUpdatedAt = wfa.updatedAtLabels;

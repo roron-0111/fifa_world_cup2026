@@ -31,3 +31,11 @@ test('knockout route uses official match-number bracket sources', () => {
     /id:'3RD-0'[\s\S]*?sourceRefs:\{home:\{round:'SF',index:0,loser:true\},away:\{round:'SF',index:1,loser:true\}\}/,
   );
 });
+
+test('knockout card renders localized stadium labels', () => {
+  assert.match(
+    html,
+    /<em>\{stadiumLabel\(match\.stadium,lang\)\}<\/em>/,
+  );
+  assert.doesNotMatch(html, /<em>\{match\.stadium\}<\/em>/);
+});

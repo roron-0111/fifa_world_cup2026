@@ -2,10 +2,16 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 
 const {
+  DEFAULT_ADMIN_TOKEN,
   verifyAdminToken,
   makeDataRefreshStatus,
   applyDataRefreshSuccess,
 } = require('../lib/admin');
+
+test('default admin token is WC2026', () => {
+  assert.equal(DEFAULT_ADMIN_TOKEN, 'WC2026');
+  assert.deepEqual(verifyAdminToken('WC2026'), { ok: true });
+});
 
 test('verifyAdminToken rejects missing server token', () => {
   assert.deepEqual(verifyAdminToken('abc', ''), {

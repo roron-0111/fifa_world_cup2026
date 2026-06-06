@@ -580,6 +580,42 @@ const server = http.createServer(async (req, res) => {
       return;
     }
 
+    if (req.method === 'POST' && pathname === '/api/admin/update-results') {
+      const body = await readBody(req);
+      const tokenCheck = verifyAdminToken(body.adminToken, process.env.WC26_ADMIN_TOKEN);
+      if (!tokenCheck.ok) {
+        sendJson(res, tokenCheck.status, { ok: false, error: tokenCheck.error });
+        return;
+      }
+      const roomId = String(body.roomId || '').trim();
+      const incoming = body.results || (body.matchId ? { [body.matchId]: body.result } : null);
+      if (!roomId) {
+        sendJson(res, 400, { ok: false, error: 'ルームIDが必要です' });
+        return;
+      }
+      if (!incoming || typeof incoming !== 'object' || Array.isArray(incoming)) {
+        sendJson(res, 400, { ok: false, error: '更新する勝敗情報が必要です' });
+        return;
+      }
+      const roomState = ensureRoomState(roomId);
+      roomState.results ||= {};
+      Object.entries(incoming).forEach(([matchId, result]) => {
+        const id = String(matchId || '').trim();
+        if (!id) return;
+        if (result == null) {
+          delete roomState.results[id];
+          return;
+        }
+        roomState.results[id] = result;
+      });
+      saveAndRespond(res, {
+        ok: true,
+        roomState,
+        updatedCount: Object.keys(incoming).length,
+      });
+      return;
+    }
+
     if (req.method === 'GET' && pathname.startsWith('/api/players/')) {
       const playerData = loadPlayerData();
       const country = decodeURIComponent(pathname.split('/').pop());
