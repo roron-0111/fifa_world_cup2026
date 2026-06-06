@@ -253,6 +253,7 @@ function bootstrapPayload() {
     sources,
     generatedAt: playerData.generatedAt || null,
     dataStatus: makeDataRefreshStatus(state),
+    resultStatus: state.meta?.resultUpdates || {},
   };
 }
 
@@ -435,6 +436,7 @@ function buildPublicState(roomId) {
     roomState: roomId ? ensureRoomState(roomId) : null,
     rooms: state.rooms,
     users: state.users,
+    resultStatus: state.meta?.resultUpdates || {},
   };
 }
 
@@ -599,6 +601,7 @@ const server = http.createServer(async (req, res) => {
       }
       const roomState = ensureRoomState(roomId);
       roomState.results ||= {};
+      const now = new Date().toISOString();
       Object.entries(incoming).forEach(([matchId, result]) => {
         const id = String(matchId || '').trim();
         if (!id) return;
@@ -608,9 +611,24 @@ const server = http.createServer(async (req, res) => {
         }
         roomState.results[id] = result;
       });
+      state.meta ||= {};
+      state.meta.resultUpdates ||= {};
+      const history = Array.isArray(state.meta.resultUpdates.history) ? state.meta.resultUpdates.history : [];
+      state.meta.resultUpdates = {
+        lastUpdatedAt: now,
+        history: [
+          {
+            updatedAt: now,
+            roomId,
+            updatedCount: Object.keys(incoming).length,
+          },
+          ...history,
+        ].slice(0, 20),
+      };
       saveAndRespond(res, {
         ok: true,
         roomState,
+        resultStatus: state.meta.resultUpdates,
         updatedCount: Object.keys(incoming).length,
       });
       return;

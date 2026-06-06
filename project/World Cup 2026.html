@@ -215,7 +215,7 @@ html,body{background:#ddd8ce;color:var(--text);font-family:'Inter',sans-serif;mi
 .sc.grn .n{color:var(--green);}
 .info-card{background:var(--s1);border:1px solid var(--border);border-radius:var(--r);padding:14px;margin:0 16px 10px;box-shadow:var(--shadow);}
 .info-card .itag{font-size:10px;color:var(--text2);font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;}
-.info-card .ival{font-family:'Bebas Neue';font-size:20px;color:var(--accent);}
+.info-card .ival{font-family:'Inter',sans-serif;font-size:20px;color:var(--accent);font-weight:1000;letter-spacing:-.04em;}
 .info-card .isub{font-size:11px;color:var(--text2);margin-top:3px;}
 .pts-info-row{display:flex;gap:8px;padding:0 16px 16px;}
 .pts-box{flex:1;background:var(--s1);border:1px solid var(--border);border-radius:10px;padding:10px;text-align:center;box-shadow:var(--shadow);}
@@ -228,12 +228,18 @@ html,body{background:#ddd8ce;color:var(--text);font-family:'Inter',sans-serif;mi
 .home-breakdown-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;}
 .home-break-card{background:var(--s1);border:1px solid var(--border);border-radius:16px;padding:13px;box-shadow:var(--shadow);min-width:0;}
 .home-break-card h3{font-size:13px;font-weight:900;margin-bottom:8px;color:var(--text);}
-.home-break-total{display:flex;align-items:baseline;gap:4px;margin-bottom:8px;}
-.home-break-total strong{font-family:'Bebas Neue';font-size:42px;line-height:1;color:var(--accent);}
+.home-break-total{display:flex;align-items:baseline;justify-content:center;gap:4px;margin-bottom:8px;text-align:center;}
+.home-break-total strong{font-family:'Inter',sans-serif;font-size:42px;line-height:1;color:var(--accent);font-weight:1000;letter-spacing:-.04em;}
 .home-break-total span{font-size:12px;color:var(--text2);font-weight:900;}
 .home-break-lines{display:flex;flex-direction:column;gap:5px;font-size:11px;color:var(--text2);font-weight:700;line-height:1.35;}
 .home-break-lines div{display:flex;justify-content:space-between;gap:8px;border-top:1px solid var(--border);padding-top:5px;}
 .home-break-lines b{color:var(--text);font-weight:900;}
+.result-update-card{margin:0 14px 12px;background:var(--s1);border:1px solid rgba(22,163,74,.24);border-radius:16px;box-shadow:var(--shadow);overflow:hidden;}
+.result-update-head{padding:11px 13px;border-bottom:1px solid var(--border);font-size:13px;font-weight:900;color:var(--green);background:linear-gradient(135deg,var(--s1),rgba(22,163,74,.08));}
+.result-update-list{max-height:154px;overflow-y:auto;padding:8px 10px;display:flex;flex-direction:column;gap:7px;}
+.result-update-item{display:flex;align-items:center;justify-content:space-between;gap:10px;border:1px solid var(--border);border-radius:12px;padding:8px 10px;background:var(--s2);font-size:11px;font-weight:800;color:var(--text2);}
+.result-update-item strong{color:var(--text);font-size:12px;}
+.result-update-empty{padding:12px;color:var(--text2);font-size:12px;font-weight:700;}
 .guest-notice{margin:12px 14px 0;padding:14px;border-radius:18px;background:linear-gradient(135deg,#0f172a,#1e6ef0 58%,#d4960a);color:#fff;box-shadow:0 16px 36px rgba(15,23,42,.22);display:flex;align-items:center;justify-content:space-between;gap:12px;border:1px solid rgba(255,255,255,.22);}
 .guest-notice strong{display:block;font-size:14px;font-weight:900;margin-bottom:4px;}
 .guest-notice span{display:block;font-size:12px;line-height:1.55;font-weight:800;color:rgba(255,255,255,.88);}
@@ -478,7 +484,8 @@ html,body{background:#ddd8ce;color:var(--text);font-family:'Inter',sans-serif;mi
 .player-name{font-size:clamp(12px,2.5vw,14px);font-weight:900;line-height:1.18;word-break:break-word;}
 .player-meta{font-size:clamp(9px,2.4vw,11px);color:var(--text2);margin-top:5px;line-height:1.35;}
 .player-meta-line{display:block;word-break:break-word;}
-.player-detail-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:3px 10px;align-items:center;}
+.player-detail-grid{display:grid;grid-template-columns:auto minmax(0,1fr) minmax(0,1.15fr);gap:4px 8px;align-items:center;}
+.player-club-line{grid-column:3;justify-self:end;text-align:right;}
 .pos-badge{display:inline-flex;align-items:center;justify-content:center;width:34px;padding:3px 0;border-radius:999px;font-size:10px;font-weight:1000;line-height:1;color:#fff;letter-spacing:.4px;}
 .pos-badge.gk{background:#dc2626;}
 .pos-badge.df{background:#2563eb;}
@@ -685,9 +692,15 @@ html,body{background:#ddd8ce;color:var(--text);font-family:'Inter',sans-serif;mi
 .rank-card{background:var(--s1);border:1px solid var(--border);border-radius:16px;padding:12px;box-shadow:var(--shadow);}
 .rank-card-top{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:12px;}
 .rank-card-left{min-width:0;flex:1;}
-.rank-card-rank{font-family:'Bebas Neue';font-size:28px;line-height:1;color:var(--accent);}
+.rank-card-rank{font-family:'Inter',sans-serif;font-size:20px;line-height:1;color:var(--accent);font-weight:1000;letter-spacing:-.04em;}
 .rank-card-name{font-size:14px;font-weight:900;line-height:1.25;}
 .rank-card-meta{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px;font-size:10px;color:var(--text2);}
+.rank-pos{display:inline-flex;align-items:center;justify-content:center;padding:2px 8px;border-radius:999px;font-size:10px;font-weight:1000;line-height:1;color:#fff;letter-spacing:.3px;}
+.rank-pos.gk{background:#dc2626;}
+.rank-pos.df{background:#2563eb;}
+.rank-pos.mf{background:#d97706;}
+.rank-pos.fw{background:#ef4444;}
+.rank-pos.unknown{background:#64748b;}
 .rank-card-foot{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-top:10px;padding-top:10px;border-top:1px solid var(--border);font-size:11px;color:var(--text2);}
 .rank-score{font-family:'Bebas Neue';font-size:34px;line-height:1;color:var(--accent);}
 .rank-score-sub{font-size:10px;color:var(--text2);margin-top:2px;text-align:right;}
@@ -798,7 +811,9 @@ html,body{background:#ddd8ce;color:var(--text);font-family:'Inter',sans-serif;mi
 .ko-match-node.predicted{box-shadow:0 0 0 2px rgba(255,20,15,.42),0 10px 24px rgba(0,0,0,.25);}
 .ko-match-node.actual{box-shadow:0 0 0 2px rgba(212,150,10,.7),0 10px 24px rgba(0,0,0,.25);}
 .ko-match-meta{min-height:32px;display:flex;align-items:center;justify-content:space-between;gap:6px;padding:4px 7px;background:linear-gradient(90deg,rgba(17,24,39,.88),rgba(30,41,59,.82));color:#fff;font-size:9px;font-weight:900;line-height:1;letter-spacing:.15px;}
-.ko-match-meta span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.ko-match-time{flex:0 0 78px;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:2px;min-width:78px;white-space:normal;line-height:1.05;}
+.ko-match-time b{font:inherit;color:#fff;}
+.ko-match-time small{font:inherit;font-size:8.5px;color:rgba(255,255,255,.9);}
 .ko-match-meta em{min-width:0;font-style:normal;color:#facc15;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;white-space:normal;line-height:1.15;text-align:right;}
 .ko-teams-line{height:58px;display:grid;grid-template-columns:minmax(0,1fr) 58px minmax(0,1fr);align-items:stretch;background:linear-gradient(180deg,rgba(255,255,255,.78),rgba(230,230,230,.86));}
 .ko-team-block{min-width:0;display:grid;grid-template-columns:18px minmax(0,1fr) auto;align-items:center;column-gap:5px;padding:7px 6px 6px;border-right:1px solid rgba(0,0,0,.08);position:relative;}
@@ -1154,6 +1169,9 @@ function FlagAsset({src,alt,className='',fallback='🏳️'}){
 function TeamFlag({team,className=''}){
   const meta=teamMeta(team);
   const parts=String(team||'').split('/').map((s)=>s.trim()).filter(Boolean);
+  if(String(team||'').startsWith('TBD-')||parts.some((part)=>!TEAM_JA[part]&&!TEAM_FLAG_DATA[part]&&!TEAM_FLAG_FILES[part])){
+    return <span className={('flag-fallback ' + className).trim()} title={meta.ja} aria-label={meta.ja}>🏳️</span>;
+  }
   if(parts.length>1){
     return (
       <span className={('flag-duo ' + className).trim()} title={meta.ja} aria-label={meta.ja + 'の国旗'}>
@@ -1234,13 +1252,15 @@ function formatMatchDate(value,time='19:00',timeZone='Asia/Tokyo'){
   if(!value)return '';
   const d=new Date(`${value}T${time}:00Z`);
   if(Number.isNaN(d.getTime()))return value;
-  return new Intl.DateTimeFormat('ja-JP',{month:'numeric',day:'numeric',weekday:'short',hour:'2-digit',minute:'2-digit',hour12:false,timeZone}).format(d);
+  const parts=Object.fromEntries(new Intl.DateTimeFormat('ja-JP',{month:'numeric',day:'numeric',weekday:'short',hour:'2-digit',minute:'2-digit',hour12:false,timeZone}).formatToParts(d).map(p=>[p.type,p.value]));
+  return `${parts.month}/${parts.day}(${parts.weekday}) ${parts.hour}:${parts.minute}`;
 }
 function formatTimestamp(value,timeZone='Asia/Tokyo'){
   if(!value)return '';
   const d=new Date(value);
   if(Number.isNaN(d.getTime()))return value;
-  return new Intl.DateTimeFormat('ja-JP',{year:'numeric',month:'numeric',day:'numeric',weekday:'short',hour:'2-digit',minute:'2-digit',hour12:false,timeZone}).format(d);
+  const parts=Object.fromEntries(new Intl.DateTimeFormat('ja-JP',{year:'numeric',month:'numeric',day:'numeric',weekday:'short',hour:'2-digit',minute:'2-digit',hour12:false,timeZone}).formatToParts(d).map(p=>[p.type,p.value]));
+  return `${parts.year}/${parts.month}/${parts.day}(${parts.weekday}) ${parts.hour}:${parts.minute}`;
 }
 const BOOTSTRAP=window.__WC26_BOOTSTRAP__||null;
 const HAS_BACKEND=!!BOOTSTRAP?.state;
@@ -1276,6 +1296,7 @@ PLAYER_DATA_BASE=withWorldCupGoals(PLAYER_DATA_BASE);
 let ALL_PLAYERS=Object.values(PLAYER_DATA).flat();
 let PLAYER_DATA_META={generatedAt:BOOTSTRAP?.generatedAt||null,sources:BOOTSTRAP?.sources||{}};
 let DATA_STATUS=BOOTSTRAP?.dataStatus||{};
+let RESULT_STATUS=BOOTSTRAP?.resultStatus||{};
 function emptyPlayerOverrides(){
   return {updatedAt:null,players:{},deletedIds:[],additionsByCountry:{}};
 }
@@ -1316,10 +1337,13 @@ function playerPhysicalMeta(player){
   return parts.join(' / ');
 }
 function positionClass(pos){return normalizePosition(pos).toLowerCase();}
-function clubGoalsText(player){
-  if(player?.clubGoalsKnown===false)return '-';
-  if(player?.clubGoals===undefined||player?.clubGoals===null||player?.clubGoals==='')return '-';
-  return String(Number(player.clubGoals)||0);
+function playerInfoParts(player){
+  const parts=[
+    positionJa(player?.position),
+    player?.club||'Unknown',
+  ];
+  if(playerPhysicalMeta(player))parts.push(playerPhysicalMeta(player));
+  return parts.filter(Boolean);
 }
 function applyPlayerOverrides(base,overrides){
   const deletedIds=new Set((overrides?.deletedIds||[]).map(id=>String(id)));
@@ -2061,14 +2085,7 @@ function calcKoPointSummary(koPreds,results,userId,settings){
 }
 function displayUserLabel(user,roomOrMembers){
   if(!user)return '--';
-  const members=Array.isArray(roomOrMembers)
-    ? roomOrMembers.filter(Boolean)
-    : (roomOrMembers?.members||[])
-      .map((id)=>gs('users',[]).find((u)=>u.id===id))
-      .filter(Boolean);
-  const dupCount=members.filter((m)=>m.username===user.username).length;
-  const code=(user.memberCode||String(user.id||'').slice(-4)).toUpperCase();
-  return dupCount>1 ? `${user.username} #${code}` : user.username;
+  return user.username || '--';
 }
 
 // ===== TOAST =====
@@ -2293,9 +2310,8 @@ function CountryModal({team,onClose}){
                   <div className="player-meta">
                     <div className="player-detail-grid">
                       <span className={`pos-badge ${positionClass(p.position)}`}>{positionJa(p.position)}</span>
-                      <span className="player-meta-line">{p.club||'Unknown'}</span>
                       {playerPhysicalMeta(p)&&<span className="player-meta-line">{playerPhysicalMeta(p)}</span>}
-                      <span className="player-meta-line">W杯 {p.worldCupGoals??0} / 25-26 {clubGoalsText(p)}</span>
+                      <span className="player-meta-line player-club-line">{p.club||'Unknown'}</span>
                     </div>
                   </div>
                 </div>
@@ -2343,10 +2359,6 @@ function CountryModal({team,onClose}){
             <div className="player-field">
               <label>2026ワールドカップ得点</label>
               <input type="number" min="0" step="1" value={draft?.worldCupGoals||0} onChange={(e)=>updateDraft('worldCupGoals',e.target.value)} />
-            </div>
-            <div className="player-field">
-              <label>2025-26シーズン得点</label>
-              <input type="number" min="0" step="1" value={draft?.clubGoals||0} onChange={(e)=>updateDraft('clubGoals',e.target.value)} />
             </div>
           </div>
           <div className="player-edit-actions">
@@ -2567,12 +2579,8 @@ function HomeScreen({user,onLogout,syncToken}){
   const uiSettings=gs('settings',DEFAULT_UI_SETTINGS);
   const latestDataAt=DATA_STATUS.lastUpdatedAt||PLAYER_DATA_META.generatedAt||'';
   const latestDataStamp=latestDataAt?formatTimestamp(latestDataAt,uiSettings.timeZone||'Asia/Tokyo'):'';
-  const sourceLabel=(source)=>{
-    if(source==='world-football-archive')return 'World Football Archive';
-    if(source==='fifa-official-squad')return 'FIFA公式スカッド';
-    return source||'選手データ';
-  };
-  const latestDataSource=DATA_STATUS.lastUpdatedAt?sourceLabel(DATA_STATUS.source):sourceLabel(PLAYER_DATA_META.playerSource||'world-football-archive');
+  const resultUpdateItems=(RESULT_STATUS.history||[]).slice(0,5);
+  const latestResultStamp=RESULT_STATUS.lastUpdatedAt?formatTimestamp(RESULT_STATUS.lastUpdatedAt,uiSettings.timeZone||'Asia/Tokyo'):'';
 
   return(
     <div className="page page-enter">
@@ -2630,9 +2638,22 @@ function HomeScreen({user,onLogout,syncToken}){
         <div className="info-card" style={{borderColor:'rgba(22,163,74,.24)',background:'linear-gradient(135deg,var(--s1),rgba(22,163,74,.08))'}}>
           <div className="itag">情報更新ステータス</div>
           <div className="ival" style={{color:'var(--green)',fontSize:24}}>更新済み: {latestDataStamp}</div>
-          <div className="isub">{latestDataSource} を基準に表示しています。時刻は選択中の表示タイムゾーン基準です。</div>
         </div>
       )}
+      <div className="result-update-card">
+        <div className="result-update-head">
+          {latestResultStamp?`${latestResultStamp}時点の結果を反映`:'結果反映履歴'}
+        </div>
+        <div className="result-update-list">
+          {resultUpdateItems.length===0&&<div className="result-update-empty">まだ勝敗情報は更新されていません</div>}
+          {resultUpdateItems.map((item,idx)=>(
+            <div className="result-update-item" key={`${item.updatedAt}-${idx}`}>
+              <strong>{formatTimestamp(item.updatedAt,uiSettings.timeZone||'Asia/Tokyo')}</strong>
+              <span>{item.updatedCount||0}件反映</span>
+            </div>
+          ))}
+        </div>
+      </div>
       <div className="home-breakdown">
         <div className="home-breakdown-title">ポイント内訳</div>
         <div className="home-breakdown-grid">
@@ -3144,7 +3165,10 @@ function BracketScreen({user,syncToken}){
         disabled={!canEditKo}
       >
         <div className="ko-match-meta">
-          <span>{match.matchNo?`M${match.matchNo} `:''}{formatMatchDate(match.date,match.kickoff,timeZone)}</span>
+          <span className="ko-match-time">
+            <b>{match.matchNo?`M${match.matchNo}`:'MATCH'}</b>
+            <small>{formatMatchDate(match.date,match.kickoff,timeZone)}</small>
+          </span>
           <em>{stadiumLabel(match.stadium,lang)}</em>
         </div>
         <div className="ko-teams-line">
@@ -3263,9 +3287,10 @@ function BracketScreen({user,syncToken}){
 function LeaderboardScreen({user,onOpenTeam}){
   const lang=useContext(LangCtx);const l=T[lang];
   const players=[...ALL_PLAYERS];
-  const rankedPlayers=[...players].sort((a,b)=>Number(b.worldCupGoals||0)-Number(a.worldCupGoals||0)||playerDisplayName(a).localeCompare(playerDisplayName(b),'ja'));
-  const top=rankedPlayers[0]
-    ||[...players].sort((a,b)=>Number(b.worldCupGoals||0)-Number(a.worldCupGoals||0)||playerDisplayName(a).localeCompare(playerDisplayName(b),'ja'))[0];
+  const rankedPlayers=[...players]
+    .filter((p)=>Number(p.worldCupGoals||0)>0)
+    .sort((a,b)=>Number(b.worldCupGoals||0)-Number(a.worldCupGoals||0)||playerDisplayName(a).localeCompare(playerDisplayName(b),'ja'));
+  const top=rankedPlayers[0]||null;
   const uiSettings=gs('settings',DEFAULT_UI_SETTINGS);
   const dataStamp=PLAYER_DATA_META.generatedAt ? formatTimestamp(PLAYER_DATA_META.generatedAt,uiSettings.timeZone) : '';
 
@@ -3280,6 +3305,7 @@ function LeaderboardScreen({user,onOpenTeam}){
             <div className="lb-pl-name">トップスコアラー</div>
             <div className="lb-pl-pts">{top?.worldCupGoals??0}</div>
             {Number(top?.worldCupGoals||0)>0&&<div style={{fontSize:9,color:'rgba(255,255,255,.6)',marginTop:2}}>{playerDisplayName(top)||''}</div>}
+            {!top&&<div style={{fontSize:10,color:'rgba(255,255,255,.68)',marginTop:4}}>得点者はいません</div>}
           </div>
         </div>
       </div>
@@ -3289,16 +3315,16 @@ function LeaderboardScreen({user,onOpenTeam}){
       </div>
       <div className="section-title">選手一覧</div>
       <div className="rank-list">
-        {rankedPlayers.length===0&&<div style={{padding:24,textAlign:'center',color:'var(--text2)',fontSize:13}}>選手データがありません</div>}
+        {rankedPlayers.length===0&&<div style={{padding:24,textAlign:'center',color:'var(--text2)',fontSize:13,fontWeight:800}}>得点者はいません</div>}
         {rankedPlayers.map((p,i)=>(
           <div className="rank-card" key={p.id}>
             <div className="rank-card-top">
               <div className="rank-card-left">
-                <div className="rank-card-rank">#{i+1}</div>
+                <div className="rank-card-rank">{i+1}位</div>
                 <div className="rank-card-name">{playerDisplayName(p)}</div>
                 <div className="rank-card-meta">
-                  <span>{positionJa(p.position)}</span>
-                  <span>{p.club}</span>
+                  <span className={`rank-pos ${positionClass(p.position)}`}>{positionJa(p.position)}</span>
+                  <span>{p.club||'Unknown'}</span>
                   {playerPhysicalMeta(p)&&<span>{playerPhysicalMeta(p)}</span>}
                 </div>
               </div>
@@ -3425,6 +3451,7 @@ function SettingsScreen({user,syncToken,onRenameUser}){
       }
       const nextResults=res.roomState?.results||{};
       ss(roomDataKey(roomId,'results'),nextResults);
+      if(res.resultStatus)RESULT_STATUS=res.resultStatus;
       setToast(`勝敗情報を更新しました（${res.updatedCount||0}件）`);
       notifyStateChange();
     }finally{
@@ -3486,30 +3513,6 @@ function SettingsScreen({user,syncToken,onRenameUser}){
           <button className="btn ghost" style={{width:'auto',marginTop:0,color:'var(--red)',borderColor:'var(--red)'}} onClick={()=>{
             if(confirm('予想データをすべて削除しますか？')){clearCompetitionData(roomId);setToast('予想データを削除しました');}
           }}>全データをクリア</button>
-        </div>
-      </div>
-      <div className="set-sec">
-        <h3>🔐 管理者更新</h3>
-        <div className="set-row" style={{flexDirection:'column',alignItems:'flex-start',gap:10}}>
-          <div className="sl">選手データ更新<span>World Football Archiveを取得し、選手一覧・所属クラブ・年齢・身長・更新時刻を更新します。取得できない場合のみFIFA公式スカッドPDFへフォールバックします。</span></div>
-          <div className="player-field" style={{marginTop:0,width:'100%'}}>
-            <label>管理者トークン</label>
-            <input type="password" value={adminToken} onChange={(e)=>setAdminToken(e.target.value)} />
-          </div>
-          <button className="btn" style={{width:'auto',padding:'10px 18px'}} onClick={refreshOfficialData} disabled={adminRefreshing}>
-            {adminRefreshing?'更新中…':'選手データを更新'}
-          </button>
-          <div style={{fontSize:12,color:'var(--text2)',lineHeight:1.5}}>
-            最終更新: {DATA_STATUS.lastUpdatedAt?formatTimestamp(DATA_STATUS.lastUpdatedAt,uiSettings.timeZone||'Asia/Tokyo'):'未更新'}
-          </div>
-          <div className="sl" style={{paddingTop:10,borderTop:'1px solid var(--border)',width:'100%'}}>勝敗情報更新<span>試合IDごとの実スコアをJSONで投入します。保存後、勝敗とスコアのポイントは自動で再計算されます。</span></div>
-          <div className="player-field" style={{marginTop:0,width:'100%'}}>
-            <label>勝敗情報JSON</label>
-            <textarea value={adminResultsJson} onChange={(e)=>setAdminResultsJson(e.target.value)} rows={5} placeholder='{"A-1":{"home":2,"away":1,"status":"final"}}' />
-          </div>
-          <button className="btn" style={{width:'auto',padding:'10px 18px'}} onClick={applyAdminResults} disabled={adminUpdatingResults}>
-            {adminUpdatingResults?'更新中…':'勝敗情報を更新'}
-          </button>
         </div>
       </div>
       <div className="set-sec point-sec">
@@ -3599,6 +3602,28 @@ function SettingsScreen({user,syncToken,onRenameUser}){
           )}
         </>
       </div>
+      <div className="set-sec">
+        <h3>🔐 管理者更新</h3>
+        <div className="set-row" style={{flexDirection:'column',alignItems:'flex-start',gap:10}}>
+          <div className="sl">選手データ更新</div>
+          <div className="player-field" style={{marginTop:0,width:'100%'}}>
+            <input type="password" value={adminToken} onChange={(e)=>setAdminToken(e.target.value)} />
+          </div>
+          <button className="btn" style={{width:'auto',padding:'10px 18px'}} onClick={refreshOfficialData} disabled={adminRefreshing}>
+            {adminRefreshing?'更新中…':'選手データを更新'}
+          </button>
+          <div style={{fontSize:12,color:'var(--text2)',lineHeight:1.5}}>
+            最終更新: {DATA_STATUS.lastUpdatedAt?formatTimestamp(DATA_STATUS.lastUpdatedAt,uiSettings.timeZone||'Asia/Tokyo'):'未更新'}
+          </div>
+          <div className="sl" style={{paddingTop:10,borderTop:'1px solid var(--border)',width:'100%'}}>勝敗情報更新</div>
+          <div className="player-field" style={{marginTop:0,width:'100%'}}>
+            <input value={adminResultsJson} onChange={(e)=>setAdminResultsJson(e.target.value)} />
+          </div>
+          <button className="btn" style={{width:'auto',padding:'10px 18px'}} onClick={applyAdminResults} disabled={adminUpdatingResults}>
+            {adminUpdatingResults?'更新中…':'勝敗情報を更新'}
+          </button>
+        </div>
+      </div>
     </div>
   );
 }
@@ -3682,6 +3707,7 @@ function App(){
         if(Array.isArray(data.rooms))ss('rooms',data.rooms);
         if(Array.isArray(data.users))ss('users',data.users);
         if(data.dataStatus)setDataStatus(data.dataStatus);
+        if(data.resultStatus)RESULT_STATUS=data.resultStatus;
         if(data.playersByCountry&&Object.keys(data.playersByCountry).length){
           setPlayerData(data.playersByCountry,{
             generatedAt:data.generatedAt||PLAYER_DATA_META.generatedAt,
