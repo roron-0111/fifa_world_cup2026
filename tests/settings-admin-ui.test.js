@@ -56,11 +56,12 @@ test('home hides internal member codes and shows readable timestamp formats', ()
 test('home result update history is visible and compact', () => {
   assert.doesNotMatch(html, /FIFA公式スカッド を基準に表示しています/);
   assert.doesNotMatch(html, /時刻は選択中の表示タイムゾーン基準です/);
+  assert.doesNotMatch(html, />情報更新ステータス</);
   assert.match(html, /RESULT_STATUS=BOOTSTRAP\?\.resultStatus/);
   assert.match(html, /resultUpdateItems=\(RESULT_STATUS\.history\|\|\[\]\)\.slice\(0,5\)/);
-  assert.match(html, /時点の結果を反映/);
+  assert.match(html, /<span>結果反映履歴<\/span>/);
+  assert.match(html, /className="result-update-stamp">: \{latestDataStamp\} 更新済み<\/span>/);
   assert.match(html, /home-status-card/);
-  assert.match(html, /home-status-top/);
   assert.match(html, /\.result-update-list\{[^}]*max-height:154px;overflow-y:auto/);
 });
 
@@ -106,6 +107,13 @@ test('pending prediction summary includes opponent state', () => {
   assert.match(html, /<span>相手<b>\{oppGroupMiss\}<\/b><\/span>/);
   assert.match(html, /<div className="sc gold split-only">/);
   assert.doesNotMatch(html, /<div className="n">\{myGroupMiss\}<\/div>/);
+  assert.match(html, /\.sc \.split\{[^}]*font-size:12px/);
+});
+
+test('top stat labels sit above their numbers', () => {
+  assert.match(html, /<div className="sc acc"><div className="l top">\{l\.predicted\}<\/div><div className="n">\{myPredCount\}<\/div><\/div>/);
+  assert.match(html, /<div className="sc grn"><div className="l top">\{l\.confirmed\}<\/div><div className="n">\{resultCount\}<\/div><\/div>/);
+  assert.match(html, /\.sc \.l\.top\{[^}]*margin:0 0 4px/);
 });
 
 test('knockout score row uses score hit wording', () => {
