@@ -49,6 +49,8 @@ test('home hides internal member codes and shows readable timestamp formats', ()
   assert.match(html, /function displayUserLabel\(user,roomOrMembers\)\{[\s\S]*return user\.username \|\| '--';/);
   assert.match(html, /\$\{parts\.month\}\/\$\{parts\.day\}\(\$\{parts\.weekday\}\) \$\{parts\.hour\}:\$\{parts\.minute\}/);
   assert.match(html, /\.info-card \.ival\{font-family:'Inter'/);
+  assert.match(html, /\.info-card \.ival\{[^}]*font-size:16px/);
+  assert.doesNotMatch(html, /fontSize:24}>更新済み/);
 });
 
 test('home result update history is visible and compact', () => {
@@ -63,4 +65,17 @@ test('home result update history is visible and compact', () => {
 test('ambiguous placeholder teams do not render multiple flag images', () => {
   assert.match(html, /parts\.some\(\(part\)=>!TEAM_JA\[part\]/);
   assert.match(html, /return <span className=\{\('flag-fallback ' \+ className\)\.trim\(\)\}/);
+});
+
+test('settings save button stays horizontal on narrow screens', () => {
+  assert.match(html, /\.settings-save-btn\{[^}]*min-width:72px/);
+  assert.match(html, /\.settings-save-btn\{[^}]*white-space:nowrap/);
+  assert.match(html, /className="btn settings-save-btn"/);
+});
+
+test('home point breakdown uses consistent count and point columns', () => {
+  assert.match(html, /\.home-break-lines div\{[^}]*grid-template-columns:minmax\(0,1fr\) 46px 52px/);
+  assert.match(html, /<b>\{mySummary\.resultHits\}件<\/b><b className="metric-points">\+\{mySummary\.resultPoints\}pt<\/b>/);
+  assert.match(html, /<b>\{\(myKoSummary\.championHit\|\|0\)\+\(myKoSummary\.runnerUpHit\|\|0\)\+\(myKoSummary\.thirdPlaceHit\|\|0\)\}件<\/b>/);
+  assert.doesNotMatch(html, /優勝 \{myKoSummary\.championHit\} \/ 2位/);
 });
