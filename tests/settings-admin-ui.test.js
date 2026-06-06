@@ -59,6 +59,8 @@ test('home result update history is visible and compact', () => {
   assert.match(html, /RESULT_STATUS=BOOTSTRAP\?\.resultStatus/);
   assert.match(html, /resultUpdateItems=\(RESULT_STATUS\.history\|\|\[\]\)\.slice\(0,5\)/);
   assert.match(html, /時点の結果を反映/);
+  assert.match(html, /home-status-card/);
+  assert.match(html, /home-status-top/);
   assert.match(html, /\.result-update-list\{[^}]*max-height:154px;overflow-y:auto/);
 });
 
@@ -102,4 +104,11 @@ test('pending prediction summary includes opponent state', () => {
   assert.match(html, /const oppPredCount=oppId\?Object\.keys\(preds\[oppId\]\|\|\{\}\)\.length:0/);
   assert.match(html, /const oppGroupMiss=oppId\?GROUP_MATCHES\.length-oppPredCount:0/);
   assert.match(html, /<span>相手<b>\{oppGroupMiss\}<\/b><\/span>/);
+  assert.match(html, /<div className="sc gold split-only">/);
+  assert.doesNotMatch(html, /<div className="n">\{myGroupMiss\}<\/div>/);
+});
+
+test('knockout score row uses score hit wording', () => {
+  assert.match(html, /\{label:'スコア的中',me:koScorePts\(myKoSummary\),opp:koScorePts\(oppKoSummary\)\}/);
+  assert.doesNotMatch(html, /スコア \/ PK/);
 });

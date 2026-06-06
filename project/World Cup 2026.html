@@ -210,6 +210,8 @@ html,body{background:#ddd8ce;color:var(--text);font-family:'Inter',sans-serif;mi
 .sc{background:var(--s1);border:1px solid var(--border);border-radius:12px;padding:12px;text-align:center;box-shadow:var(--shadow);}
 .sc .n{font-family:'Bebas Neue';font-size:34px;line-height:1;}
 .sc .l{font-size:10px;color:var(--text2);font-weight:700;margin-top:3px;}
+.sc.split-only{padding:14px 12px;}
+.sc.split-only .l{margin-top:0;}
 .sc .split{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:6px;font-size:10px;font-weight:900;color:var(--text2);}
 .sc .split b{display:block;color:var(--text);font-size:12px;font-variant-numeric:tabular-nums;}
 .sc.acc .n{color:var(--accent);}
@@ -219,6 +221,9 @@ html,body{background:#ddd8ce;color:var(--text);font-family:'Inter',sans-serif;mi
 .info-card .itag{font-size:10px;color:var(--text2);font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;}
 .info-card .ival{font-family:'Inter',sans-serif;font-size:16px;color:var(--accent);font-weight:1000;letter-spacing:-.03em;line-height:1.25;}
 .info-card .isub{font-size:11px;color:var(--text2);margin-top:3px;}
+.home-status-card{margin:0 14px 12px;background:var(--s1);border:1px solid rgba(22,163,74,.24);border-radius:16px;box-shadow:var(--shadow);overflow:hidden;}
+.home-status-top{padding:14px;background:linear-gradient(135deg,var(--s1),rgba(22,163,74,.08));}
+.home-status-divider{height:1px;background:var(--border);}
 .pts-info-row{display:flex;gap:8px;padding:0 16px 16px;}
 .pts-box{flex:1;background:var(--s1);border:1px solid var(--border);border-radius:10px;padding:10px;text-align:center;box-shadow:var(--shadow);}
 .pts-box .n{font-family:'Bebas Neue';font-size:30px;line-height:1;}
@@ -239,7 +244,7 @@ html,body{background:#ddd8ce;color:var(--text);font-family:'Inter',sans-serif;mi
 .home-compare-row b{color:var(--text);font-weight:900;text-align:right;font-variant-numeric:tabular-nums;}
 .home-compare-row b.me{color:var(--accent);}
 .home-compare-row b.opp{color:var(--gold);}
-.result-update-card{margin:0 14px 12px;background:var(--s1);border:1px solid rgba(22,163,74,.24);border-radius:16px;box-shadow:var(--shadow);overflow:hidden;}
+.result-update-card{background:transparent;border:none;border-radius:0;box-shadow:none;overflow:hidden;}
 .result-update-head{padding:11px 13px;border-bottom:1px solid var(--border);font-size:13px;font-weight:900;color:var(--green);background:linear-gradient(135deg,var(--s1),rgba(22,163,74,.08));}
 .result-update-list{max-height:154px;overflow-y:auto;padding:8px 10px;display:flex;flex-direction:column;gap:7px;}
 .result-update-item{display:flex;align-items:center;justify-content:space-between;gap:10px;border:1px solid var(--border);border-radius:12px;padding:8px 10px;background:var(--s2);font-size:11px;font-weight:800;color:var(--text2);}
@@ -2631,7 +2636,7 @@ function HomeScreen({user,onLogout,syncToken}){
   const koPodiumPts=(summary)=>`${(summary.championHit||0)+(summary.runnerUpHit||0)+(summary.thirdPlaceHit||0)}件 / +${(summary.championHit||0)*(summary.koChampionPts||0)+(summary.runnerUpHit||0)*(summary.koRunnerUpPts||0)+(summary.thirdPlaceHit||0)*(summary.koThirdPlacePts||0)}pt`;
   const koCompareRows=[
     {label:'勝者的中',me:koWinnerPts(myKoSummary),opp:koWinnerPts(oppKoSummary)},
-    {label:'スコア / PK',me:koScorePts(myKoSummary),opp:koScorePts(oppKoSummary)},
+    {label:'スコア的中',me:koScorePts(myKoSummary),opp:koScorePts(oppKoSummary)},
     {label:'順位的中',me:koPodiumPts(myKoSummary),opp:koPodiumPts(oppKoSummary)},
     {label:'合計',me:`${myKoSummary.total}pt`,opp:`${oppKoSummary.total||0}pt`},
   ];
@@ -2692,31 +2697,33 @@ function HomeScreen({user,onLogout,syncToken}){
       </div>}
       <div className="stats-grid">
         <div className="sc acc"><div className="n">{myPredCount}</div><div className="l">{l.predicted}</div></div>
-        <div className="sc gold">
-          <div className="n">{myGroupMiss}</div>
+        <div className="sc gold split-only">
           <div className="l">{l.unpredicted}</div>
           {opp&&<div className="split"><span>自分<b>{myGroupMiss}</b></span><span>相手<b>{oppGroupMiss}</b></span></div>}
         </div>
         <div className="sc grn"><div className="n">{resultCount}</div><div className="l">{l.confirmed}</div></div>
       </div>
-      {latestDataStamp&&(
-        <div className="info-card" style={{borderColor:'rgba(22,163,74,.24)',background:'linear-gradient(135deg,var(--s1),rgba(22,163,74,.08))'}}>
-          <div className="itag">情報更新ステータス</div>
-          <div className="ival" style={{color:'var(--green)'}}>更新済み: {latestDataStamp}</div>
-        </div>
-      )}
-      <div className="result-update-card">
-        <div className="result-update-head">
-          {latestResultStamp?`${latestResultStamp}時点の結果を反映`:'結果反映履歴'}
-        </div>
-        <div className="result-update-list">
-          {resultUpdateItems.length===0&&<div className="result-update-empty">まだ勝敗情報は更新されていません</div>}
-          {resultUpdateItems.map((item,idx)=>(
-            <div className="result-update-item" key={`${item.updatedAt}-${idx}`}>
-              <strong>{formatTimestamp(item.updatedAt,uiSettings.timeZone||'Asia/Tokyo')}</strong>
-              <span>{item.updatedCount||0}件反映</span>
-            </div>
-          ))}
+      <div className="home-status-card">
+        {latestDataStamp&&(
+          <div className="home-status-top">
+            <div className="itag">情報更新ステータス</div>
+            <div className="ival" style={{color:'var(--green)'}}>更新済み: {latestDataStamp}</div>
+          </div>
+        )}
+        {latestDataStamp&&<div className="home-status-divider"></div>}
+        <div className="result-update-card">
+          <div className="result-update-head">
+            {latestResultStamp?`${latestResultStamp}時点の結果を反映`:'結果反映履歴'}
+          </div>
+          <div className="result-update-list">
+            {resultUpdateItems.length===0&&<div className="result-update-empty">まだ勝敗情報は更新されていません</div>}
+            {resultUpdateItems.map((item,idx)=>(
+              <div className="result-update-item" key={`${item.updatedAt}-${idx}`}>
+                <strong>{formatTimestamp(item.updatedAt,uiSettings.timeZone||'Asia/Tokyo')}</strong>
+                <span>{item.updatedCount||0}件反映</span>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
       <div className="home-breakdown">
