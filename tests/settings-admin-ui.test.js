@@ -60,7 +60,7 @@ test('home result update history is visible and compact', () => {
   assert.match(html, /RESULT_STATUS=BOOTSTRAP\?\.resultStatus/);
   assert.match(html, /resultUpdateItems=\(RESULT_STATUS\.history\|\|\[\]\)\.slice\(0,5\)/);
   assert.match(html, /<span>結果反映履歴<\/span>/);
-  assert.match(html, /className="result-update-stamp">: \{latestDataStamp\} 更新済み<\/span>/);
+  assert.match(html, /className="result-update-stamp">\{latestDataStamp\} 更新済み<\/span>/);
   assert.match(html, /home-status-card/);
   assert.match(html, /\.result-update-list\{[^}]*max-height:154px;overflow-y:auto/);
 });
@@ -86,9 +86,10 @@ test('home point breakdown uses consistent count and point columns', () => {
 
 test('home hero score cards use aligned metrics and centered VS', () => {
   assert.match(html, /\.vs-txt\{[^}]*align-self:center/);
-  assert.match(html, /\.room-score-sub\{[^}]*grid-template-columns:minmax\(0,1fr\) 36px 44px/);
-  assert.match(html, /<span>勝敗的中<\/span><b>\{mySummary\.resultHits\}件<\/b><b className="hero-points">\+\{mySummary\.resultPoints\}pt<\/b>/);
-  assert.match(html, /<span>決勝T<\/span><b>合計<\/b><b className="hero-points">\+\{myKoSummary\.total\}pt<\/b>/);
+  assert.match(html, /\.hpc-total\{[^}]*align-items:baseline/);
+  assert.match(html, /\.hpc-total \.unit\{[^}]*font-size:12px/);
+  assert.match(html, /<div className="hpc-total"><span className="num">\{myTotal\}<\/span><span className="unit">pt<\/span><\/div>/);
+  assert.match(html, /<div className="hpc-total"><span className="num">\{oppTotal\}<\/span><span className="unit">pt<\/span><\/div>/);
 });
 
 test('auth page offers recent room recovery', () => {
@@ -104,16 +105,11 @@ test('auth page offers recent room recovery', () => {
 test('pending prediction summary includes opponent state', () => {
   assert.match(html, /const oppPredCount=oppId\?Object\.keys\(preds\[oppId\]\|\|\{\}\)\.length:0/);
   assert.match(html, /const oppGroupMiss=oppId\?GROUP_MATCHES\.length-oppPredCount:0/);
-  assert.match(html, /<span>相手<b>\{oppGroupMiss\}<\/b><\/span>/);
-  assert.match(html, /<div className="sc gold split-only">/);
-  assert.doesNotMatch(html, /<div className="n">\{myGroupMiss\}<\/div>/);
-  assert.match(html, /\.sc \.split\{[^}]*font-size:12px/);
-});
-
-test('top stat labels sit above their numbers', () => {
-  assert.match(html, /<div className="sc acc"><div className="l top">\{l\.predicted\}<\/div><div className="n">\{myPredCount\}<\/div><\/div>/);
-  assert.match(html, /<div className="sc grn"><div className="l top">\{l\.confirmed\}<\/div><div className="n">\{resultCount\}<\/div><\/div>/);
-  assert.match(html, /\.sc \.l\.top\{[^}]*margin:0 0 4px/);
+  assert.match(html, /<div className="stats-frame">/);
+  assert.match(html, /<div className="stats-table">/);
+  assert.match(html, /<div className="stats-row"><span>\{l\.predicted\}<\/span><b className="me">\{myPredCount\}件<\/b><b className="opp">\{opp\?oppPredCount:'-'\}件<\/b><\/div>/);
+  assert.match(html, /<div className="stats-row"><span>\{l\.unpredicted\}<\/span><b className="me">\{myGroupMiss\}件<\/b><b className="opp">\{opp\?oppGroupMiss:'-'\}件<\/b><\/div>/);
+  assert.match(html, /<div className="stats-row total"><span>\{l\.confirmed\}<\/span><b className="me">\{resultCount\}件<\/b><b className="opp">\{opp\?Object\.keys\(results\)\.length:'-'\}件<\/b><\/div>/);
 });
 
 test('knockout score row uses score hit wording', () => {

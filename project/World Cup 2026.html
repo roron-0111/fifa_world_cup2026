@@ -200,24 +200,33 @@ html,body{background:#ddd8ce;color:var(--text);font-family:'Inter',sans-serif;mi
   word-break:break-word;
   min-height:1.15em;
 }
+.hpc-total{
+  display:flex;
+  align-items:baseline;
+  justify-content:center;
+  gap:4px;
+  line-height:1;
+}
+.hpc-total .num{font-family:'Bebas Neue';font-size:58px;line-height:1;color:#fff;letter-spacing:1px;}
+.hpc-total .unit{font-size:12px;font-weight:900;color:rgba(255,255,255,.86);line-height:1;margin-top:6px;}
 .vs-txt{font-family:'Bebas Neue';font-size:26px;color:rgba(255,255,255,.5);text-align:center;align-self:center;display:flex;align-items:center;justify-content:center;height:100%;}
 .room-bar{display:flex;align-items:center;justify-content:space-between;background:var(--s1);border-bottom:1px solid var(--border);padding:12px 18px;}
 .room-lbl{font-size:10px;color:var(--text2);font-weight:700;text-transform:uppercase;letter-spacing:.5px;}
 .room-code{font-family:'Bebas Neue';font-size:28px;letter-spacing:4px;color:var(--accent);}
 .copy-btn{background:var(--accentf);border:none;color:var(--accent);padding:7px 14px;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .2s;}
 .copy-btn:hover{background:var(--accent);color:#fff;}
-.stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:12px 16px;}
-.sc{background:var(--s1);border:1px solid var(--border);border-radius:12px;padding:12px;text-align:center;box-shadow:var(--shadow);}
-.sc .l.top{margin:0 0 4px;}
-.sc .n{font-family:'Bebas Neue';font-size:34px;line-height:1;}
-.sc .l{font-size:10px;color:var(--text2);font-weight:700;margin-top:3px;}
-.sc.split-only{padding:14px 12px;}
-.sc.split-only .l{margin-top:0;font-size:11px;}
-.sc .split{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:8px;font-size:12px;font-weight:900;color:var(--text2);}
-.sc .split b{display:block;color:var(--text);font-size:14px;font-variant-numeric:tabular-nums;}
-.sc.acc .n{color:var(--accent);}
-.sc.gold .n{color:var(--gold);}
-.sc.grn .n{color:var(--green);}
+.stats-grid{padding:12px 16px;}
+.stats-frame{background:var(--s1);border:1px solid var(--border);border-radius:16px;box-shadow:var(--shadow);overflow:hidden;padding:10px 12px;}
+.stats-table{display:flex;flex-direction:column;gap:6px;}
+.stats-head,.stats-row{display:grid;grid-template-columns:minmax(0,1fr) minmax(52px,.7fr) minmax(52px,.7fr);gap:8px;align-items:center;}
+.stats-head{font-size:10px;color:var(--text2);font-weight:900;letter-spacing:.4px;padding-bottom:6px;border-bottom:1px solid var(--border);}
+.stats-row{padding:6px 0;border-top:1px solid var(--border);font-size:11px;font-weight:800;color:var(--text2);}
+.stats-row:first-of-type{border-top:none;padding-top:0;}
+.stats-row span{min-width:0;}
+.stats-row b{display:block;text-align:right;font-variant-numeric:tabular-nums;color:var(--text);font-size:13px;}
+.stats-row b.me{color:var(--accent);}
+.stats-row b.opp{color:var(--gold);}
+.stats-row.total b{font-size:14px;}
 .info-card{background:var(--s1);border:1px solid var(--border);border-radius:var(--r);padding:14px;margin:0 16px 10px;box-shadow:var(--shadow);}
 .info-card .itag{font-size:10px;color:var(--text2);font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;}
 .info-card .ival{font-family:'Inter',sans-serif;font-size:16px;color:var(--accent);font-weight:1000;letter-spacing:-.03em;line-height:1.25;}
@@ -548,21 +557,6 @@ html,body{background:#ddd8ce;color:var(--text);font-family:'Inter',sans-serif;mi
 .player-mini-btn.danger:hover{background:var(--red);color:#fff;}
 .player-mini-btn:disabled{opacity:.55;cursor:not-allowed;transform:none;}
 .room-hero-score{display:flex;flex-direction:column;gap:5px;align-items:center;justify-content:space-between;min-height:150px;}
-.room-score-sub{
-  display:grid;
-  grid-template-columns:minmax(0,1fr) 36px 44px;
-  gap:3px;
-  font-size:11px;
-  line-height:1.3;
-  color:rgba(255,255,255,.88);
-  font-weight:700;
-  width:100%;
-  padding-top:4px;
-  border-top:1px solid rgba(255,255,255,.14);
-}
-.room-score-sub span{min-width:0;text-align:left;}
-.room-score-sub b{font-weight:900;text-align:right;font-variant-numeric:tabular-nums;}
-.room-score-sub .hero-points{color:#fff;}
 .auth-recent{margin:10px 0 0;padding:10px;border:1px solid var(--border);border-radius:14px;background:var(--s2);}
 .auth-recent-title{font-size:11px;color:var(--text2);font-weight:900;margin-bottom:7px;}
 .auth-recent-list{display:flex;flex-direction:column;gap:6px;max-height:116px;overflow-y:auto;padding-right:2px;}
@@ -2660,23 +2654,13 @@ function HomeScreen({user,onLogout,syncToken}){
           <div className="hpc me room-hero-score">
             <div className="hpc-tag">自分</div>
             <div className="hpc-user">{myLabel}</div>
-            <div className="n">{myTotal}</div>
-            <div className="room-score-sub">
-              <span>勝敗的中</span><b>{mySummary.resultHits}件</b><b className="hero-points">+{mySummary.resultPoints}pt</b>
-              <span>スコア的中</span><b>{mySummary.exactHits}件</b><b className="hero-points">+{mySummary.exactPoints}pt</b>
-              <span>決勝T</span><b>合計</b><b className="hero-points">+{myKoSummary.total}pt</b>
-            </div>
+            <div className="hpc-total"><span className="num">{myTotal}</span><span className="unit">pt</span></div>
           </div>
           <div className="vs-txt">VS</div>
           <div className="hpc opp room-hero-score">
             <div className="hpc-tag">相手</div>
             <div className="hpc-user">{oppLabel}</div>
-            <div className="n">{oppTotal}</div>
-            <div className="room-score-sub">
-              <span>勝敗的中</span><b>{oppSummary.resultHits}件</b><b className="hero-points">+{oppSummary.resultPoints||0}pt</b>
-              <span>スコア的中</span><b>{oppSummary.exactHits}件</b><b className="hero-points">+{oppSummary.exactPoints||0}pt</b>
-              <span>決勝T</span><b>合計</b><b className="hero-points">+{oppKoSummary.total}pt</b>
-            </div>
+            <div className="hpc-total"><span className="num">{oppTotal}</span><span className="unit">pt</span></div>
           </div>
         </div>}
         {(!room||!opp)&&<p style={{fontSize:13,color:'rgba(255,255,255,.7)',marginTop:16}}>同じルームコードの相手が参加すると比較できます</p>}
@@ -2698,18 +2682,20 @@ function HomeScreen({user,onLogout,syncToken}){
           </button>}
       </div>}
       <div className="stats-grid">
-        <div className="sc acc"><div className="l top">{l.predicted}</div><div className="n">{myPredCount}</div></div>
-        <div className="sc gold split-only">
-          <div className="l">{l.unpredicted}</div>
-          {opp&&<div className="split"><span>自分<b>{myGroupMiss}</b></span><span>相手<b>{oppGroupMiss}</b></span></div>}
+        <div className="stats-frame">
+          <div className="stats-table">
+            <div className="stats-head"><span>項目</span><span>自分</span><span>相手</span></div>
+            <div className="stats-row"><span>{l.predicted}</span><b className="me">{myPredCount}件</b><b className="opp">{opp?oppPredCount:'-'}件</b></div>
+            <div className="stats-row"><span>{l.unpredicted}</span><b className="me">{myGroupMiss}件</b><b className="opp">{opp?oppGroupMiss:'-'}件</b></div>
+            <div className="stats-row total"><span>{l.confirmed}</span><b className="me">{resultCount}件</b><b className="opp">{opp?Object.keys(results).length:'-'}件</b></div>
+          </div>
         </div>
-        <div className="sc grn"><div className="l top">{l.confirmed}</div><div className="n">{resultCount}</div></div>
       </div>
       <div className="home-status-card">
         <div className="result-update-card">
           <div className="result-update-head">
             <span>結果反映履歴</span>
-            {latestDataStamp&&<span className="result-update-stamp">: {latestDataStamp} 更新済み</span>}
+            {latestDataStamp&&<span className="result-update-stamp">{latestDataStamp} 更新済み</span>}
           </div>
           <div className="result-update-list">
             {resultUpdateItems.length===0&&<div className="result-update-empty">まだ勝敗情報は更新されていません</div>}
