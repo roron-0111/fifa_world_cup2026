@@ -78,6 +78,23 @@
         "u-1780729006131-ts4w"
       ],
       "maxMembers": 2
+    },
+    {
+      "id": "room-1780734118091",
+      "code": "TEST09",
+      "members": [
+        "u-1780734118091-yc2f",
+        "u-1780734129703-wbcx"
+      ],
+      "maxMembers": 2
+    },
+    {
+      "id": "room-1780734766504",
+      "code": "TEST10",
+      "members": [
+        "u-1780734766504-497v"
+      ],
+      "maxMembers": 2
     }
   ],
   "users": [
@@ -170,6 +187,24 @@
       "username": "test01",
       "memberCode": "4TGW",
       "roomId": "room-1777955460631"
+    },
+    {
+      "id": "u-1780734118091-yc2f",
+      "username": "test01",
+      "memberCode": "ZEWV",
+      "roomId": "room-1780734118091"
+    },
+    {
+      "id": "u-1780734129703-wbcx",
+      "username": "test02",
+      "memberCode": "LQ2N",
+      "roomId": "room-1780734118091"
+    },
+    {
+      "id": "u-1780734766504-497v",
+      "username": "test02",
+      "memberCode": "H10N",
+      "roomId": "room-1780734766504"
     }
   ],
   "roomStates": {
@@ -448,6 +483,42 @@
       }
     },
     "room-1777955460631": {
+      "predictionsV2": {},
+      "results": {},
+      "locked": {},
+      "koPreds": {},
+      "settings": {
+        "resultPts": 1,
+        "exactPts": 2,
+        "koWinnerPts": 1,
+        "koExactPts": 2,
+        "koPenaltyPts": 1,
+        "koChampionPts": 5,
+        "koRunnerUpPts": 3,
+        "koThirdPlacePts": 2,
+        "koRunnerUpEnabled": false,
+        "koThirdPlaceEnabled": false
+      }
+    },
+    "room-1780734118091": {
+      "predictionsV2": {},
+      "results": {},
+      "locked": {},
+      "koPreds": {},
+      "settings": {
+        "resultPts": 1,
+        "exactPts": 2,
+        "koWinnerPts": 1,
+        "koExactPts": 2,
+        "koPenaltyPts": 1,
+        "koChampionPts": 5,
+        "koRunnerUpPts": 3,
+        "koThirdPlacePts": 2,
+        "koRunnerUpEnabled": false,
+        "koThirdPlaceEnabled": false
+      }
+    },
+    "room-1780734766504": {
       "predictionsV2": {},
       "results": {},
       "locked": {},
