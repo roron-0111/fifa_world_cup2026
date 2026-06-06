@@ -74,8 +74,32 @@ test('settings save button stays horizontal on narrow screens', () => {
 });
 
 test('home point breakdown uses consistent count and point columns', () => {
-  assert.match(html, /\.home-break-lines div\{[^}]*grid-template-columns:minmax\(0,1fr\) 46px 52px/);
-  assert.match(html, /<b>\{mySummary\.resultHits\}件<\/b><b className="metric-points">\+\{mySummary\.resultPoints\}pt<\/b>/);
-  assert.match(html, /<b>\{\(myKoSummary\.championHit\|\|0\)\+\(myKoSummary\.runnerUpHit\|\|0\)\+\(myKoSummary\.thirdPlaceHit\|\|0\)\}件<\/b>/);
-  assert.doesNotMatch(html, /優勝 \{myKoSummary\.championHit\} \/ 2位/);
+  assert.match(html, /\.home-compare-row\{[^}]*grid-template-columns:minmax\(0,1fr\) minmax\(66px,\.7fr\) minmax\(66px,\.7fr\)/);
+  assert.match(html, /groupCompareRows=\[/);
+  assert.match(html, /koCompareRows=\[/);
+  assert.match(html, /<div className="home-compare-row home-compare-head"><span>項目<\/span><b>自分<\/b><b>相手<\/b><\/div>/);
+  assert.match(html, /<span>\{row\.label\}<\/span><b className="me">\{row\.me\}<\/b><b className="opp">\{opp\?row\.opp:'-'\}<\/b>/);
+});
+
+test('home hero score cards use aligned metrics and centered VS', () => {
+  assert.match(html, /\.vs-txt\{[^}]*align-self:center/);
+  assert.match(html, /\.room-score-sub\{[^}]*grid-template-columns:minmax\(0,1fr\) 36px 44px/);
+  assert.match(html, /<span>勝敗的中<\/span><b>\{mySummary\.resultHits\}件<\/b><b className="hero-points">\+\{mySummary\.resultPoints\}pt<\/b>/);
+  assert.match(html, /<span>決勝T<\/span><b>合計<\/b><b className="hero-points">\+\{myKoSummary\.total\}pt<\/b>/);
+});
+
+test('auth page offers recent room recovery', () => {
+  assert.match(html, /recentProfiles=Object\.values\(authProfiles\)/);
+  assert.match(html, /過去に参加したルーム情報/);
+  assert.doesNotMatch(html, /ルームコードを忘れた場合/);
+  assert.match(html, /ユーザー名：\{profile\.username\}/);
+  assert.match(html, /ルームコード：\{profile\.roomCode\}/);
+  assert.match(html, /\.auth-recent-list\{[^}]*max-height:116px;overflow-y:auto/);
+  assert.match(html, /function useRecentProfile\(profile\)/);
+});
+
+test('pending prediction summary includes opponent state', () => {
+  assert.match(html, /const oppPredCount=oppId\?Object\.keys\(preds\[oppId\]\|\|\{\}\)\.length:0/);
+  assert.match(html, /const oppGroupMiss=oppId\?GROUP_MATCHES\.length-oppPredCount:0/);
+  assert.match(html, /<span>相手<b>\{oppGroupMiss\}<\/b><\/span>/);
 });

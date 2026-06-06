@@ -181,11 +181,11 @@ html,body{background:#ddd8ce;color:var(--text);font-family:'Inter',sans-serif;mi
   display:inline-flex;
   align-items:center;
   justify-content:center;
-  min-width:42px;
-  padding:3px 8px;
+  min-width:50px;
+  padding:4px 10px;
   border-radius:999px;
   background:rgba(255,255,255,.16);
-  font-size:10px;
+  font-size:11px;
   color:rgba(255,255,255,.9);
   font-weight:900;
   line-height:1;
@@ -200,7 +200,7 @@ html,body{background:#ddd8ce;color:var(--text);font-family:'Inter',sans-serif;mi
   word-break:break-word;
   min-height:1.15em;
 }
-.vs-txt{font-family:'Bebas Neue';font-size:26px;color:rgba(255,255,255,.5);text-align:center;}
+.vs-txt{font-family:'Bebas Neue';font-size:26px;color:rgba(255,255,255,.5);text-align:center;align-self:center;display:flex;align-items:center;justify-content:center;height:100%;}
 .room-bar{display:flex;align-items:center;justify-content:space-between;background:var(--s1);border-bottom:1px solid var(--border);padding:12px 18px;}
 .room-lbl{font-size:10px;color:var(--text2);font-weight:700;text-transform:uppercase;letter-spacing:.5px;}
 .room-code{font-family:'Bebas Neue';font-size:28px;letter-spacing:4px;color:var(--accent);}
@@ -210,6 +210,8 @@ html,body{background:#ddd8ce;color:var(--text);font-family:'Inter',sans-serif;mi
 .sc{background:var(--s1);border:1px solid var(--border);border-radius:12px;padding:12px;text-align:center;box-shadow:var(--shadow);}
 .sc .n{font-family:'Bebas Neue';font-size:34px;line-height:1;}
 .sc .l{font-size:10px;color:var(--text2);font-weight:700;margin-top:3px;}
+.sc .split{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:6px;font-size:10px;font-weight:900;color:var(--text2);}
+.sc .split b{display:block;color:var(--text);font-size:12px;font-variant-numeric:tabular-nums;}
 .sc.acc .n{color:var(--accent);}
 .sc.gold .n{color:var(--gold);}
 .sc.grn .n{color:var(--green);}
@@ -231,10 +233,12 @@ html,body{background:#ddd8ce;color:var(--text);font-family:'Inter',sans-serif;mi
 .home-break-total{display:flex;align-items:baseline;justify-content:center;gap:4px;margin-bottom:8px;text-align:center;}
 .home-break-total strong{font-family:'Inter',sans-serif;font-size:42px;line-height:1;color:var(--accent);font-weight:1000;letter-spacing:-.04em;}
 .home-break-total span{font-size:12px;color:var(--text2);font-weight:900;}
-.home-break-lines{display:flex;flex-direction:column;gap:5px;font-size:11px;color:var(--text2);font-weight:700;line-height:1.35;}
-.home-break-lines div{display:grid;grid-template-columns:minmax(0,1fr) 46px 52px;align-items:center;gap:8px;border-top:1px solid var(--border);padding-top:5px;}
-.home-break-lines b{color:var(--text);font-weight:900;text-align:right;font-variant-numeric:tabular-nums;}
-.home-break-lines .metric-points{color:var(--accent);}
+.home-compare{display:flex;flex-direction:column;gap:5px;font-size:11px;color:var(--text2);font-weight:700;line-height:1.35;}
+.home-compare-row{display:grid;grid-template-columns:minmax(0,1fr) minmax(66px,.7fr) minmax(66px,.7fr);align-items:center;gap:8px;border-top:1px solid var(--border);padding-top:5px;}
+.home-compare-head{border-top:none;padding-top:0;color:var(--text2);font-size:10px;}
+.home-compare-row b{color:var(--text);font-weight:900;text-align:right;font-variant-numeric:tabular-nums;}
+.home-compare-row b.me{color:var(--accent);}
+.home-compare-row b.opp{color:var(--gold);}
 .result-update-card{margin:0 14px 12px;background:var(--s1);border:1px solid rgba(22,163,74,.24);border-radius:16px;box-shadow:var(--shadow);overflow:hidden;}
 .result-update-head{padding:11px 13px;border-bottom:1px solid var(--border);font-size:13px;font-weight:900;color:var(--green);background:linear-gradient(135deg,var(--s1),rgba(22,163,74,.08));}
 .result-update-list{max-height:154px;overflow-y:auto;padding:8px 10px;display:flex;flex-direction:column;gap:7px;}
@@ -538,8 +542,8 @@ html,body{background:#ddd8ce;color:var(--text);font-family:'Inter',sans-serif;mi
 .player-mini-btn:disabled{opacity:.55;cursor:not-allowed;transform:none;}
 .room-hero-score{display:flex;flex-direction:column;gap:5px;align-items:center;justify-content:space-between;min-height:150px;}
 .room-score-sub{
-  display:flex;
-  flex-direction:column;
+  display:grid;
+  grid-template-columns:minmax(0,1fr) 36px 44px;
   gap:3px;
   font-size:11px;
   line-height:1.3;
@@ -549,6 +553,16 @@ html,body{background:#ddd8ce;color:var(--text);font-family:'Inter',sans-serif;mi
   padding-top:4px;
   border-top:1px solid rgba(255,255,255,.14);
 }
+.room-score-sub span{min-width:0;text-align:left;}
+.room-score-sub b{font-weight:900;text-align:right;font-variant-numeric:tabular-nums;}
+.room-score-sub .hero-points{color:#fff;}
+.auth-recent{margin:10px 0 0;padding:10px;border:1px solid var(--border);border-radius:14px;background:var(--s2);}
+.auth-recent-title{font-size:11px;color:var(--text2);font-weight:900;margin-bottom:7px;}
+.auth-recent-list{display:flex;flex-direction:column;gap:6px;max-height:116px;overflow-y:auto;padding-right:2px;}
+.auth-recent-btn{width:100%;border:1px solid var(--border);background:var(--s1);border-radius:10px;padding:8px 10px;text-align:left;font:inherit;cursor:pointer;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:8px;align-items:center;}
+.auth-recent-btn strong,.auth-recent-btn span{font-size:11px;font-weight:900;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.auth-recent-btn strong{color:var(--text);}
+.auth-recent-btn span{color:var(--accent);letter-spacing:.4px;}
 .member-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:8px;padding:12px 16px 0;}
 .member-card{background:var(--s1);border:1px solid var(--border);border-radius:16px;padding:12px 14px;box-shadow:var(--shadow);}
 .member-card.me{border-color:var(--accent);}
@@ -2386,7 +2400,21 @@ function AuthScreen({onAuth}){
   const authProfiles=gs('authProfiles',{})||{};
   const [form,setForm]=useState(()=>({username:lastAuth?.username||'',roomCode:lastAuth?.roomCode||''}));
   const [err,setErr]=useState('');
+  const recentProfiles=Object.values(authProfiles)
+    .filter((profile)=>profile?.roomCode&&profile?.username)
+    .reduce((acc,profile)=>{
+      if(!acc.some((item)=>item.roomCode===profile.roomCode&&item.username===profile.username))acc.push(profile);
+      return acc;
+    },[])
+    .slice(0,5);
   const set=k=>e=>setForm(f=>({...f,[k]:e.target.value}));
+  function useRecentProfile(profile){
+    setForm({
+      username:profile.username||'',
+      roomCode:profile.roomCode||'',
+    });
+    setErr('');
+  }
 
   function startGuestMode(){
     const guestRoomId='room-guest-local';
@@ -2507,6 +2535,19 @@ function AuthScreen({onAuth}){
         <div className="field"><label>ルームコード</label>
           <input value={form.roomCode} onChange={set('roomCode')} placeholder="FIFA26" maxLength={12} style={{letterSpacing:'3px',fontWeight:800,fontSize:18}}/>
         </div>
+        {recentProfiles.length>0&&(
+          <div className="auth-recent">
+            <div className="auth-recent-title">過去に参加したルーム情報</div>
+            <div className="auth-recent-list">
+              {recentProfiles.map((profile)=>(
+                <button className="auth-recent-btn" key={`${profile.roomCode}-${profile.username}`} type="button" onClick={()=>useRecentProfile(profile)}>
+                  <strong>ユーザー名：{profile.username}</strong>
+                  <span>ルームコード：{profile.roomCode}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
         <p style={{fontSize:12,color:'var(--text2)',marginBottom:12,lineHeight:1.6}}>1ルーム2人まで入室可。友達同士で試合予想をしよう！</p>
         {err&&<div className="errmsg">{err}</div>}
         <button className="btn" style={{marginTop:12}} onClick={submit}>
@@ -2577,6 +2618,23 @@ function HomeScreen({user,onLogout,syncToken}){
   const oppLabel=displayUserLabel(opp,roomMembers);
   const myTotal=mySummary.total+myKoSummary.total;
   const oppTotal=oppSummary.total+oppKoSummary.total;
+  const oppPredCount=oppId?Object.keys(preds[oppId]||{}).length:0;
+  const myGroupMiss=GROUP_MATCHES.length-myPredCount;
+  const oppGroupMiss=oppId?GROUP_MATCHES.length-oppPredCount:0;
+  const groupCompareRows=[
+    {label:'勝敗的中',me:`${mySummary.resultHits}件 / +${mySummary.resultPoints}pt`,opp:`${oppSummary.resultHits||0}件 / +${oppSummary.resultPoints||0}pt`},
+    {label:'スコア的中',me:`${mySummary.exactHits}件 / +${mySummary.exactPoints}pt`,opp:`${oppSummary.exactHits||0}件 / +${oppSummary.exactPoints||0}pt`},
+    {label:'合計',me:`${mySummary.total}pt`,opp:`${oppSummary.total||0}pt`},
+  ];
+  const koWinnerPts=(summary)=>`${summary.winnerHits||0}件 / +${(summary.winnerHits||0)*(summary.koWinnerPts||0)}pt`;
+  const koScorePts=(summary)=>`${(summary.exactHits||0)+(summary.penaltyHits||0)}件 / +${(summary.exactHits||0)*(summary.koExactPts||0)+(summary.penaltyHits||0)*(summary.koPenaltyPts||0)}pt`;
+  const koPodiumPts=(summary)=>`${(summary.championHit||0)+(summary.runnerUpHit||0)+(summary.thirdPlaceHit||0)}件 / +${(summary.championHit||0)*(summary.koChampionPts||0)+(summary.runnerUpHit||0)*(summary.koRunnerUpPts||0)+(summary.thirdPlaceHit||0)*(summary.koThirdPlacePts||0)}pt`;
+  const koCompareRows=[
+    {label:'勝者的中',me:koWinnerPts(myKoSummary),opp:koWinnerPts(oppKoSummary)},
+    {label:'スコア / PK',me:koScorePts(myKoSummary),opp:koScorePts(oppKoSummary)},
+    {label:'順位的中',me:koPodiumPts(myKoSummary),opp:koPodiumPts(oppKoSummary)},
+    {label:'合計',me:`${myKoSummary.total}pt`,opp:`${oppKoSummary.total||0}pt`},
+  ];
   const primaryActionLabel=user?.isGuest?'トップに戻る':l.logout;
   const primaryActionClass=user?.isGuest?'btn ghost':'btn ghost danger';
   const uiSettings=gs('settings',DEFAULT_UI_SETTINGS);
@@ -2597,9 +2655,9 @@ function HomeScreen({user,onLogout,syncToken}){
             <div className="hpc-user">{myLabel}</div>
             <div className="n">{myTotal}</div>
             <div className="room-score-sub">
-              <div>勝敗的中：{mySummary.resultHits}</div>
-              <div>スコア的中：{mySummary.exactHits}</div>
-              <div>決勝T：+{myKoSummary.total}</div>
+              <span>勝敗的中</span><b>{mySummary.resultHits}件</b><b className="hero-points">+{mySummary.resultPoints}pt</b>
+              <span>スコア的中</span><b>{mySummary.exactHits}件</b><b className="hero-points">+{mySummary.exactPoints}pt</b>
+              <span>決勝T</span><b>合計</b><b className="hero-points">+{myKoSummary.total}pt</b>
             </div>
           </div>
           <div className="vs-txt">VS</div>
@@ -2608,9 +2666,9 @@ function HomeScreen({user,onLogout,syncToken}){
             <div className="hpc-user">{oppLabel}</div>
             <div className="n">{oppTotal}</div>
             <div className="room-score-sub">
-              <div>勝敗的中：{oppSummary.resultHits}</div>
-              <div>スコア的中：{oppSummary.exactHits}</div>
-              <div>決勝T：+{oppKoSummary.total}</div>
+              <span>勝敗的中</span><b>{oppSummary.resultHits}件</b><b className="hero-points">+{oppSummary.resultPoints||0}pt</b>
+              <span>スコア的中</span><b>{oppSummary.exactHits}件</b><b className="hero-points">+{oppSummary.exactPoints||0}pt</b>
+              <span>決勝T</span><b>合計</b><b className="hero-points">+{oppKoSummary.total}pt</b>
             </div>
           </div>
         </div>}
@@ -2634,7 +2692,11 @@ function HomeScreen({user,onLogout,syncToken}){
       </div>}
       <div className="stats-grid">
         <div className="sc acc"><div className="n">{myPredCount}</div><div className="l">{l.predicted}</div></div>
-        <div className="sc gold"><div className="n">{GROUP_MATCHES.length-myPredCount}</div><div className="l">{l.unpredicted}</div></div>
+        <div className="sc gold">
+          <div className="n">{myGroupMiss}</div>
+          <div className="l">{l.unpredicted}</div>
+          {opp&&<div className="split"><span>自分<b>{myGroupMiss}</b></span><span>相手<b>{oppGroupMiss}</b></span></div>}
+        </div>
         <div className="sc grn"><div className="n">{resultCount}</div><div className="l">{l.confirmed}</div></div>
       </div>
       {latestDataStamp&&(
@@ -2663,20 +2725,25 @@ function HomeScreen({user,onLogout,syncToken}){
           <div className="home-break-card">
             <h3>グループリーグ</h3>
             <div className="home-break-total"><strong>{mySummary.total}</strong><span>pt</span></div>
-            <div className="home-break-lines">
-              <div><span>勝敗的中</span><b>{mySummary.resultHits}件</b><b className="metric-points">+{mySummary.resultPoints}pt</b></div>
-              <div><span>スコア的中</span><b>{mySummary.exactHits}件</b><b className="metric-points">+{mySummary.exactPoints}pt</b></div>
-              {opp&&<div><span>相手</span><b>-</b><b className="metric-points">{oppSummary.total}pt</b></div>}
+            <div className="home-compare">
+              <div className="home-compare-row home-compare-head"><span>項目</span><b>自分</b><b>相手</b></div>
+              {groupCompareRows.map(row=>(
+                <div className="home-compare-row" key={`group-${row.label}`}>
+                  <span>{row.label}</span><b className="me">{row.me}</b><b className="opp">{opp?row.opp:'-'}</b>
+                </div>
+              ))}
             </div>
           </div>
           <div className="home-break-card">
             <h3>決勝トーナメント</h3>
             <div className="home-break-total"><strong>{myKoSummary.total}</strong><span>pt</span></div>
-            <div className="home-break-lines">
-              <div><span>勝者的中</span><b>{myKoSummary.winnerHits}件</b><b className="metric-points">+{(myKoSummary.winnerHits||0)*(myKoSummary.koWinnerPts||0)}pt</b></div>
-              <div><span>スコア / PK</span><b>{(myKoSummary.exactHits||0)+(myKoSummary.penaltyHits||0)}件</b><b className="metric-points">+{(myKoSummary.exactHits||0)*(myKoSummary.koExactPts||0)+(myKoSummary.penaltyHits||0)*(myKoSummary.koPenaltyPts||0)}pt</b></div>
-              <div><span>順位的中</span><b>{(myKoSummary.championHit||0)+(myKoSummary.runnerUpHit||0)+(myKoSummary.thirdPlaceHit||0)}件</b><b className="metric-points">+{(myKoSummary.championHit||0)*(myKoSummary.koChampionPts||0)+(myKoSummary.runnerUpHit||0)*(myKoSummary.koRunnerUpPts||0)+(myKoSummary.thirdPlaceHit||0)*(myKoSummary.koThirdPlacePts||0)}pt</b></div>
-              {opp&&<div><span>相手</span><b>-</b><b className="metric-points">{oppKoSummary.total}pt</b></div>}
+            <div className="home-compare">
+              <div className="home-compare-row home-compare-head"><span>項目</span><b>自分</b><b>相手</b></div>
+              {koCompareRows.map(row=>(
+                <div className="home-compare-row" key={`ko-${row.label}`}>
+                  <span>{row.label}</span><b className="me">{row.me}</b><b className="opp">{opp?row.opp:'-'}</b>
+                </div>
+              ))}
             </div>
           </div>
         </div>
