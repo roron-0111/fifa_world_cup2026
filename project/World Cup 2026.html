@@ -218,7 +218,7 @@ html,body{background:#ddd8ce;color:var(--text);font-family:'Inter',sans-serif;mi
 .stats-grid{padding:12px 16px;}
 .stats-frame{background:var(--s1);border:1px solid var(--border);border-radius:16px;box-shadow:var(--shadow);overflow:hidden;padding:10px 12px;}
 .stats-table{display:flex;flex-direction:column;gap:6px;}
-.stats-head,.stats-row{display:grid;grid-template-columns:minmax(0,1fr) minmax(52px,.7fr) minmax(52px,.7fr);gap:8px;align-items:center;}
+.stats-head,.stats-row{display:grid;grid-template-columns:minmax(0,1fr) minmax(58px,.8fr) minmax(58px,.8fr);gap:8px;align-items:center;}
 .stats-head{font-size:10px;color:var(--text2);font-weight:900;letter-spacing:.4px;padding-bottom:6px;border-bottom:1px solid var(--border);}
 .stats-head span:nth-child(2),.stats-head span:nth-child(3){text-align:center;}
 .stats-row{padding:6px 0;border-top:1px solid var(--border);font-size:11px;font-weight:800;color:var(--text2);}
@@ -255,13 +255,36 @@ html,body{background:#ddd8ce;color:var(--text);font-family:'Inter',sans-serif;mi
 .home-compare-row b{color:var(--text);font-weight:900;text-align:right;font-variant-numeric:tabular-nums;}
 .home-compare-row b.me{color:var(--accent);}
 .home-compare-row b.opp{color:var(--gold);}
-.result-update-card{background:transparent;border:none;border-radius:0;box-shadow:none;overflow:hidden;}
-.result-update-head{padding:11px 13px;border-bottom:1px solid var(--border);font-size:13px;font-weight:900;color:var(--green);background:linear-gradient(135deg,var(--s1),rgba(22,163,74,.08));display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;}
-.result-update-stamp{font-size:12px;color:var(--green);font-weight:900;}
+.result-update-card,.result-judge-card{background:transparent;border:none;border-radius:0;box-shadow:none;overflow:hidden;}
+.result-update-head,.result-judge-head{padding:11px 13px;border-bottom:1px solid var(--border);font-size:13px;font-weight:900;color:var(--green);background:linear-gradient(135deg,var(--s1),rgba(22,163,74,.08));display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;}
+.result-update-head span,.result-judge-head span{display:block;}
+.result-judge-head small{display:block;margin-top:3px;font-size:11px;color:var(--text2);font-weight:700;line-height:1.45;}
+.result-update-stamp,.result-judge-stamp{font-size:12px;color:var(--green);font-weight:900;}
+.result-judge-form{padding:10px 10px 0;display:flex;flex-direction:column;gap:10px;}
+.result-judge-input{width:100%;min-height:74px;padding:12px 13px;border:1px solid var(--border);border-radius:12px;background:var(--s2);font:inherit;font-size:12px;line-height:1.45;color:var(--text);resize:vertical;outline:none;}
+.result-judge-input:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accentf);}
+.result-judge-btn{width:fit-content;align-self:flex-start;padding:10px 16px;margin-top:0;}
+.result-judge-list-head{padding:10px 13px 6px;font-size:12px;font-weight:900;color:var(--text2);}
 .result-update-list{max-height:154px;overflow-y:auto;padding:8px 10px;display:flex;flex-direction:column;gap:7px;}
 .result-update-item{display:flex;align-items:center;justify-content:space-between;gap:10px;border:1px solid var(--border);border-radius:12px;padding:8px 10px;background:var(--s2);font-size:11px;font-weight:800;color:var(--text2);}
 .result-update-item strong{color:var(--text);font-size:12px;}
 .result-update-empty{padding:12px;color:var(--text2);font-size:12px;font-weight:700;}
+.match-status-badge,.ko-match-status{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-width:68px;
+  padding:4px 9px;
+  border-radius:999px;
+  font-size:10px;
+  font-weight:900;
+  line-height:1;
+  letter-spacing:.2px;
+  white-space:nowrap;
+}
+.match-status-badge.pending,.ko-match-status.pending{background:rgba(100,116,139,.12);color:#64748b;}
+.match-status-badge.hit,.ko-match-status.hit{background:var(--greenf);color:var(--green);}
+.match-status-badge.miss,.ko-match-status.miss{background:rgba(220,38,38,.10);color:var(--red);}
 .guest-notice{margin:12px 14px 0;padding:14px;border-radius:18px;background:linear-gradient(135deg,#0f172a,#1e6ef0 58%,#d4960a);color:#fff;box-shadow:0 16px 36px rgba(15,23,42,.22);display:flex;align-items:center;justify-content:space-between;gap:12px;border:1px solid rgba(255,255,255,.22);}
 .guest-notice strong{display:block;font-size:14px;font-weight:900;margin-bottom:4px;}
 .guest-notice span{display:block;font-size:12px;line-height:1.55;font-weight:800;color:rgba(255,255,255,.88);}
@@ -304,7 +327,8 @@ html,body{background:#ddd8ce;color:var(--text);font-family:'Inter',sans-serif;mi
   overflow:hidden;
   box-shadow:var(--shadow);
 }
-.mcard-hdr{padding:9px 12px 6px;background:var(--s2);font-size:10px;color:var(--text2);font-weight:700;display:flex;justify-content:space-between;align-items:center;}
+.mcard-hdr{padding:9px 12px 6px;background:var(--s2);font-size:10px;color:var(--text2);font-weight:700;display:flex;justify-content:space-between;align-items:flex-start;gap:8px;flex-wrap:wrap;}
+.mcard-hdr-right{display:flex;align-items:center;gap:6px;flex-wrap:wrap;justify-content:flex-end;}
 .mcard-body{padding:4px 8px 6px;}
 .mteams{display:grid;grid-template-columns:minmax(0,.9fr) clamp(34px,6vw,48px) minmax(0,.9fr);align-items:center;gap:0;}
 .mteams{padding:4px 0 0;}
@@ -829,12 +853,14 @@ html,body{background:#ddd8ce;color:var(--text);font-family:'Inter',sans-serif;mi
 .ko-match-node:disabled{opacity:1;}
 .ko-match-node.predicted{box-shadow:0 0 0 2px rgba(255,20,15,.42),0 10px 24px rgba(0,0,0,.25);}
 .ko-match-node.actual{box-shadow:0 0 0 2px rgba(212,150,10,.7),0 10px 24px rgba(0,0,0,.25);}
-.ko-match-meta{min-height:32px;display:flex;align-items:center;justify-content:space-between;gap:6px;padding:4px 7px;background:linear-gradient(90deg,rgba(17,24,39,.88),rgba(30,41,59,.82));color:#fff;font-size:9px;font-weight:900;line-height:1;letter-spacing:.15px;}
-.ko-match-time{flex:0 0 78px;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:2px;min-width:78px;white-space:normal;line-height:1.05;}
+.ko-match-meta{min-height:38px;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px;align-items:center;padding:4px 7px;background:linear-gradient(90deg,rgba(17,24,39,.88),rgba(30,41,59,.82));color:#fff;font-size:9px;font-weight:900;line-height:1;letter-spacing:.15px;}
+.ko-match-meta-main{min-width:0;display:flex;flex-direction:column;gap:2px;}
+.ko-match-time{min-width:0;display:flex;align-items:baseline;gap:4px;flex-wrap:wrap;white-space:normal;line-height:1.05;}
 .ko-match-time b{font:inherit;color:#fff;}
 .ko-match-time small{font:inherit;font-size:8.5px;color:rgba(255,255,255,.9);}
-.ko-match-meta em{min-width:0;font-style:normal;color:#facc15;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;white-space:normal;line-height:1.15;text-align:right;}
-.ko-teams-line{height:58px;display:grid;grid-template-columns:minmax(0,1fr) 58px minmax(0,1fr);align-items:stretch;background:linear-gradient(180deg,rgba(255,255,255,.78),rgba(230,230,230,.86));}
+.ko-match-stadium{min-width:0;font-style:normal;color:#facc15;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;white-space:normal;line-height:1.15;text-align:left;}
+.ko-match-status{justify-self:end;align-self:center;min-width:74px;}
+.ko-teams-line{height:54px;display:grid;grid-template-columns:minmax(0,1fr) 58px minmax(0,1fr);align-items:stretch;background:linear-gradient(180deg,rgba(255,255,255,.78),rgba(230,230,230,.86));}
 .ko-team-block{min-width:0;display:grid;grid-template-columns:18px minmax(0,1fr) auto;align-items:center;column-gap:5px;padding:7px 6px 6px;border-right:1px solid rgba(0,0,0,.08);position:relative;}
 .ko-team-block:last-child{border-right:none;border-left:1px solid rgba(0,0,0,.08);}
 .ko-team-block.win{background:rgba(255,20,15,.12);}
@@ -844,7 +870,7 @@ html,body{background:#ddd8ce;color:var(--text);font-family:'Inter',sans-serif;mi
 .ko-actual-score{display:flex;align-items:center;justify-content:center;text-align:center;min-width:0;padding:0 4px;font-family:'Bebas Neue','Inter',sans-serif;font-size:17px;line-height:1.05;font-weight:900;color:#8a8a8a;background:rgba(255,255,255,.5);border-left:1px solid rgba(0,0,0,.08);border-right:1px solid rgba(0,0,0,.08);white-space:normal;}
 .ko-actual-score.on{font-family:'Inter',sans-serif;font-size:12px;color:#111;background:linear-gradient(180deg,#fff,#f6f1e8);}
 .ko-score-stack{border-top:1px solid rgba(0,0,0,.1);background:rgba(255,255,255,.72);display:grid;grid-template-columns:repeat(2,minmax(0,1fr));}
-.ko-pred-line{height:33px;display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;gap:5px;padding:4px 8px;font-size:10px;color:#555;font-weight:800;border-left:1px solid rgba(0,0,0,.06);min-width:0;}
+.ko-pred-line{height:31px;display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;gap:5px;padding:4px 8px;font-size:10px;color:#555;font-weight:800;border-left:1px solid rgba(0,0,0,.06);min-width:0;}
 .ko-pred-line:first-child{border-left:none;}
 .ko-pred-line b{font-size:9px;color:#fff;border-radius:999px;padding:2px 6px;text-align:center;background:#64748b;white-space:nowrap;line-height:1.2;}
 .ko-pred-line.me b{background:#1e6ef0;}
@@ -1272,17 +1298,18 @@ function formatMatchDate(value,time='19:00',timeZone='Asia/Tokyo'){
   const d=new Date(`${value}T${time}:00Z`);
   if(Number.isNaN(d.getTime()))return value;
   const parts=Object.fromEntries(new Intl.DateTimeFormat('ja-JP',{month:'numeric',day:'numeric',weekday:'short',hour:'2-digit',minute:'2-digit',hour12:false,timeZone}).formatToParts(d).map(p=>[p.type,p.value]));
-  return `${parts.month}/${parts.day}(${parts.weekday}) ${parts.hour}:${parts.minute}`;
+  return `${parts.month}/${parts.day}（${parts.weekday}） ${parts.hour}:${parts.minute}`;
 }
 function formatTimestamp(value,timeZone='Asia/Tokyo'){
   if(!value)return '';
   const d=new Date(value);
   if(Number.isNaN(d.getTime()))return value;
   const parts=Object.fromEntries(new Intl.DateTimeFormat('ja-JP',{year:'numeric',month:'numeric',day:'numeric',weekday:'short',hour:'2-digit',minute:'2-digit',hour12:false,timeZone}).formatToParts(d).map(p=>[p.type,p.value]));
-  return `${parts.year}/${parts.month}/${parts.day}(${parts.weekday}) ${parts.hour}:${parts.minute}`;
+  return `${parts.year}/${parts.month}/${parts.day}（${parts.weekday}） ${parts.hour}:${parts.minute}`;
 }
 const BOOTSTRAP=window.__WC26_BOOTSTRAP__||null;
 const HAS_BACKEND=!!BOOTSTRAP?.state;
+const DEFAULT_ADMIN_TOKEN='WC2026';
 const DEFAULT_ROOM_SETTINGS={resultPts:1,exactPts:2,koWinnerPts:1,koExactPts:2,koPenaltyPts:1,koChampionPts:5,koRunnerUpPts:3,koThirdPlacePts:2,koRunnerUpEnabled:false,koThirdPlaceEnabled:false};
 const DEFAULT_UI_SETTINGS={bgTheme:'cream',accentColor:'blue',timeZone:'Asia/Tokyo'};
 const BOOTSTRAP_PLAYERS=BOOTSTRAP?.playersByCountry&&Object.keys(BOOTSTRAP.playersByCountry).length
@@ -1665,6 +1692,20 @@ function koRecordWinnerSide(record){
     return inferWinnerSide(normalized.homePen,normalized.awayPen)||normalized.winnerSide;
   }
   return normalized.winnerSide||inferWinnerSide(normalized.home,normalized.away);
+}
+function getGroupJudgment(pred,actual){
+  if(!pred||!actual)return {state:'pending',label:'判定待ち'};
+  if(pred.home===actual.home&&pred.away===actual.away)return {state:'hit',label:'的中'};
+  const pr=pred.home>pred.away?'H':pred.home<pred.away?'A':'D';
+  const ar=actual.home>actual.away?'H':actual.home<actual.away?'A':'D';
+  return pr===ar?{state:'hit',label:'的中'}:{state:'miss',label:'不一致'};
+}
+function getKoJudgment(pred,actual){
+  if(!pred||!actual)return {state:'pending',label:'判定待ち'};
+  const pw=koRecordWinnerSide(pred);
+  const aw=koRecordWinnerSide(actual);
+  if(!pw||!aw)return {state:'pending',label:'判定待ち'};
+  return pw===aw?{state:'hit',label:'的中'}:{state:'miss',label:'不一致'};
 }
 function koWinnerSideForMatch(match,picks={},results={}){
   if(!match)return null;
@@ -2589,6 +2630,9 @@ function BottomNav({screen,setScreen}){
 function HomeScreen({user,onLogout,syncToken}){
   const lang=useContext(LangCtx);const l=T[lang];
   const [copied,setCopied]=useState(false);
+  const [homeToast,setHomeToast]=useState('');
+  const [adminResultsJson,setAdminResultsJson]=useState(()=>gs('homeAdminResultsJson',''));
+  const [homeUpdatingResults,setHomeUpdatingResults]=useState(false);
   const rooms=gs('rooms',[]);
   const room=rooms.find(r=>r.id===user.roomId);
   const roomId=room?.id||user.roomId;
@@ -2644,9 +2688,43 @@ function HomeScreen({user,onLogout,syncToken}){
   const latestDataStamp=latestDataAt?formatTimestamp(latestDataAt,uiSettings.timeZone||'Asia/Tokyo'):'';
   const resultUpdateItems=(RESULT_STATUS.history||[]).slice(0,5);
   const latestResultStamp=RESULT_STATUS.lastUpdatedAt?formatTimestamp(RESULT_STATUS.lastUpdatedAt,uiSettings.timeZone||'Asia/Tokyo'):'';
+  const homeAdminToken=String(sessionStorage.getItem('wc26AdminToken')||DEFAULT_ADMIN_TOKEN).trim();
+
+  async function applyAdminResults(){
+    if(!HAS_BACKEND){setHomeToast('サーバー接続時のみ更新できます');return;}
+    let parsed;
+    try{
+      parsed=JSON.parse(adminResultsJson||'');
+    }catch{
+      setHomeToast('勝敗情報JSONの形式が正しくありません');
+      return;
+    }
+    const results=parsed?.results&&typeof parsed.results==='object'?parsed.results:parsed;
+    if(!results||typeof results!=='object'||Array.isArray(results)){
+      setHomeToast('更新する勝敗情報をJSONで入力してください');
+      return;
+    }
+    sessionStorage.setItem('wc26AdminToken',homeAdminToken);
+    setHomeUpdatingResults(true);
+    try{
+      const res=await api('/api/admin/update-results',{adminToken:homeAdminToken,roomId,results});
+      if(!res?.ok){
+        setHomeToast(res?.error||'勝敗情報を更新できませんでした');
+        return;
+      }
+      const nextResults=res.roomState?.results||{};
+      ss(roomDataKey(roomId,'results'),nextResults);
+      if(res.resultStatus)RESULT_STATUS=res.resultStatus;
+      setHomeToast(`勝敗情報を更新しました（${res.updatedCount||0}件）`);
+      notifyStateChange();
+    }finally{
+      setHomeUpdatingResults(false);
+    }
+  }
 
   return(
     <div className="page page-enter">
+      {homeToast&&<Toast msg={homeToast} onDone={()=>setHomeToast('')}/>}
       <div className="home-hero">
         <div className="hero-bg-num">26</div>
         <div className="hero-greet">{l.welcome}</div>
@@ -2702,6 +2780,33 @@ function HomeScreen({user,onLogout,syncToken}){
             {resultUpdateItems.length===0&&<div className="result-update-empty">まだ勝敗情報は更新されていません</div>}
             {resultUpdateItems.map((item,idx)=>(
               <div className="result-update-item" key={`${item.updatedAt}-${idx}`}>
+                <strong>{formatTimestamp(item.updatedAt,uiSettings.timeZone||'Asia/Tokyo')}</strong>
+                <span>{item.updatedCount||0}件反映</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+      <div className="home-status-card">
+        <div className="result-judge-card">
+          <div className="result-judge-head">
+            <div>
+              <span>結果判定を一括反映</span>
+              <small>ホームで試合結果をまとめて更新します</small>
+            </div>
+            {latestResultStamp&&<span className="result-judge-stamp">{latestResultStamp} 更新済み</span>}
+          </div>
+          <div className="result-judge-form">
+            <textarea className="result-judge-input" value={adminResultsJson} onChange={(e)=>{const next=e.target.value;setAdminResultsJson(next);ss('homeAdminResultsJson',next);}}/>
+            <button className="btn result-judge-btn" onClick={applyAdminResults} disabled={homeUpdatingResults}>
+              {homeUpdatingResults?'更新中…':'結果判定を一括反映'}
+            </button>
+          </div>
+          <div className="result-judge-list-head">試合結果一覧</div>
+          <div className="result-update-list">
+            {resultUpdateItems.length===0&&<div className="result-update-empty">まだ勝敗情報は更新されていません</div>}
+            {resultUpdateItems.map((item,idx)=>(
+              <div className="result-update-item" key={`judge-${item.updatedAt}-${idx}`}>
                 <strong>{formatTimestamp(item.updatedAt,uiSettings.timeZone||'Asia/Tokyo')}</strong>
                 <span>{item.updatedCount||0}件反映</span>
               </div>
@@ -2794,15 +2899,17 @@ function MatchCard({match,userId,opponentId,preds,results,onSave,roomId,syncToke
     return pr===rr?{pts:s.resultPts,type:'result'}:{pts:0,type:'miss'};
   }
   const myScore=myPred&&result?getPts(myPred,result):null;
+  const groupJudgment=getGroupJudgment(myPred,result);
   return(
     <div className="mcard">
       <div className="mcard-hdr">
         <span>グループ {match.groupId}</span>
-        <div style={{display:'flex',alignItems:'center',gap:6}}>
+        <div className="mcard-hdr-right">
           {localLocked&&<span className="lock-tag">🔒 {l.confirm}済み</span>}
           {result&&<span style={{fontSize:10,background:'var(--goldf)',color:'var(--gold)',fontWeight:800,padding:'2px 8px',borderRadius:20}}>
             結果: {result.home}–{result.away}
           </span>}
+          <span className={`match-status-badge ${groupJudgment.state}`}>{groupJudgment.label}</span>
         </div>
       </div>
       <div style={{padding:'7px 12px 0',fontSize:10,color:'var(--text2)',fontWeight:700,display:'flex',justifyContent:'space-between',gap:8,flexWrap:'wrap'}}>
@@ -3216,6 +3323,7 @@ function BracketScreen({user,syncToken}){
     const homeLabel=koResolvedTeam(round.id,index,'home',myPreds,results)||match.home;
     const awayLabel=koResolvedTeam(round.id,index,'away',myPreds,results)||match.away;
     const pts=matchPoints(match,myPreds);
+    const koJudgment=getKoJudgment(pred,actual);
     return(
       <button
         key={match.id}
@@ -3225,11 +3333,14 @@ function BracketScreen({user,syncToken}){
         disabled={!canEditKo}
       >
         <div className="ko-match-meta">
-          <span className="ko-match-time">
-            <b>{match.matchNo?`M${match.matchNo}`:'MATCH'}</b>
-            <small>{formatMatchDate(match.date,match.kickoff,timeZone)}</small>
-          </span>
-          <em>{stadiumLabel(match.stadium,lang)}</em>
+          <div className="ko-match-meta-main">
+            <span className="ko-match-time">
+              <b>{match.matchNo?`M${match.matchNo}`:'MATCH'}</b>
+              <small>{formatMatchDate(match.date,match.kickoff,timeZone)}</small>
+            </span>
+            <em className="ko-match-stadium">{stadiumLabel(match.stadium,lang)}</em>
+          </div>
+          <span className={`ko-match-status ${koJudgment.state}`}>{koJudgment.label}</span>
         </div>
         <div className="ko-teams-line">
           {renderTeamBlock(round.id,index,'home',homeLabel,winnerSide)}
@@ -3420,10 +3531,8 @@ function SettingsScreen({user,syncToken,onRenameUser}){
   const [nameDraft,setNameDraft]=useState(user?.username||'');
   const [savingName,setSavingName]=useState(false);
   const [toast,setToast]=useState('');
-  const [adminToken,setAdminToken]=useState(()=>sessionStorage.getItem('wc26AdminToken')||'');
+  const [adminToken,setAdminToken]=useState(()=>sessionStorage.getItem('wc26AdminToken')||DEFAULT_ADMIN_TOKEN);
   const [adminRefreshing,setAdminRefreshing]=useState(false);
-  const [adminResultsJson,setAdminResultsJson]=useState('');
-  const [adminUpdatingResults,setAdminUpdatingResults]=useState(false);
 
   useEffect(()=>{
     setPointSettings({...DEFAULT_ROOM_SETTINGS,...gr(roomId,'settings',{})});
@@ -3483,39 +3592,6 @@ function SettingsScreen({user,syncToken,onRenameUser}){
       notifyStateChange();
     }finally{
       setAdminRefreshing(false);
-    }
-  }
-  async function applyAdminResults(){
-    if(!HAS_BACKEND){setToast('サーバー接続時のみ更新できます');return;}
-    const token=String(adminToken||'').trim();
-    if(!token){setToast('管理者トークンを入力してください');return;}
-    let parsed;
-    try{
-      parsed=JSON.parse(adminResultsJson||'');
-    }catch{
-      setToast('勝敗情報JSONの形式が正しくありません');
-      return;
-    }
-    const results=parsed?.results&&typeof parsed.results==='object'?parsed.results:parsed;
-    if(!results||typeof results!=='object'||Array.isArray(results)){
-      setToast('更新する勝敗情報をJSONで入力してください');
-      return;
-    }
-    sessionStorage.setItem('wc26AdminToken',token);
-    setAdminUpdatingResults(true);
-    try{
-      const res=await api('/api/admin/update-results',{adminToken:token,roomId,results});
-      if(!res?.ok){
-        setToast(res?.error||'勝敗情報を更新できませんでした');
-        return;
-      }
-      const nextResults=res.roomState?.results||{};
-      ss(roomDataKey(roomId,'results'),nextResults);
-      if(res.resultStatus)RESULT_STATUS=res.resultStatus;
-      setToast(`勝敗情報を更新しました（${res.updatedCount||0}件）`);
-      notifyStateChange();
-    }finally{
-      setAdminUpdatingResults(false);
     }
   }
   return(
@@ -3675,13 +3751,6 @@ function SettingsScreen({user,syncToken,onRenameUser}){
           <div style={{fontSize:12,color:'var(--text2)',lineHeight:1.5}}>
             最終更新: {DATA_STATUS.lastUpdatedAt?formatTimestamp(DATA_STATUS.lastUpdatedAt,uiSettings.timeZone||'Asia/Tokyo'):'未更新'}
           </div>
-          <div className="sl" style={{paddingTop:10,borderTop:'1px solid var(--border)',width:'100%'}}>勝敗情報更新</div>
-          <div className="player-field" style={{marginTop:0,width:'100%'}}>
-            <input value={adminResultsJson} onChange={(e)=>setAdminResultsJson(e.target.value)} />
-          </div>
-          <button className="btn" style={{width:'auto',padding:'10px 18px'}} onClick={applyAdminResults} disabled={adminUpdatingResults}>
-            {adminUpdatingResults?'更新中…':'勝敗情報を更新'}
-          </button>
         </div>
       </div>
     </div>

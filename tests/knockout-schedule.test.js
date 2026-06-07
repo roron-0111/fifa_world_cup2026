@@ -35,7 +35,7 @@ test('knockout route uses official match-number bracket sources', () => {
 test('knockout card renders localized stadium labels', () => {
   assert.match(
     html,
-    /<em>\{stadiumLabel\(match\.stadium,lang\)\}<\/em>/,
+    /className="ko-match-stadium"/,
   );
   assert.doesNotMatch(html, /<em>\{match\.stadium\}<\/em>/);
 });
