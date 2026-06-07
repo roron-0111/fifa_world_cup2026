@@ -23,10 +23,12 @@ test('admin token input stays with player refresh and result reflection moved ho
 
 test('home exposes the batch result reflection card', () => {
   assert.match(html, /className="result-judge-card"/);
-  assert.match(html, /結果判定を一括反映/);
+  assert.match(html, /結果反映/);
   assert.match(html, /試合結果一覧/);
-  assert.match(html, /adminResultsJson/);
   assert.match(html, /applyAdminResults/);
+  assert.doesNotMatch(html, /result-judge-input/);
+  assert.doesNotMatch(html, /選手: \{latestDataStamp\} 更新済み/);
+  assert.doesNotMatch(html, /result-judge-stamp-sub/);
 });
 
 test('knockout stadium labels can wrap to two lines', () => {
@@ -59,16 +61,23 @@ test('home hides internal member codes and shows readable timestamp formats', ()
   assert.doesNotMatch(html, /fontSize:24}>更新済み/);
 });
 
-test('home result update history is visible and compact', () => {
+test('home result judge area is reordered and scrollable', () => {
   assert.doesNotMatch(html, /FIFA公式スカッド を基準に表示しています/);
   assert.doesNotMatch(html, /時刻は選択中の表示タイムゾーン基準です/);
   assert.doesNotMatch(html, />情報更新ステータス</);
   assert.match(html, /RESULT_STATUS=BOOTSTRAP\?\.resultStatus/);
-  assert.match(html, /resultUpdateItems=\(RESULT_STATUS\.history\|\|\[\]\)\.slice\(0,5\)/);
-  assert.match(html, /<span>結果反映履歴<\/span>/);
-  assert.match(html, /className="result-update-stamp">\{latestDataStamp\} 更新済み<\/span>/);
-  assert.match(html, /home-status-card/);
-  assert.match(html, /\.result-update-list\{[^}]*max-height:154px;overflow-y:auto/);
+  assert.match(html, /const homeResultItems=Object\.entries\(results\)/);
+  assert.match(html, /normalizeKoRecord\(koPreds\[user\.id\]\?\.\[matchId\]\)/);
+  assert.doesNotMatch(html, /<span>結果反映履歴<\/span>/);
+  assert.match(html, /Webから試合結果を取得し、ポイントと判定バッジを再計算します/);
+  assert.match(html, /Web取得した試合結果は既に反映済みです/);
+  assert.match(html, /\/api\/admin\/refresh-results/);
+  assert.match(html, /className="home-breakdown"[\s\S]*<div className="home-status-card">[\s\S]*<div className="result-judge-card">/);
+  assert.match(html, /className="result-judge-list"/);
+  assert.match(html, /className="result-match-item"/);
+  assert.match(html, /\.result-judge-btn\{[^}]*align-self:center/);
+  assert.match(html, /\.result-judge-list\{[^}]*overflow-y:auto/);
+  assert.doesNotMatch(html, /result-judge-input/);
 });
 
 test('ambiguous placeholder teams do not render multiple flag images', () => {
@@ -83,11 +92,12 @@ test('settings save button stays horizontal on narrow screens', () => {
 });
 
 test('home point breakdown uses consistent count and point columns', () => {
-  assert.match(html, /\.home-compare-row\{[^}]*grid-template-columns:minmax\(0,1fr\) minmax\(66px,\.7fr\) minmax\(66px,\.7fr\)/);
+  assert.match(html, /\.home-compare-row\{[^}]*grid-template-columns:minmax\(0,1fr\) minmax\(82px,1fr\) minmax\(82px,1fr\)/);
   assert.match(html, /groupCompareRows=\[/);
   assert.match(html, /koCompareRows=\[/);
   assert.match(html, /<div className="home-compare-row home-compare-head"><span>項目<\/span><b>自分<\/b><b>相手<\/b><\/div>/);
   assert.match(html, /<span>\{row\.label\}<\/span><b className="me">\{row\.me\}<\/b><b className="opp">\{opp\?row\.opp:'-'\}<\/b>/);
+  assert.match(html, /\.home-compare-row > b\{[^}]*justify-self:center/);
 });
 
 test('home hero score cards use aligned metrics and centered VS', () => {

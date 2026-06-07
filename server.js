@@ -9,6 +9,11 @@ const {
   applyDataRefreshSuccess,
   applyDataRefreshFailure,
 } = require('./lib/admin');
+const {
+  FIFA_MATCHES_URL,
+  fetchFifaWorldCupResults,
+  resultSnapshotSignature,
+} = require('./lib/fifa-results');
 
 const ROOT = __dirname;
 const PROJECT_HTML = path.join(ROOT, 'project', 'World Cup 2026.html');
@@ -578,6 +583,87 @@ const server = http.createServer(async (req, res) => {
         });
         persistState();
         sendJson(res, 500, { ok: false, error: error.message, dataStatus: makeDataRefreshStatus(state) });
+      }
+      return;
+    }
+
+    if (req.method === 'POST' && pathname === '/api/admin/refresh-results') {
+      const body = await readBody(req);
+      const tokenCheck = verifyAdminToken(body.adminToken, process.env.WC26_ADMIN_TOKEN);
+      if (!tokenCheck.ok) {
+        sendJson(res, tokenCheck.status, { ok: false, error: tokenCheck.error });
+        return;
+      }
+      const roomId = String(body.roomId || '').trim();
+      if (!roomId) {
+        sendJson(res, 400, { ok: false, error: 'ルームIDが必要です' });
+        return;
+      }
+      try {
+        const { results: incoming, fetchedCount, updatedCount } = await fetchFifaWorldCupResults();
+        const roomState = ensureRoomState(roomId);
+        roomState.results ||= {};
+        const currentSignature = resultSnapshotSignature(roomState.results || {});
+        const incomingSignature = resultSnapshotSignature(incoming);
+        const alreadyCurrent = currentSignature === incomingSignature;
+        if (!alreadyCurrent) {
+          Object.entries(incoming).forEach(([matchId, result]) => {
+            roomState.results[matchId] = result;
+          });
+        }
+        const now = new Date().toISOString();
+        if (!alreadyCurrent) {
+          state.meta ||= {};
+          state.meta.resultUpdates ||= {};
+          const history = Array.isArray(state.meta.resultUpdates.history) ? state.meta.resultUpdates.history : [];
+          state.meta.resultUpdates = {
+            lastUpdatedAt: now,
+            source: 'fifa-live-results',
+            fetchedCount,
+            updatedCount,
+            history: [
+              {
+                updatedAt: now,
+                roomId,
+                source: 'fifa-live-results',
+                fetchedCount,
+                updatedCount,
+                sourceUrl: FIFA_MATCHES_URL,
+              },
+              ...history,
+            ].slice(0, 20),
+          };
+          saveAndRespond(res, {
+            ok: true,
+            roomState,
+            resultStatus: state.meta.resultUpdates,
+            fetchedCount,
+            updatedCount,
+            sourceUrl: FIFA_MATCHES_URL,
+            alreadyCurrent,
+          });
+          return;
+        }
+        sendJson(res, 200, {
+          ok: true,
+          roomState,
+          resultStatus: state.meta?.resultUpdates || {},
+          fetchedCount,
+          updatedCount: 0,
+          sourceUrl: FIFA_MATCHES_URL,
+          alreadyCurrent,
+        });
+      } catch (error) {
+        state.meta ||= {};
+        state.meta.resultUpdates ||= {};
+        state.meta.resultUpdates = {
+          ...(state.meta.resultUpdates || {}),
+          status: 'error',
+          error: error.message,
+          lastAttemptAt: new Date().toISOString(),
+        };
+        persistState();
+        sendJson(res, 500, { ok: false, error: error.message, resultStatus: state.meta.resultUpdates });
       }
       return;
     }

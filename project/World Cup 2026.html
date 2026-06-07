@@ -250,25 +250,32 @@ html,body{background:#ddd8ce;color:var(--text);font-family:'Inter',sans-serif;mi
 .home-break-total strong{font-family:'Inter',sans-serif;font-size:42px;line-height:1;color:var(--accent);font-weight:1000;letter-spacing:-.04em;}
 .home-break-total span{font-size:12px;color:var(--text2);font-weight:900;}
 .home-compare{display:flex;flex-direction:column;gap:5px;font-size:11px;color:var(--text2);font-weight:700;line-height:1.35;}
-.home-compare-row{display:grid;grid-template-columns:minmax(0,1fr) minmax(66px,.7fr) minmax(66px,.7fr);align-items:center;gap:8px;border-top:1px solid var(--border);padding-top:5px;}
+.home-compare-row{display:grid;grid-template-columns:minmax(0,1fr) minmax(82px,1fr) minmax(82px,1fr);align-items:center;gap:8px;border-top:1px solid var(--border);padding-top:5px;}
 .home-compare-head{border-top:none;padding-top:0;color:var(--text2);font-size:10px;}
-.home-compare-row b{color:var(--text);font-weight:900;text-align:right;font-variant-numeric:tabular-nums;}
+.home-compare-row > span{justify-self:start;}
+.home-compare-row > b{justify-self:center;color:var(--text);font-weight:900;text-align:center;font-variant-numeric:tabular-nums;}
 .home-compare-row b.me{color:var(--accent);}
 .home-compare-row b.opp{color:var(--gold);}
-.result-update-card,.result-judge-card{background:transparent;border:none;border-radius:0;box-shadow:none;overflow:hidden;}
-.result-update-head,.result-judge-head{padding:11px 13px;border-bottom:1px solid var(--border);font-size:13px;font-weight:900;color:var(--green);background:linear-gradient(135deg,var(--s1),rgba(22,163,74,.08));display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;}
-.result-update-head span,.result-judge-head span{display:block;}
+.result-judge-card{background:transparent;border:none;border-radius:0;box-shadow:none;overflow:hidden;}
+.result-judge-head{padding:11px 13px;border-bottom:1px solid var(--border);font-size:13px;font-weight:900;color:var(--green);background:linear-gradient(135deg,var(--s1),rgba(22,163,74,.08));display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;}
+.result-judge-head span{display:block;}
 .result-judge-head small{display:block;margin-top:3px;font-size:11px;color:var(--text2);font-weight:700;line-height:1.45;}
-.result-update-stamp,.result-judge-stamp{font-size:12px;color:var(--green);font-weight:900;}
+.result-judge-stamp{font-size:12px;color:var(--green);font-weight:900;}
 .result-judge-form{padding:10px 10px 0;display:flex;flex-direction:column;gap:10px;}
-.result-judge-input{width:100%;min-height:74px;padding:12px 13px;border:1px solid var(--border);border-radius:12px;background:var(--s2);font:inherit;font-size:12px;line-height:1.45;color:var(--text);resize:vertical;outline:none;}
-.result-judge-input:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accentf);}
-.result-judge-btn{width:fit-content;align-self:flex-start;padding:10px 16px;margin-top:0;}
+.result-judge-btn{width:fit-content;align-self:center;padding:10px 18px;margin-top:0;}
 .result-judge-list-head{padding:10px 13px 6px;font-size:12px;font-weight:900;color:var(--text2);}
-.result-update-list{max-height:154px;overflow-y:auto;padding:8px 10px;display:flex;flex-direction:column;gap:7px;}
-.result-update-item{display:flex;align-items:center;justify-content:space-between;gap:10px;border:1px solid var(--border);border-radius:12px;padding:8px 10px;background:var(--s2);font-size:11px;font-weight:800;color:var(--text2);}
-.result-update-item strong{color:var(--text);font-size:12px;}
-.result-update-empty{padding:12px;color:var(--text2);font-size:12px;font-weight:700;}
+.result-judge-list{max-height:min(540px,64vh);overflow-y:auto;margin:0 10px 10px;padding:8px;display:flex;flex-direction:column;gap:8px;border:1px solid var(--border);border-radius:14px;background:var(--s2);}
+.result-match-item{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:center;border:1px solid var(--border);border-radius:12px;padding:8px 10px;background:var(--s1);}
+.result-match-main{min-width:0;}
+.result-match-head{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.result-match-code{font-size:12px;font-weight:900;color:var(--green);}
+.result-match-time{font-size:11px;color:var(--text2);font-weight:700;}
+.result-match-teams{margin-top:4px;font-size:12px;font-weight:800;color:var(--text);line-height:1.35;}
+.result-match-teams .result-match-stadium{display:inline;color:var(--text2);font-size:10px;font-weight:700;margin-top:0;}
+.result-match-side{display:flex;flex-direction:column;align-items:flex-end;gap:6px;min-width:72px;}
+.result-match-score{font-family:'Bebas Neue';font-size:30px;line-height:1;color:var(--accent);font-weight:900;letter-spacing:-.04em;}
+.result-match-score.pending{color:var(--text2);}
+.result-match-empty{padding:12px;color:var(--text2);font-size:12px;font-weight:700;}
 .match-status-badge,.ko-match-status{
   display:inline-flex;
   align-items:center;
@@ -2631,7 +2638,6 @@ function HomeScreen({user,onLogout,syncToken}){
   const lang=useContext(LangCtx);const l=T[lang];
   const [copied,setCopied]=useState(false);
   const [homeToast,setHomeToast]=useState('');
-  const [adminResultsJson,setAdminResultsJson]=useState(()=>gs('homeAdminResultsJson',''));
   const [homeUpdatingResults,setHomeUpdatingResults]=useState(false);
   const rooms=gs('rooms',[]);
   const room=rooms.find(r=>r.id===user.roomId);
@@ -2684,38 +2690,58 @@ function HomeScreen({user,onLogout,syncToken}){
   const primaryActionLabel=user?.isGuest?'トップに戻る':l.logout;
   const primaryActionClass=user?.isGuest?'btn ghost':'btn ghost danger';
   const uiSettings=gs('settings',DEFAULT_UI_SETTINGS);
-  const latestDataAt=DATA_STATUS.lastUpdatedAt||PLAYER_DATA_META.generatedAt||'';
-  const latestDataStamp=latestDataAt?formatTimestamp(latestDataAt,uiSettings.timeZone||'Asia/Tokyo'):'';
-  const resultUpdateItems=(RESULT_STATUS.history||[]).slice(0,5);
   const latestResultStamp=RESULT_STATUS.lastUpdatedAt?formatTimestamp(RESULT_STATUS.lastUpdatedAt,uiSettings.timeZone||'Asia/Tokyo'):'';
   const homeAdminToken=String(sessionStorage.getItem('wc26AdminToken')||DEFAULT_ADMIN_TOKEN).trim();
+  const homeResultMetaList=[
+    ...GROUP_MATCHES.map((match,order)=>({kind:'group',match,order})),
+    ...KO_ROUNDS.flatMap((round,roundOrder)=>round.matches.map((match,matchOrder)=>({
+      kind:'ko',
+      match,
+      roundId:round.id,
+      roundLabel:round.label,
+      order:GROUP_MATCHES.length+(roundOrder*100)+matchOrder,
+    }))),
+  ];
+  const homeResultMetaMap=new Map(homeResultMetaList.map((item)=>[item.match.id,item]));
+  const homeResultItems=Object.entries(results)
+    .map(([matchId,actualRaw])=>{
+      const meta=homeResultMetaMap.get(matchId);
+      if(!meta)return null;
+      const actual=meta.kind==='ko'?normalizeKoRecord(actualRaw):actualRaw;
+      const pred=meta.kind==='ko'
+        ?normalizeKoRecord(koPreds[user.id]?.[matchId])
+        :preds[user.id]?.[matchId];
+      const judgment=meta.kind==='ko'?getKoJudgment(pred,actual):getGroupJudgment(pred,actual);
+      const scoreText=meta.kind==='ko'
+        ?(actual?koRecordScoreText(actual):'未反映')
+        :(actual&&Number.isFinite(actual.home)&&Number.isFinite(actual.away)?`${actual.home}–${actual.away}`:'未反映');
+      return {...meta,actual,judgment,scoreText};
+    })
+    .filter(Boolean)
+    .sort((a,b)=>a.order-b.order);
 
   async function applyAdminResults(){
     if(!HAS_BACKEND){setHomeToast('サーバー接続時のみ更新できます');return;}
-    let parsed;
-    try{
-      parsed=JSON.parse(adminResultsJson||'');
-    }catch{
-      setHomeToast('勝敗情報JSONの形式が正しくありません');
-      return;
-    }
-    const results=parsed?.results&&typeof parsed.results==='object'?parsed.results:parsed;
-    if(!results||typeof results!=='object'||Array.isArray(results)){
-      setHomeToast('更新する勝敗情報をJSONで入力してください');
-      return;
-    }
     sessionStorage.setItem('wc26AdminToken',homeAdminToken);
     setHomeUpdatingResults(true);
     try{
-      const res=await api('/api/admin/update-results',{adminToken:homeAdminToken,roomId,results});
+      const res=await api('/api/admin/refresh-results',{adminToken:homeAdminToken,roomId});
       if(!res?.ok){
-        setHomeToast(res?.error||'勝敗情報を更新できませんでした');
+        setHomeToast(res?.error||'試合結果を取得できませんでした');
         return;
       }
       const nextResults=res.roomState?.results||{};
       ss(roomDataKey(roomId,'results'),nextResults);
       if(res.resultStatus)RESULT_STATUS=res.resultStatus;
-      setHomeToast(`勝敗情報を更新しました（${res.updatedCount||0}件）`);
+      const updatedCount=Number(res.updatedCount||0);
+      if(res.alreadyCurrent){
+        setHomeToast('Web取得した試合結果は既に反映済みです');
+        notifyStateChange();
+        return;
+      }
+      setHomeToast(updatedCount
+        ? `Web取得した試合結果を反映しました（${updatedCount}件）`
+        : 'Webから取得しましたが、反映可能な試合結果はまだありません');
       notifyStateChange();
     }finally{
       setHomeUpdatingResults(false);
@@ -2770,50 +2796,6 @@ function HomeScreen({user,onLogout,syncToken}){
           </div>
         </div>
       </div>
-      <div className="home-status-card">
-        <div className="result-update-card">
-          <div className="result-update-head">
-            <span>結果反映履歴</span>
-            {latestDataStamp&&<span className="result-update-stamp">{latestDataStamp} 更新済み</span>}
-          </div>
-          <div className="result-update-list">
-            {resultUpdateItems.length===0&&<div className="result-update-empty">まだ勝敗情報は更新されていません</div>}
-            {resultUpdateItems.map((item,idx)=>(
-              <div className="result-update-item" key={`${item.updatedAt}-${idx}`}>
-                <strong>{formatTimestamp(item.updatedAt,uiSettings.timeZone||'Asia/Tokyo')}</strong>
-                <span>{item.updatedCount||0}件反映</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-      <div className="home-status-card">
-        <div className="result-judge-card">
-          <div className="result-judge-head">
-            <div>
-              <span>結果判定を一括反映</span>
-              <small>ホームで試合結果をまとめて更新します</small>
-            </div>
-            {latestResultStamp&&<span className="result-judge-stamp">{latestResultStamp} 更新済み</span>}
-          </div>
-          <div className="result-judge-form">
-            <textarea className="result-judge-input" value={adminResultsJson} onChange={(e)=>{const next=e.target.value;setAdminResultsJson(next);ss('homeAdminResultsJson',next);}}/>
-            <button className="btn result-judge-btn" onClick={applyAdminResults} disabled={homeUpdatingResults}>
-              {homeUpdatingResults?'更新中…':'結果判定を一括反映'}
-            </button>
-          </div>
-          <div className="result-judge-list-head">試合結果一覧</div>
-          <div className="result-update-list">
-            {resultUpdateItems.length===0&&<div className="result-update-empty">まだ勝敗情報は更新されていません</div>}
-            {resultUpdateItems.map((item,idx)=>(
-              <div className="result-update-item" key={`judge-${item.updatedAt}-${idx}`}>
-                <strong>{formatTimestamp(item.updatedAt,uiSettings.timeZone||'Asia/Tokyo')}</strong>
-                <span>{item.updatedCount||0}件反映</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
       <div className="home-breakdown">
         <div className="home-breakdown-title">ポイント内訳</div>
         <div className="home-breakdown-grid">
@@ -2840,6 +2822,46 @@ function HomeScreen({user,onLogout,syncToken}){
                 </div>
               ))}
             </div>
+          </div>
+        </div>
+      </div>
+      <div className="home-status-card">
+        <div className="result-judge-card">
+          <div className="result-judge-head">
+            <div>
+              <span>結果判定を一括反映</span>
+              <small>Webから試合結果を取得し、ポイントと判定バッジを再計算します</small>
+            </div>
+            {latestResultStamp&&<span className="result-judge-stamp">結果: {latestResultStamp} 更新済み</span>}
+          </div>
+          <div className="result-judge-form">
+            <button className="btn result-judge-btn" onClick={applyAdminResults} disabled={homeUpdatingResults}>
+              {homeUpdatingResults?'反映中…':'結果反映'}
+            </button>
+          </div>
+          <div className="result-judge-list-head">試合結果一覧</div>
+          <div className="result-judge-list">
+            {homeResultItems.length===0&&<div className="result-match-empty">まだ試合結果はありません</div>}
+            {homeResultItems.map((item)=>(
+              <div className="result-match-item" key={item.match.id}>
+                <div className="result-match-main">
+                  <div className="result-match-head">
+                    <strong className="result-match-code">{item.match.id}</strong>
+                    <span className="result-match-time">{formatMatchDate(item.match.date,item.match.kickoff,uiSettings.timeZone||'Asia/Tokyo')}</span>
+                  </div>
+                  <div className="result-match-teams">
+                    {item.kind==='ko'
+                      ?`${koTeamName(item.match.home)} vs ${koTeamName(item.match.away)}`
+                      :`${teamJa(item.match.home)} vs ${teamJa(item.match.away)}`}
+                    <span className="result-match-stadium">・ {stadiumLabel(item.match.stadium,lang)}</span>
+                  </div>
+                </div>
+                <div className="result-match-side">
+                  <div className={`result-match-score${item.judgment.state==='pending'?' pending':''}`}>{item.scoreText}</div>
+                  <span className={`match-status-badge ${item.judgment.state}`}>{item.judgment.label}</span>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </div>
