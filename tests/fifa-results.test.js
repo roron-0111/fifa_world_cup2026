@@ -5,36 +5,70 @@ const {
   FIFA_MATCHES_URL,
   fetchFifaWorldCupResults,
   mapFifaCalendarMatchesToResults,
+  matchIdFromMatchNumber,
   resultSnapshotSignature,
 } = require('../lib/fifa-results');
 
-test('maps fifa calendar matches into app result records by match number', () => {
-  const results = mapFifaCalendarMatchesToResults(
-    [
-      {
-        MatchNumber: 1,
-        HomeTeamScore: 2,
-        AwayTeamScore: 1,
-        MatchStatus: 'Completed',
-        ResultType: 'Regular',
-      },
-      {
-        MatchNumber: 73,
-        HomeTeamScore: 1,
-        AwayTeamScore: 1,
-        HomeTeamPenaltyScore: 4,
-        AwayTeamPenaltyScore: 3,
-        MatchStatus: 'Completed',
-        ResultType: 'Penalties',
-      },
-    ],
-    [
-      { id: 'A-1', matchNo: 1, stage: 'group' },
-      { id: 'R32-0', matchNo: 73, stage: 'ko' },
-    ],
-  );
+test('maps fifa calendar group-stage matches by official team pairing', () => {
+  const results = mapFifaCalendarMatchesToResults([
+    {
+      MatchNumber: 3,
+      Home: { ShortClubName: 'Canada' },
+      Away: { ShortClubName: 'Bosnia And Herzegovina' },
+      HomeTeamScore: 2,
+      AwayTeamScore: 1,
+    },
+    {
+      MatchNumber: 25,
+      Home: { ShortClubName: 'Czechia' },
+      Away: { ShortClubName: 'South Africa' },
+      HomeTeamScore: 1,
+      AwayTeamScore: 0,
+    },
+    {
+      MatchNumber: 53,
+      Home: { ShortClubName: 'Czechia' },
+      Away: { ShortClubName: 'Mexico' },
+      HomeTeamScore: 0,
+      AwayTeamScore: 1,
+    },
+    {
+      MatchNumber: 67,
+      Home: { ShortClubName: 'Panama' },
+      Away: { ShortClubName: 'England' },
+      HomeTeamScore: 1,
+      AwayTeamScore: 3,
+    },
+  ]);
 
-  assert.deepEqual(results['A-1'], { home: 2, away: 1, status: 'final' });
+  assert.deepEqual(results['B-1'], { home: 2, away: 1, status: 'final' });
+  assert.deepEqual(results['A-3'], { home: 1, away: 0, status: 'final' });
+  assert.deepEqual(results['A-5'], { home: 0, away: 1, status: 'final' });
+  assert.deepEqual(results['L-5'], { home: 1, away: 3, status: 'final' });
+});
+
+test('maps fifa knockout matches by official match number', () => {
+  const results = mapFifaCalendarMatchesToResults([
+    {
+      MatchNumber: 73,
+      HomeTeamScore: 1,
+      AwayTeamScore: 1,
+      HomeTeamPenaltyScore: 4,
+      AwayTeamPenaltyScore: 3,
+      MatchStatus: 'Completed',
+      ResultType: 'Penalties',
+    },
+    {
+      MatchNumber: 104,
+      Home: { ShortClubName: 'Netherlands' },
+      Away: { ShortClubName: 'Japan' },
+      HomeTeamScore: 2,
+      AwayTeamScore: 0,
+      MatchStatus: 'Completed',
+      ResultType: 'Regular',
+    },
+  ]);
+
   assert.deepEqual(results['R32-0'], {
     home: 1,
     away: 1,
@@ -45,6 +79,21 @@ test('maps fifa calendar matches into app result records by match number', () =>
     locked: true,
     status: 'final',
   });
+  assert.deepEqual(results['F-0'], {
+    home: 2,
+    away: 0,
+    winnerSide: 'home',
+    decidedBy: 'REG',
+    homePen: null,
+    awayPen: null,
+    status: 'final',
+    locked: true,
+  });
+});
+
+test('group-stage numbers do not map through the knockout helper anymore', () => {
+  assert.equal(matchIdFromMatchNumber(25), null);
+  assert.equal(matchIdFromMatchNumber(73), 'R32-0');
 });
 
 test('fetches fifa calendar matches from the live fixtures endpoint', async () => {
@@ -57,7 +106,7 @@ test('fetches fifa calendar matches from the live fixtures endpoint', async () =
     };
   };
 
-  await fetchFifaWorldCupResults({ fetchImpl: fakeFetch, matchMeta: [] });
+  await fetchFifaWorldCupResults({ fetchImpl: fakeFetch });
 
   assert.equal(requestedUrl, FIFA_MATCHES_URL);
 });
