@@ -92,3 +92,38 @@ test('third-place route does not render an extra dotted guide line', () => {
     /key="third-place-line"/,
   );
 });
+
+test('knockout bracket zoom is user adjustable without changing board geometry', () => {
+  assert.match(
+    html,
+    /const \[viewMode,setViewMode\]=useState\(\(\)=>gs\('koViewMode','normal'\)\);/,
+  );
+  assert.match(
+    html,
+    /const canvasZoom=viewMode==='overview'\?0\.72:1;/,
+  );
+  assert.match(
+    html,
+    /function toggleViewMode\(\)\{/,
+  );
+  assert.match(
+    html,
+    /<button className="ko-zoom-toggle" onClick=\{toggleViewMode\} aria-label="決勝トーナメント表示倍率を切り替え">\{viewMode==='overview'\?'拡大':'縮小'\}<\/button>/,
+  );
+  assert.match(
+    html,
+    /style=\{\{width:BOARD_WIDTH,height:BOARD_HEIGHT,zoom:canvasZoom\}\}/,
+  );
+  assert.match(
+    html,
+    /\.ko-zoom-toggle\{position:fixed;right:16px;bottom:72px;/,
+  );
+  assert.doesNotMatch(
+    html,
+    /<div className="ko-view-controls"/,
+  );
+  assert.doesNotMatch(
+    html,
+    /\.ko-canvas\{zoom:\.72;\}/,
+  );
+});

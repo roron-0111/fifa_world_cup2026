@@ -819,6 +819,7 @@ html,body{background:#ddd8ce;color:var(--text);font-family:'Inter',sans-serif;mi
 
 /* KNOCKOUT BOARD */
 .ko-toolbar{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;padding:12px 14px 0;}
+.ko-zoom-toggle{position:fixed;right:16px;bottom:72px;z-index:330;border:1.5px solid var(--accent);background:linear-gradient(135deg,var(--accent),#0f4cc4);color:#fff;border-radius:999px;padding:12px 16px;font:inherit;font-size:13px;font-weight:1000;cursor:pointer;box-shadow:0 14px 34px rgba(30,110,240,.32);}
 .ko-summary-card{background:linear-gradient(135deg,var(--s1),var(--s2));border:1px solid var(--border);border-radius:14px;padding:12px 14px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:4px;min-width:0;position:relative;overflow:hidden;}
 .ko-summary-card::after{content:'';position:absolute;right:-28px;top:-34px;width:92px;height:92px;border-radius:999px;background:var(--accentf);pointer-events:none;}
 .ko-summary-card span{font-size:10px;font-weight:900;color:var(--text2);text-transform:uppercase;letter-spacing:.4px;}
@@ -3171,6 +3172,7 @@ function BracketScreen({user,syncToken}){
   const labelScrollRef=useRef(null);
   const stickyStageRef=useRef(null);
   const [stickyHeight,setStickyHeight]=useState(0);
+  const [viewMode,setViewMode]=useState(()=>gs('koViewMode','normal'));
   const uiSettings=gs('settings',DEFAULT_UI_SETTINGS);
   const timeZone=uiSettings.timeZone||DEFAULT_UI_SETTINGS.timeZone;
   const myPreds=koPreds[user.id]||{};
@@ -3183,6 +3185,7 @@ function BracketScreen({user,syncToken}){
   const BOARD_HEIGHT=BOARD.y+BOARD.gapY*16+230;
   const R32_VISUAL_ORDER=[1,4,0,2,10,11,8,9,3,5,6,7,13,15,12,14];
   const R32_VISUAL_SLOT=R32_VISUAL_ORDER.reduce((acc,index,slot)=>({...acc,[index]:slot}),{});
+  const canvasZoom=viewMode==='overview'?0.72:1;
   const podium=koPodiumPredictions(myPreds,{});
   const podiumCandidates=koPodiumCandidates(myPreds,results);
   const champion=podium.champion;
@@ -3309,6 +3312,14 @@ function BracketScreen({user,syncToken}){
     if(!value)delete nextUserPreds._podium[key];
     const next={...koPreds,[user.id]:nextUserPreds};
     setKoPreds(next);sr(roomId,'koPreds',next);
+  }
+  function updateViewMode(mode){
+    setViewMode(mode);
+    ss('koViewMode',mode);
+    requestAnimationFrame(()=>syncBracketScroll('board'));
+  }
+  function toggleViewMode(){
+    updateViewMode(viewMode==='overview'?'normal':'overview');
   }
   function renderLines(){
     const lines=[];
@@ -3487,8 +3498,9 @@ function BracketScreen({user,syncToken}){
         {renderStickyRoundBand()}
       </div>
       <div className="ko-sticky-spacer" style={{height:stickyHeight}} aria-hidden="true"></div>
+      <button className="ko-zoom-toggle" onClick={toggleViewMode} aria-label="決勝トーナメント表示倍率を切り替え">{viewMode==='overview'?'拡大':'縮小'}</button>
       <div className="ko-scroll" ref={scrollRef} onScroll={()=>syncBracketScroll('board')}>
-        <div className="ko-canvas" style={{width:BOARD_WIDTH,height:BOARD_HEIGHT}}>
+        <div className="ko-canvas" style={{width:BOARD_WIDTH,height:BOARD_HEIGHT,zoom:canvasZoom}}>
           {renderRoundGuides()}
           <svg className="ko-lines" width="100%" height="100%" viewBox={`0 0 ${BOARD_WIDTH} ${BOARD_HEIGHT}`} preserveAspectRatio="none">
             {renderLines()}
@@ -3504,7 +3516,7 @@ function BracketScreen({user,syncToken}){
       </div>
       {ReactDOM.createPortal(
         <div className="ko-scrollbar-proxy" ref={scrollProxyRef} onScroll={()=>syncBracketScroll('proxy')} aria-label="決勝トーナメント表の横スクロール">
-          <div style={{width:BOARD_WIDTH,height:1}}></div>
+          <div style={{width:BOARD_WIDTH*canvasZoom,height:1}}></div>
         </div>,
         document.body
       )}
