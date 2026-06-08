@@ -39,3 +39,56 @@ test('knockout card renders localized stadium labels', () => {
   );
   assert.doesNotMatch(html, /<em>\{match\.stadium\}<\/em>/);
 });
+
+test('knockout predictions do not visually advance teams as official winners', () => {
+  assert.match(
+    html,
+    /function koOfficialWinnerSideForMatch\(match,results=\{\}\)/,
+  );
+  assert.match(
+    html,
+    /function koOfficialResolvedTeam\(roundId,matchIndex,side,results=\{\}\)/,
+  );
+  assert.match(
+    html,
+    /const winnerSide=koRecordWinnerSide\(actual\);/,
+  );
+  assert.match(
+    html,
+    /const homeLabel=koOfficialResolvedTeam\(round\.id,index,'home',results\)\|\|match\.home;/,
+  );
+  assert.match(
+    html,
+    /const awayLabel=koOfficialResolvedTeam\(round\.id,index,'away',results\)\|\|match\.away;/,
+  );
+  assert.match(
+    html,
+    /<TeamFlag team=\{koOfficialResolvedTeam\(editing\.roundId,editing\.index,side,results\)\|\|editing\.match\[side\]\}\/>/,
+  );
+});
+
+test('knockout route highlights use official results only', () => {
+  assert.match(
+    html,
+    /const homeWinner=koOfficialWinnerSideForMatch\(koGetMatch\(homeRef\.round,homeRef\.index\),results\);/,
+  );
+  assert.match(
+    html,
+    /const awayWinner=koOfficialWinnerSideForMatch\(koGetMatch\(awayRef\.round,awayRef\.index\),results\);/,
+  );
+  assert.match(
+    html,
+    /const finalWinner=koOfficialWinnerSideForMatch\(finalMatch,results\);/,
+  );
+});
+
+test('third-place route does not render an extra dotted guide line', () => {
+  assert.doesNotMatch(
+    html,
+    /key=\{`third-\$\{index\}`\}/,
+  );
+  assert.doesNotMatch(
+    html,
+    /key="third-place-line"/,
+  );
+});

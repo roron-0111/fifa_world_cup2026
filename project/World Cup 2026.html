@@ -826,7 +826,9 @@ html,body{background:#ddd8ce;color:var(--text);font-family:'Inter',sans-serif;mi
 .ko-summary-card.champion strong{font-family:inherit;font-size:15px;font-weight:900;line-height:1.25;color:var(--text);}
 .ko-summary-card em{font-style:normal;font-size:11px;color:var(--text2);font-weight:700;line-height:1.35;display:flex;align-items:center;gap:5px;min-width:0;}
 .ko-nav-spacer{display:none;}
-.ko-podium-panel{margin:10px 14px 0;background:linear-gradient(135deg,#fff,#f7f3ec);border:1px solid var(--border);border-radius:16px;padding:12px;box-shadow:var(--shadow);}
+.ko-sticky-stage{position:fixed;top:0;left:50%;transform:translateX(-50%);width:min(100vw,1500px);z-index:220;background:var(--bg);padding-top:8px;border-bottom:1px solid rgba(22,80,45,.14);box-shadow:0 8px 18px rgba(0,0,0,.08);}
+.ko-sticky-spacer{height:var(--ko-sticky-height,0px);}
+.ko-podium-panel{margin:0 14px;background:linear-gradient(135deg,#fff,#f7f3ec);border:1px solid var(--border);border-radius:16px;padding:12px;box-shadow:var(--shadow);}
 .ko-podium-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;}
 .ko-podium-pick{min-width:0;border:1px solid var(--border);border-radius:14px;background:var(--s1);padding:10px;display:flex;flex-direction:column;gap:7px;}
 .ko-podium-pick.off{opacity:.55;background:var(--s2);}
@@ -834,7 +836,12 @@ html,body{background:#ddd8ce;color:var(--text);font-family:'Inter',sans-serif;mi
 .ko-podium-pick select{width:100%;min-width:0;border:1.5px solid var(--border);border-radius:10px;background:var(--s2);color:var(--text);font:inherit;font-size:12px;font-weight:800;padding:9px 10px;outline:none;}
 .ko-podium-pick select:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accentf);}
 .ko-podium-note{font-size:10px;color:var(--text2);font-weight:700;line-height:1.35;}
-.ko-scroll{margin:10px 0 24px;overflow-x:auto;overflow-y:visible;background:#dfeadf;border-top:1px solid rgba(22,80,45,.12);border-bottom:1px solid rgba(22,80,45,.12);box-shadow:inset 0 12px 26px rgba(40,80,45,.12);-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain;touch-action:pan-x pan-y;scrollbar-width:none;}
+.ko-round-band{margin-top:10px;height:52px;overflow:hidden;background:linear-gradient(135deg,#eaf3ef,#dfeadf);border-top:1px solid rgba(22,80,45,.12);}
+.ko-round-band-inner{position:relative;height:52px;min-width:100%;}
+.ko-round-band-label{position:absolute;top:9px;height:32px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;font-family:'Bebas Neue','Inter',sans-serif;font-size:22px;line-height:1;color:#1f2937;letter-spacing:0;font-weight:900;}
+.ko-round-band-label small{display:block;margin-top:2px;font-family:'Inter',sans-serif;font-size:10px;line-height:1;color:#4b5563;font-weight:900;}
+.ko-round-band-label.final{color:var(--gold);}
+.ko-scroll{margin:0 0 24px;overflow-x:auto;overflow-y:visible;background:#dfeadf;border-top:0;border-bottom:1px solid rgba(22,80,45,.12);box-shadow:inset 0 12px 26px rgba(40,80,45,.12);-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain;touch-action:pan-x pan-y;scrollbar-width:none;}
 .ko-scroll::-webkit-scrollbar{display:none;}
 .ko-scrollbar-proxy{display:none;}
 .ko-canvas{position:relative;min-width:100%;background:
@@ -847,10 +854,10 @@ html,body{background:#ddd8ce;color:var(--text);font-family:'Inter',sans-serif;mi
 }
 .ko-lines{position:absolute;inset:0;z-index:1;pointer-events:none;}
 .ko-round-guide{position:absolute;z-index:0;top:44px;bottom:0;width:0;border-left:1px dashed rgba(31,41,55,.22);pointer-events:none;}
-.ko-round-label{position:absolute;z-index:2;top:8px;min-height:34px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;font-family:'Bebas Neue','Inter',sans-serif;font-size:22px;line-height:1;color:#1f2937;letter-spacing:0;font-weight:900;text-shadow:0 1px 0 rgba(255,255,255,.8);}
+.ko-round-label{position:absolute;z-index:2;top:8px;min-height:34px;display:none;flex-direction:column;align-items:center;justify-content:center;text-align:center;font-family:'Bebas Neue','Inter',sans-serif;font-size:22px;line-height:1;color:#1f2937;letter-spacing:0;font-weight:900;text-shadow:0 1px 0 rgba(255,255,255,.8);}
 .ko-round-label small{display:block;margin-top:3px;font-family:'Inter',sans-serif;font-size:11px;line-height:1;color:#4b5563;font-weight:900;}
 .ko-round-label.final{color:var(--gold);}
-.ko-line{fill:none;stroke:rgba(63,83,70,.56);stroke-width:7;stroke-linejoin:round;stroke-linecap:square;filter:drop-shadow(0 1px 2px rgba(255,255,255,.6));}
+.ko-line{fill:none;stroke:rgba(63,83,70,.58);stroke-width:6;stroke-linejoin:round;stroke-linecap:square;filter:drop-shadow(0 1px 2px rgba(255,255,255,.6));}
 .ko-line.on{stroke:#ff140f;filter:drop-shadow(0 0 7px rgba(255,20,15,.65));}
 .ko-line.third{stroke:rgba(63,83,70,.36);stroke-width:5;stroke-dasharray:10 8;}
 .ko-line.champion{stroke-width:8;}
@@ -860,12 +867,14 @@ html,body{background:#ddd8ce;color:var(--text);font-family:'Inter',sans-serif;mi
 .ko-match-node:disabled{opacity:1;}
 .ko-match-node.predicted{box-shadow:0 0 0 2px rgba(255,20,15,.42),0 10px 24px rgba(0,0,0,.25);}
 .ko-match-node.actual{box-shadow:0 0 0 2px rgba(212,150,10,.7),0 10px 24px rgba(0,0,0,.25);}
-.ko-match-meta{min-height:38px;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px;align-items:center;padding:4px 7px;background:linear-gradient(90deg,rgba(17,24,39,.88),rgba(30,41,59,.82));color:#fff;font-size:9px;font-weight:900;line-height:1;letter-spacing:.15px;}
-.ko-match-meta-main{min-width:0;display:flex;flex-direction:column;gap:2px;}
+.ko-match-meta{min-height:48px;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px;align-items:center;padding:5px 7px;background:linear-gradient(90deg,rgba(17,24,39,.88),rgba(30,41,59,.82));color:#fff;font-size:9px;font-weight:900;line-height:1;letter-spacing:.15px;}
+.ko-match-meta-main{min-width:0;display:flex;flex-direction:column;gap:3px;}
+.ko-match-kind{display:inline-flex;align-items:center;justify-content:center;width:fit-content;max-width:100%;padding:2px 7px;border-radius:999px;background:var(--gold);color:#111;font-size:9px;font-weight:1000;line-height:1;}
+.ko-match-kind.third{background:rgba(255,255,255,.18);color:#facc15;border:1px solid rgba(250,204,21,.42);}
 .ko-match-time{min-width:0;display:flex;align-items:baseline;gap:4px;flex-wrap:wrap;white-space:normal;line-height:1.05;}
 .ko-match-time b{font:inherit;color:#fff;}
 .ko-match-time small{font:inherit;font-size:8.5px;color:rgba(255,255,255,.9);}
-.ko-match-stadium{min-width:0;font-style:normal;color:#facc15;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;white-space:normal;line-height:1.15;text-align:left;}
+.ko-match-stadium{min-width:0;font-style:normal;color:#facc15;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;white-space:normal;line-height:1.1;text-align:left;}
 .ko-match-status{justify-self:end;align-self:center;min-width:74px;}
 .ko-teams-line{height:54px;display:grid;grid-template-columns:minmax(0,1fr) 58px minmax(0,1fr);align-items:stretch;background:linear-gradient(180deg,rgba(255,255,255,.78),rgba(230,230,230,.86));}
 .ko-team-block{min-width:0;display:grid;grid-template-columns:18px minmax(0,1fr) auto;align-items:center;column-gap:5px;padding:7px 6px 6px;border-right:1px solid rgba(0,0,0,.08);position:relative;}
@@ -915,12 +924,17 @@ html,body{background:#ddd8ce;color:var(--text);font-family:'Inter',sans-serif;mi
   .ko-toolbar{grid-template-columns:1fr;padding:10px 12px 0;}
   .ko-summary-card{padding:10px 12px;}
   .ko-summary-card strong{font-size:30px;}
-  .ko-podium-panel{margin:8px 12px 0;padding:9px;}
+  .ko-sticky-stage{padding-top:6px;}
+  .ko-podium-panel{margin:0 12px;padding:9px;}
   .ko-podium-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;}
   .ko-podium-pick{padding:7px;gap:5px;border-radius:11px;}
   .ko-podium-label{font-size:9px;}
   .ko-podium-pick select{font-size:10px;padding:7px 6px;border-radius:8px;}
   .ko-podium-note{font-size:9px;}
+  .ko-round-band{height:46px;margin-top:8px;}
+  .ko-round-band-inner{height:46px;}
+  .ko-round-band-label{top:7px;height:30px;font-size:19px;}
+  .ko-round-band-label small{font-size:9px;}
   .ko-scroll{margin-top:8px;}
   .ko-round-label{font-size:19px;}
   .ko-match-node{border-radius:7px;}
@@ -985,6 +999,7 @@ html,body{background:#ddd8ce;color:var(--text);font-family:'Inter',sans-serif;mi
   .ko-scrollbar-proxy::-webkit-scrollbar{height:14px;}
   .ko-scrollbar-proxy::-webkit-scrollbar-track{background:rgba(255,255,255,.75);border-radius:999px;}
   .ko-scrollbar-proxy::-webkit-scrollbar-thumb{background:linear-gradient(90deg,var(--accent),var(--gold));border-radius:999px;border:3px solid rgba(255,255,255,.82);}
+  .ko-sticky-stage{top:65px;}
   .nitem{
     flex:0 0 auto;
     flex-direction:row;
@@ -1722,6 +1737,10 @@ function koWinnerSideForMatch(match,picks={},results={}){
   const pred=normalizeKoRecord(picks?.[match.id]);
   return koRecordWinnerSide(pred);
 }
+function koOfficialWinnerSideForMatch(match,results={}){
+  if(!match)return null;
+  return koRecordWinnerSide(normalizeKoRecord(results?.[match.id]));
+}
 function koResolvedTeam(roundId,matchIndex,side,picks={},results={}){
   const round = KO_ROUNDS.find(r=>r.id===roundId);
   if(!round) return null;
@@ -1738,6 +1757,23 @@ function koResolvedTeam(roundId,matchIndex,side,picks={},results={}){
   if(!winnerSide || !sourceMatch) return sourceLabel;
   const resolvedSide = sourceRef.loser ? (winnerSide==='home'?'away':'home') : winnerSide;
   return koResolvedTeam(sourceRef.round, sourceRef.index, resolvedSide, picks, results) || sourceLabel;
+}
+function koOfficialResolvedTeam(roundId,matchIndex,side,results={}){
+  const round = KO_ROUNDS.find(r=>r.id===roundId);
+  if(!round) return null;
+  const match = round.matches[matchIndex];
+  if(!match) return null;
+  if(roundId==='R32'){
+    return side==='home'?match.home:match.away;
+  }
+  const sourceRef = koSourceRef(roundId,matchIndex,side);
+  if(!sourceRef) return side==='home'?match.home:match.away;
+  const sourceLabel = match[side];
+  const sourceMatch = koGetMatch(sourceRef.round,sourceRef.index);
+  const winnerSide = koOfficialWinnerSideForMatch(sourceMatch,results);
+  if(!winnerSide || !sourceMatch) return sourceLabel;
+  const resolvedSide = sourceRef.loser ? (winnerSide==='home'?'away':'home') : winnerSide;
+  return koOfficialResolvedTeam(sourceRef.round, sourceRef.index, resolvedSide, results) || sourceLabel;
 }
 function koWinnerLabel(roundId,matchIndex,picks={},results={}){
   const match=koGetMatch(roundId,matchIndex);
@@ -3132,6 +3168,9 @@ function BracketScreen({user,syncToken}){
   const [status,setStatus]=useState('');
   const scrollRef=useRef(null);
   const scrollProxyRef=useRef(null);
+  const labelScrollRef=useRef(null);
+  const stickyStageRef=useRef(null);
+  const [stickyHeight,setStickyHeight]=useState(0);
   const uiSettings=gs('settings',DEFAULT_UI_SETTINGS);
   const timeZone=uiSettings.timeZone||DEFAULT_UI_SETTINGS.timeZone;
   const myPreds=koPreds[user.id]||{};
@@ -3139,9 +3178,11 @@ function BracketScreen({user,syncToken}){
   const canEditKo=!user.isGuest;
   const settings={...DEFAULT_ROOM_SETTINGS,...gr(roomId,'settings',{})};
   const boardRounds=KO_ROUNDS.filter((round)=>['R32','R16','QF','SF','F'].includes(round.id));
-  const BOARD={x:24,y:50,w:260,h:126,gapX:314,gapY:150};
+  const BOARD={x:24,y:50,w:260,h:136,gapX:314,gapY:156};
   const BOARD_WIDTH=BOARD.x+BOARD.gapX*5+BOARD.w+190;
   const BOARD_HEIGHT=BOARD.y+BOARD.gapY*16+230;
+  const R32_VISUAL_ORDER=[1,4,0,2,10,11,8,9,3,5,6,7,13,15,12,14];
+  const R32_VISUAL_SLOT=R32_VISUAL_ORDER.reduce((acc,index,slot)=>({...acc,[index]:slot}),{});
   const podium=koPodiumPredictions(myPreds,{});
   const podiumCandidates=koPodiumCandidates(myPreds,results);
   const champion=podium.champion;
@@ -3150,6 +3191,19 @@ function BracketScreen({user,syncToken}){
     setKoPreds(gr(roomId,'koPreds',{}));
     setResults(gr(roomId,'results',{}));
   },[syncToken,roomId]);
+  useEffect(()=>{
+    const measure=()=>setStickyHeight(Math.ceil(stickyStageRef.current?.getBoundingClientRect().height||0));
+    measure();
+    const raf=requestAnimationFrame(measure);
+    window.addEventListener('resize',measure);
+    const observer=window.ResizeObserver&&stickyStageRef.current?new ResizeObserver(measure):null;
+    if(observer&&stickyStageRef.current)observer.observe(stickyStageRef.current);
+    return()=>{
+      cancelAnimationFrame(raf);
+      window.removeEventListener('resize',measure);
+      observer?.disconnect();
+    };
+  },[]);
 
   function roundX(roundId){
     if(roundId==='3RD')return BOARD.x + 4 * BOARD.gapX;
@@ -3157,8 +3211,8 @@ function BracketScreen({user,syncToken}){
     return BOARD.x + Math.max(0,index) * BOARD.gapX;
   }
   function centerY(roundId,index){
-    if(roundId==='3RD')return BOARD.y + BOARD.gapY*16 + 66;
-    if(roundId==='R32')return BOARD.y + index*BOARD.gapY + BOARD.h/2;
+    if(roundId==='3RD')return centerY('F',0) + BOARD.h + 24;
+    if(roundId==='R32')return BOARD.y + (R32_VISUAL_SLOT[index]??index)*BOARD.gapY + BOARD.h/2;
     const homeRef=koSourceRef(roundId,index,'home');
     const awayRef=koSourceRef(roundId,index,'away');
     if(!homeRef||!awayRef)return BOARD.y + BOARD.h/2;
@@ -3167,16 +3221,24 @@ function BracketScreen({user,syncToken}){
     return (a+b)/2;
   }
   function cardY(roundId,index){return centerY(roundId,index)-BOARD.h/2;}
-  function sideY(roundId,index,side){return centerY(roundId,index);}
+  function routeY(roundId,index,side){
+    const base=centerY(roundId,index);
+    if(side==='home')return base-BOARD.h*0.2;
+    if(side==='away')return base+BOARD.h*0.2;
+    return base;
+  }
   function syncBracketScroll(source){
     const scroller=scrollRef.current;
     const proxy=scrollProxyRef.current;
+    const labels=labelScrollRef.current;
     if(!scroller||!proxy)return;
     if(source==='proxy'){
       if(Math.abs(scroller.scrollLeft-proxy.scrollLeft)>1)scroller.scrollLeft=proxy.scrollLeft;
     }else{
       if(Math.abs(proxy.scrollLeft-scroller.scrollLeft)>1)proxy.scrollLeft=scroller.scrollLeft;
     }
+    const left=source==='proxy'?proxy.scrollLeft:scroller.scrollLeft;
+    if(labels&&Math.abs(labels.scrollLeft-left)>1)labels.scrollLeft=left;
   }
   function matchPoints(match,predsForUser=myPreds){
     const pred=normalizeKoRecord(predsForUser[match.id]);
@@ -3250,36 +3312,30 @@ function BracketScreen({user,syncToken}){
   }
   function renderLines(){
     const lines=[];
-    ['R32','R16','QF','SF'].forEach((roundId)=>{
+    ['R16','QF','SF','F'].forEach((roundId)=>{
       const round=koGetRound(roundId);
       round.matches.forEach((match,index)=>{
-        const target=koFindTarget(roundId,index);
-        if(!target||target.roundId==='3RD')return;
-        const winnerSide=koWinnerSideForMatch(match,myPreds,results);
-        const x1=roundX(roundId)+BOARD.w;
-        const y1=winnerSide?sideY(roundId,index,winnerSide):centerY(roundId,index);
-        const x2=roundX(target.roundId);
-        const y2=sideY(target.roundId,target.index,target.side);
+        const homeRef=koSourceRef(roundId,index,'home');
+        const awayRef=koSourceRef(roundId,index,'away');
+        if(!homeRef||!awayRef)return;
+        const x1=roundX(homeRef.round)+BOARD.w;
+        const x2=roundX(roundId);
         const mid=x1+(x2-x1)/2;
-        lines.push(<path key={`${roundId}-${index}`} className={`ko-line${winnerSide?' on':''}`} d={`M ${x1} ${y1} H ${mid} V ${y2} H ${x2}`}/>);
+        const yHome=centerY(homeRef.round,homeRef.index);
+        const yAway=centerY(awayRef.round,awayRef.index);
+        const yTarget=centerY(roundId,index);
+        const homeWinner=koOfficialWinnerSideForMatch(koGetMatch(homeRef.round,homeRef.index),results);
+        const awayWinner=koOfficialWinnerSideForMatch(koGetMatch(awayRef.round,awayRef.index),results);
+        const active=homeWinner||awayWinner;
+        const d=`M ${x1} ${yHome} H ${mid} M ${x1} ${yAway} H ${mid} M ${mid} ${yHome} V ${yAway} M ${mid} ${yTarget} H ${x2}`;
+        lines.push(<path key={`${roundId}-${index}`} className={`ko-line${active?' on':''}`} d={d}/>);
       });
     });
     const finalMatch=koGetMatch('F',0);
-    const finalWinner=koWinnerSideForMatch(finalMatch,myPreds,results);
+    const finalWinner=koOfficialWinnerSideForMatch(finalMatch,results);
     const finalX=roundX('F')+BOARD.w;
-    const finalY=finalWinner?sideY('F',0,finalWinner):centerY('F',0);
+    const finalY=finalWinner?routeY('F',0,finalWinner):centerY('F',0);
     lines.push(<path key="champion-line" className={`ko-line champion${finalWinner?' on':''}`} d={`M ${finalX} ${finalY} H ${finalX+150}`}/>);
-    [0,1].forEach((index)=>{
-      const match=koGetMatch('SF',index);
-      const winnerSide=koWinnerSideForMatch(match,myPreds,results);
-      const loserSide=winnerSide==='home'?'away':winnerSide==='away'?'home':null;
-      const x1=roundX('SF')+BOARD.w;
-      const y1=loserSide?sideY('SF',index,loserSide):centerY('SF',index);
-      const x2=roundX('F');
-      const y2=sideY('3RD',0,index===0?'home':'away');
-      const mid=x1+(x2-x1)/2;
-      lines.push(<path key={`third-${index}`} className="ko-line third" d={`M ${x1} ${y1} H ${mid} V ${y2} H ${x2}`}/>);
-    });
     return lines;
   }
   function renderTeamBlock(roundId,index,side,label,winnerSide){
@@ -3314,7 +3370,7 @@ function BracketScreen({user,syncToken}){
       {id:'R16',label:'R16'},
       {id:'QF',label:'準々決勝'},
       {id:'SF',label:'準決勝'},
-      {id:'F',label:'決勝',sub:'（3位決定戦）',final:true},
+      {id:'F',label:'決勝',final:true},
     ].map((round)=>(
       <div
         key={`round-label-${round.id}`}
@@ -3325,6 +3381,30 @@ function BracketScreen({user,syncToken}){
         {round.sub&&<small>{round.sub}</small>}
       </div>
     ));
+  }
+  function renderStickyRoundBand(){
+    return (
+      <div className="ko-round-band" ref={labelScrollRef}>
+        <div className="ko-round-band-inner" style={{width:BOARD_WIDTH}}>
+          {[
+            {id:'R32',label:'R32'},
+            {id:'R16',label:'R16'},
+            {id:'QF',label:'準々決勝'},
+            {id:'SF',label:'準決勝'},
+            {id:'F',label:'決勝',sub:'3位決定戦は直下',final:true},
+          ].map((round)=>(
+            <div
+              key={`sticky-round-label-${round.id}`}
+              className={`ko-round-band-label${round.final?' final':''}`}
+              style={{left:roundX(round.id),width:BOARD.w}}
+            >
+              <span>{round.label}</span>
+              {round.sub&&<small>{round.sub}</small>}
+            </div>
+          ))}
+        </div>
+      </div>
+    );
   }
   function renderRoundGuides(){
     return ['R32','R16','QF','SF','F'].map((roundId)=>(
@@ -3340,22 +3420,23 @@ function BracketScreen({user,syncToken}){
     const actual=normalizeKoRecord(results[match.id]);
     const pred=normalizeKoRecord(myPreds[match.id]);
     const oppPred=oppId?normalizeKoRecord(oppPreds[match.id]):null;
-    const active=actual||pred;
-    const winnerSide=koRecordWinnerSide(active);
-    const homeLabel=koResolvedTeam(round.id,index,'home',myPreds,results)||match.home;
-    const awayLabel=koResolvedTeam(round.id,index,'away',myPreds,results)||match.away;
+    const winnerSide=koRecordWinnerSide(actual);
+    const homeLabel=koOfficialResolvedTeam(round.id,index,'home',results)||match.home;
+    const awayLabel=koOfficialResolvedTeam(round.id,index,'away',results)||match.away;
     const pts=matchPoints(match,myPreds);
     const koJudgment=getKoJudgment(pred,actual);
+    const matchKindLabel=round.id==='F'?'決勝':round.id==='3RD'?'3位決定戦':'';
     return(
       <button
         key={match.id}
-        className={`ko-match-node ${round.id.toLowerCase()}${actual?' actual':pred?' predicted':''}${canEditKo?'':' readonly'}`}
+        className={`ko-match-node ${round.id.toLowerCase()}${round.id==='3RD'?' third-place':''}${actual?' actual':pred?' predicted':''}${canEditKo?'':' readonly'}`}
         style={{left:roundX(round.id),top:cardY(round.id,index),width:BOARD.w,height:BOARD.h}}
         onClick={()=>openMatch(round,index)}
         disabled={!canEditKo}
       >
         <div className="ko-match-meta">
           <div className="ko-match-meta-main">
+            {matchKindLabel&&<span className={`ko-match-kind${round.id==='3RD'?' third':''}`}>{matchKindLabel}</span>}
             <span className="ko-match-time">
               <b>{match.matchNo?`M${match.matchNo}`:'MATCH'}</b>
               <small>{formatMatchDate(match.date,match.kickoff,timeZone)}</small>
@@ -3378,30 +3459,34 @@ function BracketScreen({user,syncToken}){
   }
 
   return(
-    <div className="page page-enter">
+    <div className="page">
       <div className="ko-nav-spacer" aria-hidden="true"></div>
-      <div className="ko-podium-panel">
-        <div className="ko-podium-grid">
-          {[
-            {key:'champion',label:'優勝予想',enabled:true,points:settings.koChampionPts},
-            {key:'runnerUp',label:'2位予想',enabled:settings.koRunnerUpEnabled,points:settings.koRunnerUpPts},
-            {key:'third',label:'3位予想',enabled:settings.koThirdPlaceEnabled,points:settings.koThirdPlacePts},
-          ].map(item=>(
-            <div className={`ko-podium-pick${item.enabled?'':' off'}`} key={item.key}>
-              <div className="ko-podium-label"><span>{item.label}</span></div>
-              <select
-                value={podium[item.key]||''}
-                disabled={!item.enabled||!canEditKo}
-                onChange={(e)=>updatePodium(item.key,e.target.value)}
-              >
-                <option value="">{item.enabled?'未選択':'設定で無効'}</option>
-                {podiumCandidates.map(candidate=><option key={`${item.key}-${candidate}`} value={candidate}>{koTeamName(candidate)}</option>)}
-              </select>
-              <div className="ko-podium-note">{!item.enabled?'採点しない場合はこのままでOK':canEditKo?`的中で +${item.points}pt`:'ゲストは閲覧のみ'}</div>
-            </div>
-          ))}
+      <div className="ko-sticky-stage" ref={stickyStageRef}>
+        <div className="ko-podium-panel">
+          <div className="ko-podium-grid">
+            {[
+              {key:'champion',label:'優勝予想',enabled:true,points:settings.koChampionPts},
+              {key:'runnerUp',label:'2位予想',enabled:settings.koRunnerUpEnabled,points:settings.koRunnerUpPts},
+              {key:'third',label:'3位予想',enabled:settings.koThirdPlaceEnabled,points:settings.koThirdPlacePts},
+            ].map(item=>(
+              <div className={`ko-podium-pick${item.enabled?'':' off'}`} key={item.key}>
+                <div className="ko-podium-label"><span>{item.label}</span></div>
+                <select
+                  value={podium[item.key]||''}
+                  disabled={!item.enabled||!canEditKo}
+                  onChange={(e)=>updatePodium(item.key,e.target.value)}
+                >
+                  <option value="">{item.enabled?'未選択':'設定で無効'}</option>
+                  {podiumCandidates.map(candidate=><option key={`${item.key}-${candidate}`} value={candidate}>{koTeamName(candidate)}</option>)}
+                </select>
+                <div className="ko-podium-note">{!item.enabled?'採点しない場合はこのままでOK':canEditKo?`的中で +${item.points}pt`:'ゲストは閲覧のみ'}</div>
+              </div>
+            ))}
+          </div>
         </div>
+        {renderStickyRoundBand()}
       </div>
+      <div className="ko-sticky-spacer" style={{height:stickyHeight}} aria-hidden="true"></div>
       <div className="ko-scroll" ref={scrollRef} onScroll={()=>syncBracketScroll('board')}>
         <div className="ko-canvas" style={{width:BOARD_WIDTH,height:BOARD_HEIGHT}}>
           {renderRoundGuides()}
@@ -3436,8 +3521,8 @@ function BracketScreen({user,syncToken}){
             <div className="ko-modal-teams">
               {['home','away'].map((side)=>(
                 <div className="ko-modal-team" key={side}>
-                  <TeamFlag team={koResolvedTeam(editing.roundId,editing.index,side,myPreds,results)||editing.match[side]}/>
-                  <span>{koTeamName(koResolvedTeam(editing.roundId,editing.index,side,myPreds,results)||editing.match[side])}</span>
+                  <TeamFlag team={koOfficialResolvedTeam(editing.roundId,editing.index,side,results)||editing.match[side]}/>
+                  <span>{koTeamName(koOfficialResolvedTeam(editing.roundId,editing.index,side,results)||editing.match[side])}</span>
                 </div>
               ))}
             </div>

@@ -450,8 +450,21 @@ function serveHtml(res) {
   const boot = `<script>window.__WC26_BOOTSTRAP__=${JSON.stringify(bootstrapPayload())};</script>`;
   html = html.replace(
     '<script src="https://unpkg.com/react@18.3.1/umd/react.development.js"',
-    `${boot}\n<script src="https://unpkg.com/react@18.3.1/umd/react.development.js"`,
+    `${boot}\n<script src="/react.development.js"`,
   );
+  html = html
+    .replace(
+      '<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js"',
+      '<script src="/react-dom.development.js"',
+    )
+    .replace(
+      '<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js"',
+      '<script src="/babel.min.js"',
+    )
+    .replace(
+      '<script src="https://cdn.jsdelivr.net/npm/@koozaki/romaji-conv@2.0.35/dist/romaji-conv.js"',
+      '<script src="/romaji-conv.js"',
+    );
   res.writeHead(200, {
     'Content-Type': 'text/html; charset=utf-8',
     'Cache-Control': 'no-store',
@@ -462,6 +475,9 @@ function serveHtml(res) {
 function serveStaticFile(res, filePath) {
   const ext = path.extname(filePath).toLowerCase();
   const contentType = {
+    '.js': 'application/javascript; charset=utf-8',
+    '.json': 'application/json; charset=utf-8',
+    '.css': 'text/css; charset=utf-8',
     '.gif': 'image/gif',
     '.svg': 'image/svg+xml',
     '.png': 'image/png',

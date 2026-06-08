@@ -504,7 +504,20 @@
       "predictionsV2": {},
       "results": {},
       "locked": {},
-      "koPreds": {},
+      "koPreds": {
+        "u-1780734129703-wbcx": {
+          "R32-1": {
+            "home": 1,
+            "away": 0,
+            "winnerSide": "home",
+            "decidedBy": "REG",
+            "homePen": null,
+            "awayPen": null,
+            "locked": true,
+            "updatedAt": "2026-06-08T14:09:49.449Z"
+          }
+        }
+      },
       "settings": {
         "resultPts": 1,
         "exactPts": 2,
