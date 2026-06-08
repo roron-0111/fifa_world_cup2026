@@ -116,6 +116,14 @@ test('knockout bracket zoom is user adjustable without changing board geometry',
   );
   assert.match(
     html,
+    /className="ko-round-band-inner" style=\{\{width:BOARD_WIDTH\*canvasZoom\}\}/,
+  );
+  assert.match(
+    html,
+    /style=\{\{left:roundX\(round\.id\)\*canvasZoom,width:BOARD\.w\*canvasZoom\}\}/,
+  );
+  assert.match(
+    html,
     /\.ko-zoom-toggle\{position:fixed;right:16px;bottom:72px;/,
   );
   assert.doesNotMatch(

@@ -3396,7 +3396,7 @@ function BracketScreen({user,syncToken}){
   function renderStickyRoundBand(){
     return (
       <div className="ko-round-band" ref={labelScrollRef}>
-        <div className="ko-round-band-inner" style={{width:BOARD_WIDTH}}>
+        <div className="ko-round-band-inner" style={{width:BOARD_WIDTH*canvasZoom}}>
           {[
             {id:'R32',label:'R32'},
             {id:'R16',label:'R16'},
@@ -3407,7 +3407,7 @@ function BracketScreen({user,syncToken}){
             <div
               key={`sticky-round-label-${round.id}`}
               className={`ko-round-band-label${round.final?' final':''}`}
-              style={{left:roundX(round.id),width:BOARD.w}}
+              style={{left:roundX(round.id)*canvasZoom,width:BOARD.w*canvasZoom}}
             >
               <span>{round.label}</span>
               {round.sub&&<small>{round.sub}</small>}
