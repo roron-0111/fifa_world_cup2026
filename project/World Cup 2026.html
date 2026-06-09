@@ -4107,7 +4107,7 @@ function App(){
       }catch{}
     };
     sync();
-    const timer=setInterval(sync,4000);
+    const timer=setInterval(sync,10000);
     return()=>{alive=false;clearInterval(timer);};
   },[user?.roomId]);
 

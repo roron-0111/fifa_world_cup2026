@@ -127,6 +127,8 @@ test('static hosting uses shared Firestore rooms instead of per-device local roo
   assert.match(html, /syncStaticSharedRoomState\(roomId,\(state\)=>\{state\[key\]=v;\}\)/);
   assert.match(html, /syncStaticSharedRoomState\(roomId,\(state\)=>\{[\s\S]*?state\.predictionsV2\[userId\]\[matchId\]=prediction;/);
   assert.match(html, /if\(STATIC_SHARED_ROOM_BACKEND&&!HAS_BACKEND\)\{[\s\S]*?const shared=await fetchSharedRoomPayload\(code\);/);
+  assert.match(html, /const timer=setInterval\(sync,10000\);/);
+  assert.doesNotMatch(html, /setInterval\(sync,4000\)/);
 });
 
 test('pending prediction summary includes opponent state', () => {
