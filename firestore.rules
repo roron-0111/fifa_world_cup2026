@@ -1,8 +1,18 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Firebase 移行時の最小テンプレート。
-    // 実運用では room / user / prediction ごとに細かく権限制御する。
+    match /rooms/{roomCode} {
+      allow read: if true;
+      allow create, update: if isValidRoomPayload();
+      allow delete: if false;
+    }
+
+    function isValidRoomPayload() {
+      return request.resource.data.keys().hasOnly(['payload', 'updatedAt'])
+        && request.resource.data.payload is string
+        && request.resource.data.payload.size() < 900000;
+    }
+
     match /{document=**} {
       allow read, write: if false;
     }

@@ -118,6 +118,17 @@ test('auth page offers recent room recovery', () => {
   assert.match(html, /function useRecentProfile\(profile\)/);
 });
 
+test('static hosting uses shared Firestore rooms instead of per-device local rooms', () => {
+  assert.match(html, /const STATIC_SHARED_ROOM_BACKEND=!HAS_BACKEND&&!!FIREBASE_PROJECT_ID;/);
+  assert.match(html, /async function fetchSharedRoomPayload\(roomCode\)/);
+  assert.match(html, /async function saveSharedRoomPayload\(payload\)/);
+  assert.match(html, /function applySharedRoomPayload\(payload\)/);
+  assert.match(html, /if\(STATIC_SHARED_ROOM_BACKEND\)\{[\s\S]*?const shared=normalizeSharedRoomPayload\(await fetchSharedRoomPayload\(code\),code\);/);
+  assert.match(html, /syncStaticSharedRoomState\(roomId,\(state\)=>\{state\[key\]=v;\}\)/);
+  assert.match(html, /syncStaticSharedRoomState\(roomId,\(state\)=>\{[\s\S]*?state\.predictionsV2\[userId\]\[matchId\]=prediction;/);
+  assert.match(html, /if\(STATIC_SHARED_ROOM_BACKEND&&!HAS_BACKEND\)\{[\s\S]*?const shared=await fetchSharedRoomPayload\(code\);/);
+});
+
 test('pending prediction summary includes opponent state', () => {
   assert.match(html, /const oppPredCount=oppId\?Object\.keys\(preds\[oppId\]\|\|\{\}\)\.length:0/);
   assert.match(html, /const oppGroupMiss=oppId\?GROUP_MATCHES\.length-oppPredCount:0/);

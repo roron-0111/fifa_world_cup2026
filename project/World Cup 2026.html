@@ -1973,11 +1973,88 @@ function applyAccent(name){
 // ===== STORAGE =====
 const SK='wc26_';
 const PREDICTION_STORE_KEY='predictionsV2';
+const FIREBASE_PROJECT_ID='fifa-world-cup2026';
+const STATIC_SHARED_ROOM_BACKEND=!HAS_BACKEND&&!!FIREBASE_PROJECT_ID;
 const gs=(k,d)=>{try{const v=localStorage.getItem(SK+k);return v!=null?JSON.parse(v):d;}catch{return d;}};
 const ss=(k,v)=>localStorage.setItem(SK+k,JSON.stringify(v));
 function roomDataKey(roomId,key){return `${key}:${roomId}`;}
 function gr(roomId,key,d){return gs(roomDataKey(roomId,key),d);}
 function grPred(roomId,d){return gr(roomId,PREDICTION_STORE_KEY,d);}
+function normalizeRoomCode(code){return String(code||'').trim().toUpperCase();}
+function makeClientRoomState(){
+  return {predictionsV2:{},results:{},locked:{},koPreds:{},settings:{...DEFAULT_ROOM_SETTINGS}};
+}
+function normalizeSharedRoomPayload(payload,roomCode=''){
+  const code=normalizeRoomCode(payload?.room?.code||roomCode||genCode());
+  const room={
+    id:payload?.room?.id||`room-${code}`,
+    code,
+    members:Array.isArray(payload?.room?.members)?[...new Set(payload.room.members)]:[],
+    maxMembers:Number(payload?.room?.maxMembers||2),
+  };
+  const state={...makeClientRoomState(),...(payload?.state||{})};
+  state.settings={...DEFAULT_ROOM_SETTINGS,...(state.settings||{})};
+  return {room,users:Array.isArray(payload?.users)?payload.users:[],state};
+}
+function firestoreRoomDocId(roomCode){
+  return normalizeRoomCode(roomCode).replace(/[^A-Z0-9_-]/g,'_');
+}
+function firestoreRoomDocUrl(roomCode){
+  return `https://firestore.googleapis.com/v1/projects/${FIREBASE_PROJECT_ID}/databases/(default)/documents/rooms/${encodeURIComponent(firestoreRoomDocId(roomCode))}`;
+}
+async function fetchSharedRoomPayload(roomCode){
+  if(!STATIC_SHARED_ROOM_BACKEND)return null;
+  const res=await fetch(firestoreRoomDocUrl(roomCode),{cache:'no-store'});
+  if(res.status===404)return null;
+  if(!res.ok)throw new Error('共有ルームを取得できませんでした');
+  const doc=await res.json();
+  const raw=doc?.fields?.payload?.stringValue;
+  return raw?normalizeSharedRoomPayload(JSON.parse(raw),roomCode):null;
+}
+async function saveSharedRoomPayload(payload){
+  if(!STATIC_SHARED_ROOM_BACKEND)return payload;
+  const normalized=normalizeSharedRoomPayload(payload,payload?.room?.code);
+  const res=await fetch(firestoreRoomDocUrl(normalized.room.code),{
+    method:'PATCH',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({fields:{payload:{stringValue:JSON.stringify(normalized)},updatedAt:{timestampValue:new Date().toISOString()}}}),
+  });
+  if(!res.ok)throw new Error('共有ルームを保存できませんでした');
+  return normalized;
+}
+function applySharedRoomPayload(payload){
+  const normalized=normalizeSharedRoomPayload(payload,payload?.room?.code);
+  const rooms=[...gs('rooms',[])];
+  const roomIndex=rooms.findIndex(r=>r.id===normalized.room.id||normalizeRoomCode(r.code)===normalized.room.code);
+  if(roomIndex>=0)rooms[roomIndex]=normalized.room;else rooms.push(normalized.room);
+  ss('rooms',rooms);
+  const users=[...gs('users',[])];
+  normalized.users.forEach((nextUser)=>{
+    const index=users.findIndex(u=>u.id===nextUser.id);
+    if(index>=0)users[index]={...users[index],...nextUser};else users.push(nextUser);
+  });
+  ss('users',users);
+  ss(roomDataKey(normalized.room.id,PREDICTION_STORE_KEY),normalized.state.predictionsV2||{});
+  ss(roomDataKey(normalized.room.id,'results'),normalized.state.results||{});
+  ss(roomDataKey(normalized.room.id,'locked'),normalized.state.locked||{});
+  ss(roomDataKey(normalized.room.id,'koPreds'),normalized.state.koPreds||{});
+  ss(roomDataKey(normalized.room.id,'settings'),normalized.state.settings||DEFAULT_ROOM_SETTINGS);
+  notifyStateChange();
+  return normalized;
+}
+function localRoomCodeForId(roomId){
+  return normalizeRoomCode((gs('rooms',[]).find(r=>r.id===roomId)||{}).code);
+}
+async function syncStaticSharedRoomState(roomId,mutator){
+  if(!STATIC_SHARED_ROOM_BACKEND||!roomId)return null;
+  const code=localRoomCodeForId(roomId);
+  if(!code)return null;
+  const payload=normalizeSharedRoomPayload(await fetchSharedRoomPayload(code),code);
+  mutator(payload.state,payload);
+  const saved=await saveSharedRoomPayload(payload);
+  applySharedRoomPayload(saved);
+  return saved;
+}
 async function api(path, body){
   if(!HAS_BACKEND)return null;
   try{
@@ -1996,8 +2073,14 @@ function notifyStateChange(){
 }
 function syncRoomState(roomId,key,v){
   const user=gs('currentUser',null);
-  if(!HAS_BACKEND||!roomId||!user?.id||user?.isGuest)return;
-  api('/api/state',{roomId,userId:user.id,key,value:v});
+  if(!roomId||!user?.id||user?.isGuest)return;
+  if(HAS_BACKEND){
+    api('/api/state',{roomId,userId:user.id,key,value:v});
+    return;
+  }
+  if(STATIC_SHARED_ROOM_BACKEND){
+    syncStaticSharedRoomState(roomId,(state)=>{state[key]=v;}).catch(()=>{});
+  }
 }
 function sr(roomId,key,v){
   ss(roomDataKey(roomId,key),v);
@@ -2017,6 +2100,12 @@ function savePrediction(roomId,userId,matchId,prediction){
       }
       notifyStateChange();
     });
+  }else if(STATIC_SHARED_ROOM_BACKEND&&roomId&&userId&&user&&!user.isGuest){
+    syncStaticSharedRoomState(roomId,(state)=>{
+      state.predictionsV2 ||= {};
+      state.predictionsV2[userId] ||= {};
+      state.predictionsV2[userId][matchId]=prediction;
+    }).catch(()=>notifyStateChange());
   }else{
     notifyStateChange();
   }
@@ -2569,6 +2658,40 @@ function AuthScreen({onAuth}){
       ss('currentUser',result.user);
       onAuth(result.user);
       return;
+    }
+    if(STATIC_SHARED_ROOM_BACKEND){
+      const code=normalizeRoomCode(form.roomCode)||genCode();
+      try{
+        const shared=normalizeSharedRoomPayload(await fetchSharedRoomPayload(code),code);
+        const reuseMemberCode=canReuse?String(savedProfile?.memberCode||'').trim().toUpperCase():'';
+        const existing=(reuseMemberCode&&shared.users.find(u=>String(u.memberCode||'').toUpperCase()===reuseMemberCode&&u.roomId===shared.room.id))||null;
+        if(shared.room.members.length>=shared.room.maxMembers&&!existing){setErr('このルームは満員です');return;}
+        let user=existing||null;
+        if(user){
+          user={...user,username:rawName,roomId:shared.room.id};
+          shared.users=shared.users.map(u=>u.id===user.id?user:u);
+          if(!shared.room.members.includes(user.id))shared.room.members.push(user.id);
+        }else{
+          let memberCode;
+          do{
+            memberCode=Math.random().toString(36).slice(2,6).toUpperCase();
+          }while(shared.users.some(u=>String(u.memberCode||'').toUpperCase()===memberCode));
+          user={id:'u-'+Date.now()+'-'+Math.random().toString(36).slice(2,6),username:rawName,memberCode,roomId:shared.room.id};
+          shared.users.push(user);
+          shared.room.members.push(user.id);
+        }
+        const saved=await saveSharedRoomPayload(shared);
+        applySharedRoomPayload(saved);
+        const cu={...user,roomId:saved.room.id};
+        const persisted={id:cu.id,username:cu.username,memberCode:cu.memberCode,roomId:cu.roomId,roomCode:saved.room.code};
+        ss('lastAuthUser',persisted);
+        ss('authProfiles',{...authProfiles,[`${saved.room.code}::${String(cu.username||'').toLowerCase()}`]:persisted});
+        ss('currentUser',cu);onAuth(cu);
+        return;
+      }catch(error){
+        setErr(error?.message||'共有ルームへ接続できませんでした');
+        return;
+      }
     }
     const code=(form.roomCode.trim().toUpperCase()||genCode());
     const rooms=[...gs('rooms',[])];
@@ -3944,10 +4067,19 @@ function App(){
   },[user?.roomId,user?.id]);
 
   useEffect(()=>{
-    if(!HAS_BACKEND||!user?.roomId||user?.isGuest)return;
+    if(!user?.roomId||user?.isGuest)return;
     let alive=true;
     const sync=async()=>{
       try{
+        if(STATIC_SHARED_ROOM_BACKEND&&!HAS_BACKEND){
+          const code=localRoomCodeForId(user.roomId);
+          if(!code)return;
+          const shared=await fetchSharedRoomPayload(code);
+          if(!alive||!shared)return;
+          applySharedRoomPayload(shared);
+          return;
+        }
+        if(!HAS_BACKEND)return;
         const res=await fetch(`/api/room/${encodeURIComponent(user.roomId)}`);
         if(!res.ok)return;
         const data=await res.json();
