@@ -3372,7 +3372,11 @@ function HomeScreen({user,onLogout,onManualSync,syncToken}){
       return {...meta,actual,myJudgment,oppJudgment,scoreText,myPredText,oppPredText};
     })
     .filter(Boolean)
-    .sort((a,b)=>a.order-b.order);
+    .sort((a,b)=>{
+      const bt=matchKickoffDate(b.match)?.getTime()||0;
+      const at=matchKickoffDate(a.match)?.getTime()||0;
+      return bt-at||a.order-b.order;
+    });
 
   async function applyAdminResults(){
     sessionStorage.setItem('wc26AdminToken',homeAdminToken);

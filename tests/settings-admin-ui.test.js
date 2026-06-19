@@ -91,6 +91,9 @@ test('home result judge area is reordered and scrollable', () => {
   assert.match(html, /const scoreText=scorePairText\(actual,'未反映'\);/);
   assert.match(html, /const myPredText=scorePairText\(myPred,'未予想'\);/);
   assert.match(html, /const oppPredText=scorePairText\(oppPred,'未予想'\);/);
+  assert.match(html, /const bt=matchKickoffDate\(b\.match\)\?\.getTime\(\)\|\|0;/);
+  assert.match(html, /const at=matchKickoffDate\(a\.match\)\?\.getTime\(\)\|\|0;/);
+  assert.match(html, /return bt-at\|\|a\.order-b\.order;/);
   assert.doesNotMatch(html, /<span>結果反映履歴<\/span>/);
   assert.match(html, /Webから試合結果を取得し、ポイントと判定バッジを再計算します/);
   assert.match(html, /Web取得した試合結果は既に反映済みです/);
