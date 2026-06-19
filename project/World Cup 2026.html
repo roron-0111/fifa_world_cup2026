@@ -2680,9 +2680,7 @@ function compareScorerPlayers(a,b){
 }
 function sameScorerRankBucket(a,b){
   if(scorerStatNumber(a?.worldCupGoals)!==scorerStatNumber(b?.worldCupGoals))return false;
-  if(scorerStatNumber(a?.worldCupAssists)!==scorerStatNumber(b?.worldCupAssists))return false;
-  const aMinutes=scorerMinutes(a), bMinutes=scorerMinutes(b);
-  return !(aMinutes!==null&&bMinutes!==null&&aMinutes!==bMinutes);
+  return true;
 }
 function makeScorerRankGroups(players=ALL_PLAYERS,limit=Infinity){
   const groups=[];
@@ -4342,7 +4340,7 @@ function LeaderboardScreen({user,onOpenTeam,syncToken}){
       const res=staticOnly?await refreshStaticPlayerData():await api('/api/admin/refresh-players',{adminToken:token});
       if(!res?.ok){
         if(res?.dataStatus)setDataStatus(res.dataStatus);
-        setScorerToast(res?.error||(HAS_BACKEND?'ローカルサーバーに接続できません。localhost:3000を起動してから再実行してください':'得点ランキングデータを取得できませんでした'));
+        setScorerToast(res?.error||(HAS_BACKEND?'ローカルサーバーに接続できません。localhost:3000を起動してから再実行してください':'公開済みの得点ランキングデータを再読み込みできませんでした'));
         return;
       }
       const refreshed=setPlayerDataFromResponse(res,true);
@@ -4351,13 +4349,13 @@ function LeaderboardScreen({user,onOpenTeam,syncToken}){
         const afterGenerated=res.generatedAt||'';
         const afterRanking=res.meta?.worldFootballArchiveRankingUpdatedAt||'';
         setScorerToast((afterGenerated&&afterGenerated!==beforeGenerated)||(afterRanking&&afterRanking!==beforeRanking)
-          ?'公開済みの得点ランキングデータを反映しました'
-          :'公開済みの得点ランキングデータは更新済みです');
+          ?'公開済みの得点ランキングデータを再読み込みしました'
+          :'公開済みの得点ランキングデータは変更ありません');
       }else{
         setScorerToast(refreshed?'得点ランキングデータを更新しました':'得点ランキングデータを取得できませんでした');
       }
     }catch(error){
-      setScorerToast(error?.message||'得点ランキングデータを取得できませんでした');
+      setScorerToast(error?.message||(staticOnly?'公開済みの得点ランキングデータを再読み込みできませんでした':'得点ランキングデータを取得できませんでした'));
     }finally{
       setScorerRefreshing(false);
     }
@@ -4433,10 +4431,10 @@ function LeaderboardScreen({user,onOpenTeam,syncToken}){
       <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',gap:10,margin:'12px 14px 0',padding:'10px 12px',background:'var(--s1)',border:'1px solid var(--border)',borderRadius:14,boxShadow:'var(--shadow)'}}>
         <div style={{minWidth:0}}>
           <div style={{fontSize:12,fontWeight:900,color:'var(--text)'}}>得点ランキングデータ</div>
-          <div style={{fontSize:10,fontWeight:800,color:'var(--text2)',lineHeight:1.4}}>{HAS_BACKEND?'WFAから得点ランキングを取得し、選手データへ反映します':'公開済みの得点ランキングJSONを再読み込みします'}</div>
+          <div style={{fontSize:10,fontWeight:800,color:'var(--text2)',lineHeight:1.4}}>{HAS_BACKEND?'WFAから得点ランキングを取得し、選手データへ反映します':'公開サイトでは更新ジョブで公開済みの得点ランキングJSONを再読み込みします'}</div>
         </div>
         <button className="btn" style={{width:'auto',padding:'9px 13px',fontSize:12,whiteSpace:'nowrap',marginTop:0}} onClick={refreshScorerData} disabled={scorerRefreshing}>
-          {scorerRefreshing?'更新中…':'最新を反映'}
+          {scorerRefreshing?'更新中…':(HAS_BACKEND?'最新を反映':'公開データを再読込')}
         </button>
       </div>
       <details className="scorer-pred-panel">

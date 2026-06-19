@@ -138,12 +138,12 @@ test('scorer ranking predictions score the top three goal tiers with ties', () =
   });
 });
 
-test('scorer ranking predictions use assists and minutes before treating players as tied', () => {
+test('scorer ranking predictions keep same-goal players tied regardless of assists and minutes', () => {
   const match = html.match(/(const SCORER_PREDICTION_SLOTS=\[[\s\S]*?)\nfunction displayUserLabel/);
   assert.ok(match, 'scorer ranking summary should be extractable');
   const context = { GROUP_MATCHES: [], KO_MATCHES: [] };
   vm.runInNewContext(`${match[1]}; this.summary=calcScorerPointSummary(
-    {user:{first:'MEX::few-minutes',second:'USA::more-minutes',third:'CAN::fewer-assists'}} ,
+    {user:{first:'MEX::few-minutes',second:'BRA::lower-goals',third:'CAN::fewer-assists'}} ,
     'user',
     {scorerFirstPts:5,scorerSecondPts:3,scorerThirdPts:2},
     [
@@ -154,20 +154,20 @@ test('scorer ranking predictions use assists and minutes before treating players
     ]
   );`, context);
   assert.deepEqual(JSON.parse(JSON.stringify(context.summary)), {
-    total: 10,
+    total: 8,
     firstHit: 1,
     secondHit: 1,
-    thirdHit: 1,
+    thirdHit: 0,
     firstPoints: 5,
     secondPoints: 3,
-    thirdPoints: 2,
+    thirdPoints: 0,
     scorerFirstPts: 5,
     scorerSecondPts: 3,
     scorerThirdPts: 2,
   });
 });
 
-test('scorer ranking predictions keep same-goal same-assist players tied when minutes are missing', () => {
+test('scorer ranking predictions do not split same-goal players by missing minutes', () => {
   const match = html.match(/(const SCORER_PREDICTION_SLOTS=\[[\s\S]*?)\nfunction displayUserLabel/);
   assert.ok(match, 'scorer ranking summary should be extractable');
   const context = { GROUP_MATCHES: [], KO_MATCHES: [] };
@@ -182,12 +182,12 @@ test('scorer ranking predictions keep same-goal same-assist players tied when mi
     ]
   );`, context);
   assert.deepEqual(JSON.parse(JSON.stringify(context.summary)), {
-    total: 8,
+    total: 5,
     firstHit: 1,
-    secondHit: 1,
+    secondHit: 0,
     thirdHit: 0,
     firstPoints: 5,
-    secondPoints: 3,
+    secondPoints: 0,
     thirdPoints: 0,
     scorerFirstPts: 5,
     scorerSecondPts: 3,

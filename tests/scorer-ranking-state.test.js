@@ -38,6 +38,7 @@ test('scorer ranking prediction panel is compact and collapsible', () => {
 test('scorer ranking list uses computed tie-aware ranks', () => {
   assert.match(html, /function buildScorerRankingRows\(players=ALL_PLAYERS\)\{/);
   assert.match(html, /const rankedScorerRows=buildScorerRankingRows\(players\);/);
+  assert.match(html, /function sameScorerRankBucket\(a,b\)\{\s*if\(scorerStatNumber\(a\?\.worldCupGoals\)!==scorerStatNumber\(b\?\.worldCupGoals\)\)return false;\s*return true;\s*\}/);
   assert.match(html, /row\.isTied\?`同率\$\{row\.rank\}位`:`\$\{row\.rank\}位`/);
   assert.doesNotMatch(html, /<div className="rank-card-rank">\{i\+1\}位<\/div>/);
 });
