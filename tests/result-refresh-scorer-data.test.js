@@ -23,9 +23,13 @@ test('static hosting loads scorer ranking data on startup and from leaderboard r
   assert.match(html, /useEffect\(\(\)=>\{\s*let alive=true;\s*if\(STATIC_SHARED_ROOM_BACKEND&&!HAS_BACKEND\)\{\s*refreshStaticPlayerData\(\)/);
   assert.match(html, /if\(alive&&payload\.dataStatus\)setDataStatus\(payload\.dataStatus\);/);
   assert.match(html, /async function refreshScorerData\(\)\{/);
-  assert.match(html, /STATIC_SHARED_ROOM_BACKEND&&!HAS_BACKEND\?await refreshStaticPlayerData\(\):await api\('\/api\/admin\/refresh-players'/);
+  assert.match(html, /const staticOnly=STATIC_SHARED_ROOM_BACKEND&&!HAS_BACKEND;/);
+  assert.match(html, /staticOnly\?await refreshStaticPlayerData\(\):await api\('\/api\/admin\/refresh-players'/);
   assert.match(html, /最新を反映/);
   assert.match(html, /得点ランキングデータを更新しました/);
+  assert.match(html, /公開済みの得点ランキングデータは更新済みです/);
+  assert.match(html, /公開済みの得点ランキングJSONを再読み込みします/);
+  assert.match(html, /WFAから得点ランキングを取得し、選手データへ反映します/);
 });
 
 test('home result reflection does not refresh scorer ranking data', () => {
@@ -35,6 +39,8 @@ test('home result reflection does not refresh scorer ranking data', () => {
   assert.doesNotMatch(html, /得点ランキングを更新しました。試合結果は取得できませんでした/);
   assert.doesNotMatch(html, /試合結果は反映済みです。得点ランキングを更新しました/);
   assert.doesNotMatch(html, /Web取得した試合結果\$\{scorerRefreshed\?'と得点ランキング':''\}を反映しました/);
+  assert.match(html, /if\(!roomId\)\{\s*setHomeToast\('ルームに入った状態で実行してください'\);/);
+  assert.match(html, /ローカルサーバーに接続できません。localhost:3000を起動してから再実行してください/);
   assert.match(html, /Webから試合結果を取得し、ポイントと判定バッジを再計算します/);
 });
 

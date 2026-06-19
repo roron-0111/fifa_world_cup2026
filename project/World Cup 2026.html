@@ -3376,6 +3376,10 @@ function HomeScreen({user,onLogout,onManualSync,syncToken}){
 
   async function applyAdminResults(){
     sessionStorage.setItem('wc26AdminToken',homeAdminToken);
+    if(!roomId){
+      setHomeToast('ルームに入った状態で実行してください');
+      return;
+    }
     setHomeUpdatingResults(true);
     try{
       const res=HAS_BACKEND
@@ -3384,7 +3388,7 @@ function HomeScreen({user,onLogout,onManualSync,syncToken}){
           ?await refreshStaticSharedRoomResults(roomId)
           :null;
       if(!res?.ok){
-        setHomeToast(res?.error||'試合結果を取得できませんでした');
+        setHomeToast(res?.error||(HAS_BACKEND?'ローカルサーバーに接続できません。localhost:3000を起動してから再実行してください':'試合結果を取得できませんでした'));
         return;
       }
       const nextResults=res.roomState?.results||{};
@@ -4326,17 +4330,28 @@ function LeaderboardScreen({user,onOpenTeam,syncToken}){
   async function refreshScorerData(){
     const token=String(sessionStorage.getItem('wc26AdminToken')||DEFAULT_ADMIN_TOKEN).trim();
     sessionStorage.setItem('wc26AdminToken',token);
+    const staticOnly=STATIC_SHARED_ROOM_BACKEND&&!HAS_BACKEND;
+    const beforeGenerated=PLAYER_DATA_META.generatedAt||'';
+    const beforeRanking=PLAYER_DATA_META.meta?.worldFootballArchiveRankingUpdatedAt||'';
     setScorerRefreshing(true);
     try{
-      const res=STATIC_SHARED_ROOM_BACKEND&&!HAS_BACKEND?await refreshStaticPlayerData():await api('/api/admin/refresh-players',{adminToken:token});
+      const res=staticOnly?await refreshStaticPlayerData():await api('/api/admin/refresh-players',{adminToken:token});
       if(!res?.ok){
         if(res?.dataStatus)setDataStatus(res.dataStatus);
-        setScorerToast(res?.error||'得点ランキングデータを取得できませんでした');
+        setScorerToast(res?.error||(HAS_BACKEND?'ローカルサーバーに接続できません。localhost:3000を起動してから再実行してください':'得点ランキングデータを取得できませんでした'));
         return;
       }
       const refreshed=setPlayerDataFromResponse(res,true);
       if(res.dataStatus)setDataStatus(res.dataStatus);
-      setScorerToast(refreshed?'得点ランキングデータを更新しました':'得点ランキングデータを取得できませんでした');
+      if(staticOnly){
+        const afterGenerated=res.generatedAt||'';
+        const afterRanking=res.meta?.worldFootballArchiveRankingUpdatedAt||'';
+        setScorerToast((afterGenerated&&afterGenerated!==beforeGenerated)||(afterRanking&&afterRanking!==beforeRanking)
+          ?'公開済みの得点ランキングデータを反映しました'
+          :'公開済みの得点ランキングデータは更新済みです');
+      }else{
+        setScorerToast(refreshed?'得点ランキングデータを更新しました':'得点ランキングデータを取得できませんでした');
+      }
     }catch(error){
       setScorerToast(error?.message||'得点ランキングデータを取得できませんでした');
     }finally{
@@ -4414,7 +4429,7 @@ function LeaderboardScreen({user,onOpenTeam,syncToken}){
       <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',gap:10,margin:'12px 14px 0',padding:'10px 12px',background:'var(--s1)',border:'1px solid var(--border)',borderRadius:14,boxShadow:'var(--shadow)'}}>
         <div style={{minWidth:0}}>
           <div style={{fontSize:12,fontWeight:900,color:'var(--text)'}}>得点ランキングデータ</div>
-          <div style={{fontSize:10,fontWeight:800,color:'var(--text2)',lineHeight:1.4}}>試合結果とは別に、公開済みの得点ランキングJSONを再読み込みします</div>
+          <div style={{fontSize:10,fontWeight:800,color:'var(--text2)',lineHeight:1.4}}>{HAS_BACKEND?'WFAから得点ランキングを取得し、選手データへ反映します':'公開済みの得点ランキングJSONを再読み込みします'}</div>
         </div>
         <button className="btn" style={{width:'auto',padding:'9px 13px',fontSize:12,whiteSpace:'nowrap',marginTop:0}} onClick={refreshScorerData} disabled={scorerRefreshing}>
           {scorerRefreshing?'更新中…':'最新を反映'}

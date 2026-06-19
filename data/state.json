@@ -209,7 +209,148 @@
   ],
   "roomStates": {
     "room-demo": {
-      "results": {},
+      "results": {
+        "A-1": {
+          "home": 2,
+          "away": 0,
+          "status": "final"
+        },
+        "A-2": {
+          "home": 2,
+          "away": 1,
+          "status": "final"
+        },
+        "B-1": {
+          "home": 1,
+          "away": 1,
+          "status": "final"
+        },
+        "D-1": {
+          "home": 4,
+          "away": 1,
+          "status": "final"
+        },
+        "B-2": {
+          "home": 1,
+          "away": 1,
+          "status": "final"
+        },
+        "C-2": {
+          "home": 1,
+          "away": 1,
+          "status": "final"
+        },
+        "C-1": {
+          "home": 0,
+          "away": 1,
+          "status": "final"
+        },
+        "D-2": {
+          "home": 2,
+          "away": 0,
+          "status": "final"
+        },
+        "E-2": {
+          "home": 7,
+          "away": 1,
+          "status": "final"
+        },
+        "F-1": {
+          "home": 2,
+          "away": 2,
+          "status": "final"
+        },
+        "E-1": {
+          "home": 1,
+          "away": 0,
+          "status": "final"
+        },
+        "F-2": {
+          "home": 5,
+          "away": 1,
+          "status": "final"
+        },
+        "H-2": {
+          "home": 0,
+          "away": 0,
+          "status": "final"
+        },
+        "G-2": {
+          "home": 1,
+          "away": 1,
+          "status": "final"
+        },
+        "H-1": {
+          "home": 1,
+          "away": 1,
+          "status": "final"
+        },
+        "G-1": {
+          "home": 2,
+          "away": 2,
+          "status": "final"
+        },
+        "I-1": {
+          "home": 3,
+          "away": 1,
+          "status": "final"
+        },
+        "I-2": {
+          "home": 1,
+          "away": 4,
+          "status": "final"
+        },
+        "J-1": {
+          "home": 3,
+          "away": 0,
+          "status": "final"
+        },
+        "J-2": {
+          "home": 3,
+          "away": 1,
+          "status": "final"
+        },
+        "K-1": {
+          "home": 1,
+          "away": 1,
+          "status": "final"
+        },
+        "L-2": {
+          "home": 4,
+          "away": 2,
+          "status": "final"
+        },
+        "L-1": {
+          "home": 1,
+          "away": 0,
+          "status": "final"
+        },
+        "K-2": {
+          "home": 1,
+          "away": 3,
+          "status": "final"
+        },
+        "A-3": {
+          "home": 1,
+          "away": 1,
+          "status": "final"
+        },
+        "B-3": {
+          "home": 4,
+          "away": 1,
+          "status": "final"
+        },
+        "B-4": {
+          "home": 6,
+          "away": 0,
+          "status": "final"
+        },
+        "A-4": {
+          "home": 1,
+          "away": 0,
+          "status": "final"
+        }
+      },
       "locked": {},
       "koPreds": {},
       "settings": {
@@ -596,11 +737,27 @@
   },
   "meta": {
     "dataRefresh": {
-      "lastUpdatedAt": "2026-06-06T02:34:19.471Z",
-      "source": "fifa-official-squad",
-      "generatedAt": "2026-06-06T02:34:19.441Z",
+      "lastUpdatedAt": "2026-06-19T09:04:56.164Z",
+      "source": "world-football-archive",
+      "generatedAt": "2026-06-19T09:04:56.126Z",
       "status": "success",
       "error": ""
+    },
+    "resultUpdates": {
+      "lastUpdatedAt": "2026-06-19T08:57:56.604Z",
+      "source": "fifa-live-results",
+      "fetchedCount": 104,
+      "updatedCount": 28,
+      "history": [
+        {
+          "updatedAt": "2026-06-19T08:57:56.604Z",
+          "roomId": "room-demo",
+          "source": "fifa-live-results",
+          "fetchedCount": 104,
+          "updatedCount": 28,
+          "sourceUrl": "https://api.fifa.com/api/v3/calendar/matches?language=en&count=500&idSeason=285023"
+        }
+      ]
     }
   }
 }
