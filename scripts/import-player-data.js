@@ -13,6 +13,7 @@ const {
 } = require('./official-squad-data');
 const {
   buildWorldFootballArchiveTeamUrl,
+  parseWorldFootballArchiveTournamentRankings,
   parseWorldFootballArchiveTeamText,
 } = require('./world-football-archive');
 
@@ -22,6 +23,7 @@ const OUT_FILE = path.join(DATA_DIR, 'players.generated.json');
 const PROJECT_OUT_FILE = path.join(ROOT, 'project', 'players.generated.json');
 const SOURCES_FILE = path.join(DATA_DIR, 'sources.json');
 const NAME_OVERRIDES_FILE = path.join(DATA_DIR, 'player-name-overrides.json');
+const RANKING_OVERRIDES_FILE = path.join(DATA_DIR, 'world-cup-ranking-overrides.json');
 const SEASON_START = new Date('2025-07-01T00:00:00Z');
 const SEASON_END = new Date('2026-07-01T00:00:00Z');
 
@@ -393,6 +395,172 @@ function mergeWfaPlayersWithExisting(wfaByCountry, existingByCountry = {}) {
   return merged;
 }
 
+function normalizeRankingText(value) {
+  return String(value || '')
+    .normalize('NFKC')
+    .toLowerCase()
+    .replace(/ヴァ/g, 'バ')
+    .replace(/ヴィ/g, 'ビ')
+    .replace(/ヴェ/g, 'ベ')
+    .replace(/ヴォ/g, 'ボ')
+    .replace(/ヴ/g, 'ブ')
+    .replace(/[\s・･.．,，'’"“”\-‐‑–—]/g, '')
+    .trim();
+}
+
+function isRankingNameMatch(candidateKey, targetKey) {
+  if (!candidateKey || !targetKey) return false;
+  if (candidateKey === targetKey) return true;
+  if (candidateKey.length < 4 || targetKey.length < 4) return false;
+  return targetKey.includes(candidateKey)||candidateKey.includes(targetKey);
+}
+
+function buildCountryByJapaneseName() {
+  const entries = [];
+  TEAM_SPECS.forEach((spec) => {
+    entries.push([spec.ja, spec.country]);
+    if (spec.wfaSlug) entries.push([spec.wfaSlug, spec.country]);
+  });
+  return new Map(entries.map(([ja, country]) => [normalizeRankingText(ja), country]));
+}
+
+function findRankingPlayer(players, rankingEntry) {
+  const target = normalizeRankingText(rankingEntry?.name);
+  if (!target) return null;
+  return (players || []).find((player) =>
+    [player.officialNameJa, player.displayNameJa, player.name].some((name) => {
+      const candidateKey = normalizeRankingText(name);
+      return isRankingNameMatch(candidateKey, target);
+    }),
+  ) || null;
+}
+
+function parseIsoDateLabel(value) {
+  const text = String(value || '').trim();
+  if (!text) return '';
+  const normalized = text.replace(/\//g, '-');
+  const match = normalized.match(/(\d{4})-(\d{1,2})-(\d{1,2})/);
+  if (!match) return '';
+  const [, year, month, day] = match;
+  return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
+}
+
+function latestDateLabel(...labels) {
+  return labels
+    .map(parseIsoDateLabel)
+    .filter(Boolean)
+    .sort()
+    .pop() || '';
+}
+
+function readWorldCupRankingOverrides(filePath = RANKING_OVERRIDES_FILE) {
+  if (!fs.existsSync(filePath)) {
+    return { updatedAtLabel: '', sources: [], goals: [], assists: [] };
+  }
+  const data = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+  return {
+    updatedAtLabel: parseIsoDateLabel(data.updatedAt || data.updatedAtLabel),
+    sources: Array.isArray(data.sources) ? data.sources : [],
+    goals: Array.isArray(data.goals) ? data.goals : [],
+    assists: Array.isArray(data.assists) ? data.assists : [],
+  };
+}
+
+function mergeRankingEntries(primaryEntries, overrideEntries, valueKey) {
+  const merged = (primaryEntries || []).map((entry) => ({ ...entry }));
+  let applied = 0;
+
+  for (const override of overrideEntries || []) {
+    const value = Number(override?.[valueKey] || 0);
+    const name = String(override?.name || '').trim();
+    const countryJa = String(override?.countryJa || '').trim();
+    if (!value || !name || !countryJa) continue;
+
+    const targetName = normalizeRankingText(name);
+    const targetCountry = normalizeRankingText(countryJa);
+    const existing = merged.find((entry) =>
+      normalizeRankingText(entry.name) === targetName
+      && normalizeRankingText(entry.countryJa) === targetCountry
+    );
+
+    if (existing) {
+      const before = Number(existing[valueKey] || 0);
+      existing[valueKey] = Math.max(before, value);
+      existing.rank = Math.min(Number(existing.rank || override.rank || 9999), Number(override.rank || existing.rank || 9999));
+      existing.overrideSource = override.source || existing.overrideSource || '';
+      if (existing[valueKey] > before) applied += 1;
+      continue;
+    }
+
+    merged.push({
+      rank: Number(override.rank || 9999),
+      name,
+      countryJa,
+      [valueKey]: value,
+      overrideSource: override.source || '',
+    });
+    applied += 1;
+  }
+
+  return { entries: merged, applied };
+}
+
+function mergeWorldCupRankingOverrides(rankings, overrides) {
+  const goals = mergeRankingEntries(rankings?.goals || [], overrides?.goals || [], 'goals');
+  const assists = mergeRankingEntries(rankings?.assists || [], overrides?.assists || [], 'assists');
+  return {
+    updatedAtLabel: latestDateLabel(rankings?.updatedAtLabel, overrides?.updatedAtLabel),
+    goals: goals.entries,
+    assists: assists.entries,
+    overrideStats: {
+      sources: overrides?.sources || [],
+      appliedGoals: goals.applied,
+      appliedAssists: assists.applied,
+    },
+  };
+}
+
+function applyWorldCupRankingStats(playersByCountry, rankings) {
+  const countryByJa = buildCountryByJapaneseName();
+  const stats = {
+    matchedGoals: 0,
+    matchedAssists: 0,
+    unmatchedGoals: [],
+    unmatchedAssists: [],
+  };
+
+  Object.values(playersByCountry || {}).forEach((players) => {
+    (players || []).forEach((player) => {
+      player.worldCupGoals = 0;
+      player.worldCupAssists = 0;
+    });
+  });
+
+  (rankings?.goals || []).forEach((goal) => {
+    const country = countryByJa.get(normalizeRankingText(goal.countryJa));
+    const player = findRankingPlayer(playersByCountry?.[country], goal);
+    if (!country || !player) {
+      stats.unmatchedGoals.push(goal);
+      return;
+    }
+    player.worldCupGoals = Number(goal.goals || 0);
+    stats.matchedGoals += 1;
+  });
+
+  (rankings?.assists || []).forEach((assist) => {
+    const country = countryByJa.get(normalizeRankingText(assist.countryJa));
+    const player = findRankingPlayer(playersByCountry?.[country], assist);
+    if (!country || !player) {
+      stats.unmatchedAssists.push(assist);
+      return;
+    }
+    player.worldCupAssists = Number(assist.assists || 0);
+    stats.matchedAssists += 1;
+  });
+
+  return stats;
+}
+
 async function buildWorldFootballArchivePlayersByCountry(existingPlayersByCountry) {
   const playersByCountry = {};
   const failedTeams = [];
@@ -739,6 +907,31 @@ async function main() {
     finalPlayersByCountry[spec.country] = buildFallbackPlayers(spec);
   }
 
+  let worldFootballArchiveRankingUpdatedAt = '';
+  let worldFootballArchiveRankingStats = {
+    matchedGoals: 0,
+    matchedAssists: 0,
+    unmatchedGoals: [],
+    unmatchedAssists: [],
+  };
+  try {
+    const rankingHtml = await readTextUrl(sources.players.worldFootballArchive);
+    const rankings = mergeWorldCupRankingOverrides(
+      parseWorldFootballArchiveTournamentRankings(rankingHtml),
+      readWorldCupRankingOverrides(),
+    );
+    worldFootballArchiveRankingUpdatedAt = rankings.updatedAtLabel || '';
+    worldFootballArchiveRankingStats = applyWorldCupRankingStats(finalPlayersByCountry, rankings);
+    worldFootballArchiveRankingStats.overrideStats = rankings.overrideStats;
+    if (worldFootballArchiveRankingStats.unmatchedGoals.length || worldFootballArchiveRankingStats.unmatchedAssists.length) {
+      console.warn(
+        `World Football Archive ranking unmatched: goals=${worldFootballArchiveRankingStats.unmatchedGoals.length}, assists=${worldFootballArchiveRankingStats.unmatchedAssists.length}`,
+      );
+    }
+  } catch (error) {
+    console.warn(`World Football Archive ranking import failed; keeping existing World Cup scorer fields: ${error.message}`);
+  }
+
   const output = {
     generatedAt: new Date().toISOString(),
     sources: {
@@ -749,6 +942,7 @@ async function main() {
       roiblogSchedule: sources.teams.roiblogSchedule,
       googlePlayersSearch: sources.players.googlePlayersSearch,
       worldFootballArchive: sources.players.worldFootballArchive,
+      worldCupRankingOverrides: 'data/world-cup-ranking-overrides.json',
       officialSquadPdf: sources.players.officialSquadPdf,
       fifaSquadsConfirmedJa: sources.players.fifaSquadsConfirmedJa,
       jfaJapanSquad: sources.players.jfaJapanSquad,
@@ -765,6 +959,8 @@ async function main() {
       fallbackTeams: missingTeams.map((spec) => spec.country),
       playerSource,
       worldFootballArchiveUpdatedAt,
+      worldFootballArchiveRankingUpdatedAt,
+      worldFootballArchiveRankingStats,
     },
   };
 

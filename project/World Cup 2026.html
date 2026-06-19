@@ -20,8 +20,10 @@ html,body{background:#ddd8ce;color:var(--text);font-family:'Inter',sans-serif;mi
 #root{min-height:100dvh;display:flex;justify-content:center;align-items:stretch;}
 .shell{width:min(100%,1440px);height:100dvh;display:flex;flex-direction:column;position:relative;overflow:visible;background:var(--bg);}
 .display{font-family:'Bebas Neue',sans-serif;letter-spacing:.03em;}
-.page{flex:1;overflow-y:auto;overflow-x:hidden;padding-bottom:96px;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
-.page::-webkit-scrollbar{display:none;}
+.page{flex:1;min-height:0;overflow-y:auto;overflow-x:hidden;padding-bottom:96px;-webkit-overflow-scrolling:touch;scrollbar-width:thin;scrollbar-color:rgba(30,110,240,.38) transparent;}
+.page::-webkit-scrollbar{width:8px;}
+.page::-webkit-scrollbar-track{background:transparent;}
+.page::-webkit-scrollbar-thumb{background:rgba(30,110,240,.38);border-radius:999px;border:2px solid transparent;background-clip:content-box;}
 .page-enter{animation:pgIn .3s cubic-bezier(.22,1,.36,1) both;}
 @keyframes pgIn{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
 /* AUTH */
@@ -38,7 +40,9 @@ html,body{background:#ddd8ce;color:var(--text);font-family:'Inter',sans-serif;mi
   gap:24px;
   padding:28px 20px 108px;
   position:relative;
-  overflow:hidden;
+  overflow-y:auto;
+  overflow-x:hidden;
+  -webkit-overflow-scrolling:touch;
 }
 .auth-top-title{
   width:100%;
@@ -210,17 +214,18 @@ html,body{background:#ddd8ce;color:var(--text);font-family:'Inter',sans-serif;mi
 .hpc-total .num{font-family:'Bebas Neue';font-size:58px;line-height:1;color:#fff;letter-spacing:1px;}
 .hpc-total .unit{font-size:12px;font-weight:900;color:rgba(255,255,255,.86);line-height:1;margin-top:6px;}
 .vs-txt{font-family:'Bebas Neue';font-size:26px;color:rgba(255,255,255,.5);text-align:center;align-self:center;display:flex;align-items:center;justify-content:center;height:100%;}
-.room-bar{display:flex;align-items:center;justify-content:space-between;background:var(--s1);border-bottom:1px solid var(--border);padding:12px 18px;}
+.room-bar{display:flex;align-items:center;justify-content:space-between;background:var(--s1);border-bottom:1px solid var(--border);padding:12px 18px;gap:12px;}
 .room-lbl{font-size:10px;color:var(--text2);font-weight:700;text-transform:uppercase;letter-spacing:.5px;}
 .room-code{font-family:'Bebas Neue';font-size:28px;letter-spacing:4px;color:var(--accent);}
+.room-actions{display:flex;align-items:center;justify-content:flex-end;gap:8px;flex-wrap:wrap;}
 .copy-btn{background:var(--accentf);border:none;color:var(--accent);padding:7px 14px;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .2s;}
 .copy-btn:hover{background:var(--accent);color:#fff;}
 .stats-grid{padding:12px 16px;}
 .stats-frame{background:var(--s1);border:1px solid var(--border);border-radius:16px;box-shadow:var(--shadow);overflow:hidden;padding:10px 12px;}
 .stats-table{display:flex;flex-direction:column;gap:6px;}
-.stats-head,.stats-row{display:grid;grid-template-columns:minmax(0,1fr) minmax(58px,.8fr) minmax(58px,.8fr);gap:8px;align-items:center;}
+.stats-head,.stats-row{display:grid;grid-template-columns:minmax(52px,.52fr) minmax(88px,1fr) minmax(88px,1fr);gap:8px;align-items:center;}
 .stats-head{font-size:10px;color:var(--text2);font-weight:900;letter-spacing:.4px;padding-bottom:6px;border-bottom:1px solid var(--border);}
-.stats-head span:nth-child(2),.stats-head span:nth-child(3){text-align:center;}
+.stats-head span:nth-child(2),.stats-head span:nth-child(3){text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 .stats-row{padding:6px 0;border-top:1px solid var(--border);font-size:11px;font-weight:800;color:var(--text2);}
 .stats-row:first-of-type{border-top:none;padding-top:0;}
 .stats-row span{min-width:0;}
@@ -246,12 +251,18 @@ html,body{background:#ddd8ce;color:var(--text);font-family:'Inter',sans-serif;mi
 .home-breakdown-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;}
 .home-break-card{background:var(--s1);border:1px solid var(--border);border-radius:16px;padding:13px;box-shadow:var(--shadow);min-width:0;}
 .home-break-card h3{font-size:13px;font-weight:900;margin-bottom:8px;color:var(--text);}
-.home-break-total{display:flex;align-items:baseline;justify-content:center;gap:4px;margin-bottom:8px;text-align:center;}
-.home-break-total strong{font-family:'Inter',sans-serif;font-size:42px;line-height:1;color:var(--accent);font-weight:1000;letter-spacing:-.04em;}
-.home-break-total span{font-size:12px;color:var(--text2);font-weight:900;}
+.home-break-totals{display:grid;grid-template-columns:minmax(52px,.52fr) minmax(88px,1fr) minmax(88px,1fr);gap:8px;margin-bottom:8px;}
+.home-break-total-spacer{min-width:0;}
+.home-break-total{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-width:0;text-align:center;border:1px solid var(--border);border-radius:12px;background:var(--s2);padding:8px 6px;}
+.home-break-total .total-label{max-width:100%;font-size:10px;color:var(--text2);font-weight:900;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.home-break-total .total-score{display:flex;align-items:baseline;justify-content:center;gap:3px;min-height:42px;}
+.home-break-total strong{font-family:'Inter',sans-serif;font-size:38px;line-height:1;color:var(--accent);font-weight:1000;letter-spacing:-.04em;}
+.home-break-total.opp strong{color:var(--gold);}
+.home-break-total .total-score span{font-size:12px;color:var(--text2);font-weight:900;}
 .home-compare{display:flex;flex-direction:column;gap:5px;font-size:11px;color:var(--text2);font-weight:700;line-height:1.35;}
-.home-compare-row{display:grid;grid-template-columns:minmax(0,1fr) minmax(82px,1fr) minmax(82px,1fr);align-items:center;gap:8px;border-top:1px solid var(--border);padding-top:5px;}
+.home-compare-row{display:grid;grid-template-columns:minmax(52px,.52fr) minmax(88px,1fr) minmax(88px,1fr);align-items:center;gap:8px;border-top:1px solid var(--border);padding-top:5px;}
 .home-compare-head{border-top:none;padding-top:0;color:var(--text2);font-size:10px;}
+.home-compare-head > b{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:100%;}
 .home-compare-row > span{justify-self:start;}
 .home-compare-row > b{justify-self:center;color:var(--text);font-weight:900;text-align:center;font-variant-numeric:tabular-nums;}
 .home-compare-row b.me{color:var(--accent);}
@@ -265,16 +276,19 @@ html,body{background:#ddd8ce;color:var(--text);font-family:'Inter',sans-serif;mi
 .result-judge-btn{width:fit-content;align-self:center;padding:10px 18px;margin-top:0;}
 .result-judge-list-head{padding:10px 13px 6px;font-size:12px;font-weight:900;color:var(--text2);}
 .result-judge-list{max-height:min(540px,64vh);overflow-y:auto;margin:0 10px 10px;padding:8px;display:flex;flex-direction:column;gap:8px;border:1px solid var(--border);border-radius:14px;background:var(--s2);}
-.result-match-item{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:center;border:1px solid var(--border);border-radius:12px;padding:8px 10px;background:var(--s1);}
+.result-match-item{display:grid;grid-template-columns:minmax(0,1fr) minmax(176px,auto);gap:8px;align-items:center;border:1px solid var(--border);border-radius:12px;padding:8px 10px;background:var(--s1);}
 .result-match-main{min-width:0;}
 .result-match-head{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
 .result-match-code{font-size:12px;font-weight:900;color:var(--green);}
 .result-match-time{font-size:11px;color:var(--text2);font-weight:700;}
 .result-match-teams{margin-top:4px;font-size:12px;font-weight:800;color:var(--text);line-height:1.35;}
-.result-match-teams .result-match-stadium{display:inline;color:var(--text2);font-size:10px;font-weight:700;margin-top:0;}
-.result-match-side{display:flex;flex-direction:column;align-items:flex-end;gap:6px;min-width:72px;}
-.result-match-score{font-family:'Bebas Neue';font-size:30px;line-height:1;color:var(--accent);font-weight:900;letter-spacing:-.04em;}
+.result-match-side{display:grid;grid-template-columns:auto minmax(56px,1fr) minmax(56px,1fr);align-items:center;justify-items:center;gap:6px;min-width:176px;}
+.result-match-score{justify-self:start;font-family:'Bebas Neue';font-size:30px;line-height:1;color:var(--accent);font-weight:900;letter-spacing:-.04em;}
 .result-match-score.pending{color:var(--text2);}
+.result-match-judge-col{display:flex;flex-direction:column;align-items:center;gap:3px;min-width:0;width:100%;}
+.result-match-judge-label{max-width:100%;font-size:9px;font-weight:900;color:var(--text2);line-height:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.result-pred-score{font-family:'Bebas Neue';font-size:15px;line-height:1;color:var(--text);font-weight:900;letter-spacing:.02em;}
+.result-match-judge-col .match-status-badge{max-width:74px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 .result-match-empty{padding:12px;color:var(--text2);font-size:12px;font-weight:700;}
 .match-status-badge,.ko-match-status{
   display:inline-flex;
@@ -398,8 +412,10 @@ html,body{background:#ddd8ce;color:var(--text);font-family:'Inter',sans-serif;mi
   font-family:'Bebas Neue';
   font-size:24px;
   color:var(--text2);
+  padding:0 4px;
 }
 .lock-tag{display:inline-flex;align-items:center;gap:3px;background:var(--accentf);color:var(--accent);font-size:9px;font-weight:800;padding:2px 8px;border-radius:18px;letter-spacing:.2px;white-space:nowrap;}
+.match-finished-tag{display:inline-flex;align-items:center;justify-content:center;background:var(--greenf);color:var(--green);font-size:10px;font-weight:900;padding:3px 10px;border-radius:999px;line-height:1;white-space:nowrap;}
 .mactions{margin-top:10px;display:flex;gap:6px;align-items:center;}
 .pbtn{flex:1;padding:8px 7px;background:var(--accent);border:none;color:#fff;font-size:11px;font-weight:800;border-radius:10px;cursor:pointer;font-family:inherit;transition:all .2s;letter-spacing:.15px;min-width:0;}
 .pbtn:hover{opacity:.88;}
@@ -477,6 +493,34 @@ html,body{background:#ddd8ce;color:var(--text);font-family:'Inter',sans-serif;mi
 .pts-none{background:rgba(100,100,100,.1);color:var(--text2);}
 .match-mid{font-size:10px;color:var(--text2);text-align:center;line-height:1.5;}
 .actual-r{font-family:'Bebas Neue';font-size:14px;color:var(--accent);display:block;margin-top:2px;}
+.scorer-pred-panel{margin:14px;background:var(--s1);border:1px solid var(--border);border-radius:18px;box-shadow:var(--shadow);overflow:hidden;}
+.scorer-pred-summary{display:grid;grid-template-columns:minmax(0,1fr) auto auto;align-items:center;gap:10px;padding:12px;cursor:pointer;list-style:none;}
+.scorer-pred-summary::-webkit-details-marker{display:none;}
+.scorer-pred-summary-title{display:flex;flex-direction:column;gap:2px;min-width:0;}
+.scorer-pred-summary-title strong{font-size:13px;font-weight:900;color:var(--text);}
+.scorer-pred-summary-title span{font-size:10px;font-weight:800;color:var(--text2);}
+.scorer-pred-counts{display:flex;align-items:center;gap:6px;flex-wrap:wrap;justify-content:flex-end;}
+.scorer-pred-counts span{display:inline-flex;align-items:center;gap:3px;border-radius:999px;background:var(--s2);border:1px solid var(--border);padding:4px 8px;font-size:10px;font-weight:900;color:var(--text2);white-space:nowrap;}
+.scorer-pred-counts b{color:var(--accent);}
+.scorer-pred-caret{display:inline-flex;align-items:center;justify-content:center;min-width:42px;padding:5px 8px;border-radius:999px;background:var(--accentf);color:var(--accent);font-size:10px;font-weight:900;}
+.scorer-pred-caret::before{content:'開く';}
+.scorer-pred-panel[open] .scorer-pred-caret::before{content:'閉じる';}
+.scorer-pred-panel:not([open]) .scorer-pred-body{display:none;}
+.scorer-pred-body{border-top:1px solid var(--border);padding:9px 12px 12px;background:linear-gradient(180deg,#fff,var(--s2));}
+.scorer-pred-grid{display:grid;grid-template-columns:1fr;gap:6px;}
+.scorer-pred-card{min-width:0;border:1px solid var(--border);border-radius:12px;background:rgba(255,255,255,.72);padding:8px;display:grid;grid-template-columns:minmax(64px,.55fr) minmax(0,1fr);gap:8px;align-items:center;}
+.scorer-pred-card.hit{border-color:rgba(22,163,74,.32);box-shadow:0 0 0 3px var(--greenf) inset;}
+.scorer-pred-head{display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:3px;font-size:11px;font-weight:900;color:var(--text2);min-width:0;}
+.scorer-pred-head b{color:var(--accent);white-space:nowrap;}
+.scorer-pred-controls{display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);gap:6px;min-width:0;}
+.scorer-select{width:100%;min-width:0;border:1.5px solid var(--border);border-radius:10px;background:var(--s1);color:var(--text);font:inherit;font-size:11px;font-weight:800;padding:7px 8px;outline:none;}
+.scorer-select:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accentf);}
+.scorer-select:disabled{opacity:.65;}
+.scorer-pred-note{grid-column:1/-1;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr) auto;gap:6px;align-items:center;font-size:10px;color:var(--text2);font-weight:800;line-height:1.35;}
+.scorer-pred-note span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.scorer-pred-note strong{width:fit-content;border-radius:999px;background:rgba(100,100,100,.08);color:var(--text2);padding:3px 8px;font-size:10px;}
+.scorer-pred-card.hit .scorer-pred-note strong{background:var(--greenf);color:var(--green);}
+.scorer-pred-help{margin-top:8px;font-size:10px;color:var(--text2);font-weight:700;line-height:1.45;}
 /* SETTINGS */
 .set-sec{margin:14px 14px 20px;}
 .set-sec h3{font-size:14px;font-weight:900;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid var(--border);color:var(--text2);text-transform:uppercase;letter-spacing:.5px;}
@@ -589,11 +633,11 @@ html,body{background:#ddd8ce;color:var(--text);font-family:'Inter',sans-serif;mi
 .player-mini-btn.danger:hover{background:var(--red);color:#fff;}
 .player-mini-btn:disabled{opacity:.55;cursor:not-allowed;transform:none;}
 .room-hero-score{display:flex;flex-direction:column;gap:5px;align-items:center;justify-content:space-between;min-height:150px;}
-.auth-recent{margin:10px 0 0;padding:10px;border:1px solid var(--border);border-radius:14px;background:var(--s2);}
-.auth-recent-title{font-size:11px;color:var(--text2);font-weight:900;margin-bottom:7px;}
-.auth-recent-list{display:flex;flex-direction:column;gap:6px;max-height:116px;overflow-y:auto;padding-right:2px;}
-.auth-recent-btn{width:100%;border:1px solid var(--border);background:var(--s1);border-radius:10px;padding:8px 10px;text-align:left;font:inherit;cursor:pointer;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:8px;align-items:center;}
-.auth-recent-btn strong,.auth-recent-btn span{font-size:11px;font-weight:900;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.auth-recent{margin:8px 0 0;padding:8px;border:1px solid var(--border);border-radius:12px;background:var(--s2);}
+.auth-recent-title{font-size:10px;color:var(--text2);font-weight:900;margin-bottom:5px;}
+.auth-recent-list{display:flex;flex-direction:column;gap:5px;max-height:68px;overflow-y:auto;padding-right:2px;}
+.auth-recent-btn{width:100%;border:1px solid var(--border);background:var(--s1);border-radius:9px;padding:6px 8px;text-align:left;font:inherit;cursor:pointer;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:6px;align-items:center;}
+.auth-recent-btn strong,.auth-recent-btn span{font-size:10px;font-weight:900;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 .auth-recent-btn strong{color:var(--text);}
 .auth-recent-btn span{color:var(--accent);letter-spacing:.4px;}
 .member-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:8px;padding:12px 16px 0;}
@@ -690,6 +734,32 @@ html,body{background:#ddd8ce;color:var(--text);font-family:'Inter',sans-serif;mi
   font-size:38px;
   color:var(--accent);
 }
+.pred-value.no-pred{
+  font-family:'Inter',sans-serif;
+  font-size:15px;
+  line-height:1.2;
+  letter-spacing:0;
+  font-weight:900;
+  color:var(--text2);
+  white-space:normal;
+  word-break:keep-all;
+  overflow-wrap:anywhere;
+}
+.pred-value.big.no-pred{
+  font-size:16px;
+  color:var(--text2);
+}
+.prediction-point-tag{
+  font-size:11px;
+  font-weight:900;
+  padding:6px 10px;
+  border-radius:10px;
+  white-space:nowrap;
+  line-height:1;
+}
+.prediction-point-tag.exact{background:var(--goldf);color:var(--gold);}
+.prediction-point-tag.result{background:var(--greenf);color:var(--green);}
+.prediction-point-tag.miss{background:rgba(100,100,100,.08);color:var(--text2);}
 .pred-note{
   font-size:10px;
   color:var(--text2);
@@ -718,6 +788,13 @@ html,body{background:#ddd8ce;color:var(--text);font-family:'Inter',sans-serif;mi
 @media (max-width: 520px){
   .auth-top-title{font-size:18px;letter-spacing:.14em;}
   .home-breakdown-grid{grid-template-columns:1fr;}
+  .result-match-item{grid-template-columns:1fr;gap:7px;padding:9px;}
+  .result-match-main{display:grid;grid-template-columns:auto minmax(0,1fr);column-gap:8px;align-items:start;}
+  .result-match-head{align-content:flex-start;gap:4px;}
+  .result-match-teams{font-size:13px;line-height:1.25;margin-top:0;overflow-wrap:anywhere;}
+  .result-match-side{grid-template-columns:minmax(58px,.52fr) repeat(2,minmax(0,1fr));width:100%;min-width:0;gap:6px;align-items:center;}
+  .result-match-score{font-size:34px;justify-self:center;}
+  .result-match-judge-col .match-status-badge{width:100%;max-width:none;min-width:0;padding:4px 5px;font-size:9px;}
   .guest-notice{align-items:flex-start;flex-direction:column;}
   .player-edit-grid{grid-template-columns:1fr;}
   .player-editor{padding:10px;}
@@ -726,6 +803,9 @@ html,body{background:#ddd8ce;color:var(--text);font-family:'Inter',sans-serif;mi
   .player-list{gap:6px;}
   .player-row{padding:10px;}
   .player-mini-btn,.btn.ghost,.modal-close{font-size:11px;}
+  .scorer-pred-grid{grid-template-columns:1fr;}
+  .scorer-pred-card{padding:9px;}
+  .scorer-select{font-size:12px;padding:9px 8px;}
   .rank-card{padding:10px;}
   .rank-card-top{grid-template-columns:minmax(0,1fr) auto;gap:8px;align-items:center;}
   .rank-card-name{font-size:13px;}
@@ -836,6 +916,9 @@ html,body{background:#ddd8ce;color:var(--text);font-family:'Inter',sans-serif;mi
 .ko-podium-label{display:flex;align-items:center;gap:6px;font-size:11px;font-weight:900;color:var(--text2);}
 .ko-podium-pick select{width:100%;min-width:0;border:1.5px solid var(--border);border-radius:10px;background:var(--s2);color:var(--text);font:inherit;font-size:12px;font-weight:800;padding:9px 10px;outline:none;}
 .ko-podium-pick select:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accentf);}
+.ko-podium-opp{display:flex;align-items:center;justify-content:space-between;gap:6px;border-top:1px solid var(--border);padding-top:6px;font-size:10px;font-weight:900;color:var(--text2);min-width:0;}
+.ko-podium-opp b{color:var(--gold);font-size:10px;white-space:nowrap;}
+.ko-podium-opp span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--text);}
 .ko-podium-note{font-size:10px;color:var(--text2);font-weight:700;line-height:1.35;}
 .ko-round-band{margin-top:10px;height:52px;overflow:hidden;background:linear-gradient(135deg,#eaf3ef,#dfeadf);border-top:1px solid rgba(22,80,45,.12);}
 .ko-round-band-inner{position:relative;height:52px;min-width:100%;}
@@ -931,6 +1014,8 @@ html,body{background:#ddd8ce;color:var(--text);font-family:'Inter',sans-serif;mi
   .ko-podium-pick{padding:7px;gap:5px;border-radius:11px;}
   .ko-podium-label{font-size:9px;}
   .ko-podium-pick select{font-size:10px;padding:7px 6px;border-radius:8px;}
+  .ko-podium-opp{font-size:9px;gap:4px;padding-top:5px;}
+  .ko-podium-opp b{font-size:9px;}
   .ko-podium-note{font-size:9px;}
   .ko-round-band{height:46px;margin-top:8px;}
   .ko-round-band-inner{height:46px;}
@@ -1323,6 +1408,15 @@ function formatMatchDate(value,time='19:00',timeZone='Asia/Tokyo'){
   const parts=Object.fromEntries(new Intl.DateTimeFormat('ja-JP',{month:'numeric',day:'numeric',weekday:'short',hour:'2-digit',minute:'2-digit',hour12:false,timeZone}).formatToParts(d).map(p=>[p.type,p.value]));
   return `${parts.month}/${parts.day}（${parts.weekday}） ${parts.hour}:${parts.minute}`;
 }
+function matchKickoffDate(match){
+  if(!match?.date)return null;
+  const d=new Date(`${match.date}T${match.kickoff||'19:00'}:00Z`);
+  return Number.isNaN(d.getTime())?null:d;
+}
+function isMatchPredictionClosed(match,now=new Date()){
+  const kickoff=matchKickoffDate(match);
+  return !!kickoff&&now.getTime()>=kickoff.getTime();
+}
 function formatTimestamp(value,timeZone='Asia/Tokyo'){
   if(!value)return '';
   const d=new Date(value);
@@ -1333,7 +1427,7 @@ function formatTimestamp(value,timeZone='Asia/Tokyo'){
 const BOOTSTRAP=window.__WC26_BOOTSTRAP__||null;
 const HAS_BACKEND=!!BOOTSTRAP?.state;
 const DEFAULT_ADMIN_TOKEN='WC2026';
-const DEFAULT_ROOM_SETTINGS={resultPts:1,exactPts:2,koWinnerPts:1,koExactPts:2,koPenaltyPts:1,koChampionPts:5,koRunnerUpPts:3,koThirdPlacePts:2,koRunnerUpEnabled:false,koThirdPlaceEnabled:false};
+const DEFAULT_ROOM_SETTINGS={resultPts:1,exactPts:2,koWinnerPts:1,koExactPts:2,koPenaltyPts:1,koChampionPts:5,koRunnerUpPts:3,koThirdPlacePts:2,koRunnerUpEnabled:false,koThirdPlaceEnabled:false,scorerFirstPts:5,scorerSecondPts:3,scorerThirdPts:2};
 const DEFAULT_UI_SETTINGS={bgTheme:'cream',accentColor:'blue',timeZone:'Asia/Tokyo'};
 const BOOTSTRAP_PLAYERS=BOOTSTRAP?.playersByCountry&&Object.keys(BOOTSTRAP.playersByCountry).length
   ?BOOTSTRAP.playersByCountry
@@ -1363,7 +1457,7 @@ function withWorldCupGoals(data){
 PLAYER_DATA=withWorldCupGoals(PLAYER_DATA);
 PLAYER_DATA_BASE=withWorldCupGoals(PLAYER_DATA_BASE);
 let ALL_PLAYERS=Object.values(PLAYER_DATA).flat();
-let PLAYER_DATA_META={generatedAt:BOOTSTRAP?.generatedAt||null,sources:BOOTSTRAP?.sources||{}};
+let PLAYER_DATA_META={generatedAt:BOOTSTRAP?.generatedAt||null,sources:BOOTSTRAP?.sources||{},meta:BOOTSTRAP?.meta||{}};
 let DATA_STATUS=BOOTSTRAP?.dataStatus||{};
 let RESULT_STATUS=BOOTSTRAP?.resultStatus||{};
 function emptyPlayerOverrides(){
@@ -1459,8 +1553,32 @@ function setPlayerData(next,meta={},shouldNotify=true){
   refreshPlayerDataView();
   if(shouldNotify)notifyStateChange();
 }
+function setPlayerDataFromResponse(data,shouldNotify=true){
+  if(!data?.playersByCountry||!Object.keys(data.playersByCountry).length)return false;
+  setPlayerData(data.playersByCountry,{
+    generatedAt:data.generatedAt||PLAYER_DATA_META.generatedAt,
+    sources:data.sources||PLAYER_DATA_META.sources,
+    meta:data.meta||PLAYER_DATA_META.meta,
+  },shouldNotify);
+  return true;
+}
 function setDataStatus(next){
   DATA_STATUS={...DATA_STATUS,...(next||{})};
+}
+async function refreshStaticPlayerData(){
+  const res=await fetch(`./players.generated.json?refresh=${Date.now()}`,{cache:'no-store'});
+  if(!res.ok)throw new Error('得点ランキングデータを取得できませんでした');
+  const payload=await res.json();
+  setPlayerDataFromResponse(payload,true);
+  const dataStatus={
+    lastUpdatedAt:new Date().toISOString(),
+    source:'players.generated.json',
+    generatedAt:payload.generatedAt||'',
+    status:'success',
+    error:'',
+  };
+  setDataStatus(dataStatus);
+  return {ok:true,...payload,dataStatus};
 }
 const GROUP_STAGE_DEFS=[
   {id:'A',teams:['Mexico','South Africa','Korea Republic','Czechia'],matches:[
@@ -1625,6 +1743,23 @@ const KO_ROUNDS=[
     {id:'3RD-0',matchNo:103,home:'M101敗者',away:'M102敗者',date:'2026-07-18',kickoff:'21:00',stadium:'Miami Stadium',venueLocal:'7/18 17:00',sourceRefs:{home:{round:'SF',index:0,loser:true},away:{round:'SF',index:1,loser:true}}},
   ]},
 ];
+const KO_MATCHES=KO_ROUNDS.flatMap((round)=>round.matches.map((match)=>({...match,roundId:round.id})));
+const FIFA_MATCHES_URL='https://api.fifa.com/api/v3/calendar/matches?language=en&count=500&idSeason=285023';
+const FIFA_TEAM_NAME_ALIASES={
+  'Bosnia And Herzegovina':'Bosnia and Herzegovina',
+  'Congo DR':'Congo',
+  'DR Congo':'Congo',
+  'Democratic Republic of the Congo':'Congo',
+  "Côte D'Ivoire":"Côte d'Ivoire",
+  'Iran':'IR Iran',
+  'Republic of Korea':'Korea Republic',
+  'South Korea':'Korea Republic',
+  'Turkey':'Türkiye',
+  'Turkiye':'Türkiye',
+  'Czech Republic':'Czechia',
+  'United States':'USA',
+  'United States of America':'USA',
+};
 const KO_ROUND_ORDER=KO_ROUNDS.map(r=>r.id);
 const KO_ROUND_INDEX=Object.fromEntries(KO_ROUND_ORDER.map((id,i)=>[id,i]));
 function koMatchKey(roundId,matchIndex){return `${roundId}-${matchIndex}`;}
@@ -1674,6 +1809,27 @@ function inferWinnerSide(home,away){
   if(a>h)return 'away';
   return null;
 }
+function fifaFinalSignal(value,kind){
+  if(value===''||value===null||value===undefined)return null;
+  const num=toFiniteResultNumber(value);
+  if(num!==null)return kind==='status'?num===0:num>0;
+  const text=String(value).trim().toLowerCase();
+  if(!text)return null;
+  if(/(regular|penalt|completed|complete|finished|final|full[-\s]?time)/.test(text))return true;
+  if(/(live|progress|half|scheduled|fixture|not[-\s]?started|pre[-\s]?match|ongoing)/.test(text))return false;
+  return null;
+}
+function isFifaCalendarMatchFinal(match){
+  if(!match||typeof match!=='object')return false;
+  const resultTypeFinal=fifaFinalSignal(match?.ResultType??match?.resultType,'resultType');
+  if(resultTypeFinal!==null)return resultTypeFinal;
+  const candidates=[match?.MatchStatusName,match?.MatchStatusDescription,match?.MatchStatus,match?.OfficialityStatus];
+  for(const value of candidates){
+    const statusFinal=fifaFinalSignal(value,'status');
+    if(statusFinal!==null)return statusFinal;
+  }
+  return true;
+}
 function normalizeKoRecord(value){
   if(!value)return null;
   if(typeof value==='string'){
@@ -1696,17 +1852,151 @@ function normalizeKoRecord(value){
     updatedAt:value.updatedAt||null,
   };
 }
+function toFiniteResultNumber(value){
+  if(value===''||value===null||value===undefined)return null;
+  const num=Number(value);
+  return Number.isFinite(num)?num:null;
+}
+function normalizeFifaKey(value){
+  return String(value||'')
+    .normalize('NFKD')
+    .replace(/[\u0300-\u036f]/g,'')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g,'');
+}
+function normalizeFifaTeamName(value){
+  const raw=String(value||'').trim();
+  if(!raw)return '';
+  return normalizeFifaKey(FIFA_TEAM_NAME_ALIASES[raw]||raw);
+}
+function fifaTeamName(team){
+  if(!team)return null;
+  if(typeof team==='string')return team.trim()||null;
+  if(typeof team!=='object')return null;
+  const candidates=[
+    team.ShortClubName,
+    Array.isArray(team.TeamName)?team.TeamName.find((entry)=>entry&&entry.Description)?.Description:null,
+    team.TeamName&&team.TeamName[0]?team.TeamName[0].Description:null,
+    team.Name,
+    team.name,
+    team.Abbreviation,
+  ];
+  const name=candidates.find((candidate)=>typeof candidate==='string'&&candidate.trim());
+  return name?String(name).trim():null;
+}
+function fifaPairKey(homeName,awayName){
+  return `${normalizeFifaTeamName(homeName)}|${normalizeFifaTeamName(awayName)}`;
+}
+const GROUP_MATCH_ID_BY_FIFA_PAIR=new Map(GROUP_MATCHES.map((match)=>[fifaPairKey(match.home,match.away),match.id]));
+function fifaMatchIdFromMatchNumber(matchNumber){
+  const no=toFiniteResultNumber(matchNumber);
+  if(no===null)return null;
+  if(no>=73&&no<=88)return `R32-${no-73}`;
+  if(no>=89&&no<=96)return `R16-${no-89}`;
+  if(no>=97&&no<=100)return `QF-${no-97}`;
+  if(no>=101&&no<=102)return `SF-${no-101}`;
+  if(no===103)return '3RD-0';
+  if(no===104)return 'F-0';
+  return null;
+}
+function resolveFifaMatchId(match){
+  const numbered=fifaMatchIdFromMatchNumber(match?.MatchNumber??match?.matchNumber??match?.matchNo);
+  if(numbered)return numbered;
+  const homeName=fifaTeamName(match?.Home??match?.home);
+  const awayName=fifaTeamName(match?.Away??match?.away);
+  return homeName&&awayName?GROUP_MATCH_ID_BY_FIFA_PAIR.get(fifaPairKey(homeName,awayName))||null:null;
+}
+function parseFifaCalendarResult(match){
+  const matchId=resolveFifaMatchId(match);
+  if(!matchId)return null;
+  if(!isFifaCalendarMatchFinal(match))return null;
+  const home=toFiniteResultNumber(match?.HomeTeamScore??match?.homeTeamScore??match?.homeScore);
+  const away=toFiniteResultNumber(match?.AwayTeamScore??match?.awayTeamScore??match?.awayScore);
+  if(home===null||away===null)return null;
+  const isKo=matchId.startsWith('R32-')||matchId.startsWith('R16-')||matchId.startsWith('QF-')||matchId.startsWith('SF-')||matchId==='3RD-0'||matchId==='F-0';
+  if(!isKo)return {matchId,result:{home,away,status:'final'}};
+  const homePen=toFiniteResultNumber(match?.HomeTeamPenaltyScore??match?.homeTeamPenaltyScore??match?.homePenalty);
+  const awayPen=toFiniteResultNumber(match?.AwayTeamPenaltyScore??match?.awayTeamPenaltyScore??match?.awayPenalty);
+  const result={home,away,winnerSide:inferWinnerSide(home,away),decidedBy:'REG',homePen:null,awayPen:null,status:'final',locked:true};
+  if(home===away){
+    if(homePen===null||awayPen===null)return null;
+    result.decidedBy='PK';
+    result.homePen=homePen;
+    result.awayPen=awayPen;
+    result.winnerSide=inferWinnerSide(homePen,awayPen);
+    if(!result.winnerSide)return null;
+  }
+  return {matchId,result};
+}
+function mapFifaCalendarMatchesToResults(matches=[]){
+  const results={};
+  (matches||[]).forEach((match)=>{
+    const parsed=parseFifaCalendarResult(match);
+    if(parsed)results[parsed.matchId]=parsed.result;
+  });
+  return results;
+}
+function normalizeStoredResult(value){
+  if(!value||typeof value!=='object'||Array.isArray(value))return null;
+  const normalized={home:toFiniteResultNumber(value.home??value.homeScore??value.homeGoal),away:toFiniteResultNumber(value.away??value.awayScore??value.awayGoal),status:String(value.status||'final')};
+  if('winnerSide' in value||'decidedBy' in value||'homePen' in value||'awayPen' in value||'locked' in value){
+    normalized.winnerSide=value.winnerSide||null;
+    normalized.decidedBy=value.decidedBy||null;
+    normalized.homePen=toFiniteResultNumber(value.homePen??value.homePenalty);
+    normalized.awayPen=toFiniteResultNumber(value.awayPen??value.awayPenalty);
+    normalized.locked=value.locked!==false;
+  }
+  return normalized;
+}
+function resultSnapshotSignature(results={}){
+  return JSON.stringify(Object.keys(results||{}).sort().map((matchId)=>[matchId,normalizeStoredResult(results[matchId])]));
+}
+async function fetchFifaWorldCupResultsClient(){
+  const res=await fetch(FIFA_MATCHES_URL,{headers:{Accept:'application/json'},cache:'no-store'});
+  if(!res.ok)throw new Error(`FIFA試合結果の取得に失敗しました (${res.status})`);
+  const payload=await res.json();
+  const matches=Array.isArray(payload?.Results)?payload.Results:Array.isArray(payload?.results)?payload.results:[];
+  const results=mapFifaCalendarMatchesToResults(matches);
+  return {results,fetchedCount:matches.length,updatedCount:Object.keys(results).length};
+}
+async function refreshStaticSharedRoomResults(roomId){
+  const code=localRoomCodeForId(roomId);
+  if(!code)throw new Error('ルームコードが見つかりません');
+  const {results:incoming,fetchedCount}=await fetchFifaWorldCupResultsClient();
+  const payload=normalizeSharedRoomPayload(await fetchSharedRoomPayload(code),code);
+  const currentResults=payload.state.results||{};
+  const mergedResults={...currentResults,...incoming};
+  const alreadyCurrent=resultSnapshotSignature(currentResults)===resultSnapshotSignature(mergedResults);
+  const changedCount=Object.keys(incoming).filter((matchId)=>(
+    resultSnapshotSignature({[matchId]:currentResults[matchId]})!==resultSnapshotSignature({[matchId]:incoming[matchId]})
+  )).length;
+  let saved=payload;
+  if(!alreadyCurrent){
+    payload.state.results=mergedResults;
+    saved=await saveSharedRoomPayload(payload);
+  }
+  applySharedRoomPayload(saved);
+  const now=new Date().toISOString();
+  RESULT_STATUS={lastUpdatedAt:now,source:'fifa-live-results',fetchedCount,updatedCount:alreadyCurrent?0:changedCount,sourceUrl:FIFA_MATCHES_URL};
+  return {ok:true,roomState:saved.state,resultStatus:RESULT_STATUS,fetchedCount,updatedCount:alreadyCurrent?0:changedCount,sourceUrl:FIFA_MATCHES_URL,alreadyCurrent};
+}
+function koMatchPredictionCount(userKoPreds={}){
+  return KO_MATCHES.reduce((count,match)=>count+(normalizeKoRecord(userKoPreds?.[match.id])?1:0),0);
+}
 function koRecordHasScore(record){
   return record&&Number.isFinite(record.home)&&Number.isFinite(record.away);
 }
-function koRecordScoreText(record){
-  if(!koRecordHasScore(record))return '未入力';
+function scorePairText(record,fallback='未入力'){
+  if(!koRecordHasScore(record))return fallback;
   const base=`${record.home} - ${record.away}`;
   if(record.decidedBy==='PK'&&Number.isFinite(record.homePen)&&Number.isFinite(record.awayPen)){
     return `${base} PK ${record.homePen} - ${record.awayPen}`;
   }
   if(record.decidedBy==='PK')return `${base} PK`;
   return base;
+}
+function koRecordScoreText(record){
+  return scorePairText(record,'未入力');
 }
 function koRecordWinnerSide(record){
   const normalized=normalizeKoRecord(record);
@@ -1718,17 +2008,19 @@ function koRecordWinnerSide(record){
 }
 function getGroupJudgment(pred,actual){
   if(!pred||!actual)return {state:'pending',label:'判定待ち'};
-  if(pred.home===actual.home&&pred.away===actual.away)return {state:'hit',label:'的中'};
+  if(pred.home===actual.home&&pred.away===actual.away)return {state:'hit',label:'スコア+勝敗'};
   const pr=pred.home>pred.away?'H':pred.home<pred.away?'A':'D';
   const ar=actual.home>actual.away?'H':actual.home<actual.away?'A':'D';
-  return pr===ar?{state:'hit',label:'的中'}:{state:'miss',label:'不一致'};
+  return pr===ar?{state:'hit',label:'勝敗的中'}:{state:'miss',label:'不一致'};
 }
 function getKoJudgment(pred,actual){
   if(!pred||!actual)return {state:'pending',label:'判定待ち'};
   const pw=koRecordWinnerSide(pred);
   const aw=koRecordWinnerSide(actual);
   if(!pw||!aw)return {state:'pending',label:'判定待ち'};
-  return pw===aw?{state:'hit',label:'的中'}:{state:'miss',label:'不一致'};
+  if(pw!==aw)return {state:'miss',label:'不一致'};
+  const scoreExact=actual.decidedBy!=='PK'&&pred.home===actual.home&&pred.away===actual.away;
+  return {state:'hit',label:scoreExact?'スコア+勝者':'勝者的中'};
 }
 function koWinnerSideForMatch(match,picks={},results={}){
   if(!match)return null;
@@ -1981,8 +2273,15 @@ function roomDataKey(roomId,key){return `${key}:${roomId}`;}
 function gr(roomId,key,d){return gs(roomDataKey(roomId,key),d);}
 function grPred(roomId,d){return gr(roomId,PREDICTION_STORE_KEY,d);}
 function normalizeRoomCode(code){return String(code||'').trim().toUpperCase();}
+function normalizedUserNameKey(name){return String(name||'').trim().toLowerCase();}
+function findUniqueRoomUserByName(users,roomId,username){
+  const key=normalizedUserNameKey(username);
+  if(!key)return null;
+  const matches=(Array.isArray(users)?users:[]).filter((u)=>u?.roomId===roomId&&normalizedUserNameKey(u.username)===key);
+  return matches.length===1?matches[0]:null;
+}
 function makeClientRoomState(){
-  return {predictionsV2:{},results:{},locked:{},koPreds:{},settings:{...DEFAULT_ROOM_SETTINGS}};
+  return {predictionsV2:{},results:{},locked:{},koPreds:{},scorerPreds:{},settings:{...DEFAULT_ROOM_SETTINGS}};
 }
 function normalizeSharedRoomPayload(payload,roomCode=''){
   const code=normalizeRoomCode(payload?.room?.code||roomCode||genCode());
@@ -2038,9 +2337,35 @@ function applySharedRoomPayload(payload){
   ss(roomDataKey(normalized.room.id,'results'),normalized.state.results||{});
   ss(roomDataKey(normalized.room.id,'locked'),normalized.state.locked||{});
   ss(roomDataKey(normalized.room.id,'koPreds'),normalized.state.koPreds||{});
+  ss(roomDataKey(normalized.room.id,'scorerPreds'),normalized.state.scorerPreds||{});
   ss(roomDataKey(normalized.room.id,'settings'),normalized.state.settings||DEFAULT_ROOM_SETTINGS);
   notifyStateChange();
   return normalized;
+}
+function reconcileCurrentUserWithSharedRoom(payload){
+  const normalized=normalizeSharedRoomPayload(payload,payload?.room?.code);
+  const current=gs('currentUser',null);
+  if(!current?.id||current?.isGuest)return {payload:normalized,user:current,changed:false,saveRequired:false};
+  const currentCode=localRoomCodeForId(current.roomId);
+  if(currentCode&&currentCode!==normalized.room.code)return {payload:normalized,user:current,changed:false,saveRequired:false};
+  const currentMemberCode=String(current.memberCode||'').trim().toUpperCase();
+  let matched=normalized.users.find(u=>u.id===current.id)
+    || (currentMemberCode?normalized.users.find(u=>String(u.memberCode||'').trim().toUpperCase()===currentMemberCode):null);
+  if(matched){
+    const nextUser={...matched,username:current.username||matched.username,roomId:normalized.room.id};
+    normalized.users=normalized.users.map(u=>u.id===matched.id?nextUser:u);
+    const missingMember=!normalized.room.members.includes(nextUser.id);
+    if(missingMember)normalized.room.members.push(nextUser.id);
+    const changed=current.id!==nextUser.id||current.roomId!==nextUser.roomId||current.username!==nextUser.username;
+    return {payload:normalized,user:nextUser,changed,saveRequired:changed||missingMember};
+  }
+  if(normalized.room.members.length>=(normalized.room.maxMembers||2)){
+    return {payload:normalized,user:current,changed:false,saveRequired:false};
+  }
+  const nextUser={...current,roomId:normalized.room.id};
+  normalized.users.push(nextUser);
+  normalized.room.members.push(nextUser.id);
+  return {payload:normalized,user:nextUser,changed:current.roomId!==nextUser.roomId,saveRequired:true};
 }
 function localRoomCodeForId(roomId){
   return normalizeRoomCode((gs('rooms',[]).find(r=>r.id===roomId)||{}).code);
@@ -2087,10 +2412,14 @@ function sr(roomId,key,v){
   syncRoomState(roomId,key,v);
   notifyStateChange();
 }
-function savePrediction(roomId,userId,matchId,prediction){
+function saveLocalPrediction(roomId,userId,matchId,prediction){
   const current=grPred(roomId,{});
   const next={...current,[userId]:{...(current[userId]||{}),[matchId]:prediction}};
   ss(roomDataKey(roomId,PREDICTION_STORE_KEY),next);
+  return next;
+}
+function savePrediction(roomId,userId,matchId,prediction){
+  const next=saveLocalPrediction(roomId,userId,matchId,prediction);
   const user=gs('currentUser',null);
   if(HAS_BACKEND&&roomId&&userId&&user&&!user.isGuest){
     api('/api/state/prediction',{roomId,userId,matchId,prediction}).then((res)=>{
@@ -2110,6 +2439,29 @@ function savePrediction(roomId,userId,matchId,prediction){
     notifyStateChange();
   }
   return next;
+}
+function saveAndLockGroupPrediction(roomId,userId,matchId,prediction){
+  const nextPreds=saveLocalPrediction(roomId,userId,matchId,prediction);
+  const lk=gr(roomId,'locked',{});
+  const arr=[...(lk[userId]||[])];
+  if(!arr.includes(matchId))arr.push(matchId);
+  lk[userId]=arr;
+  ss(roomDataKey(roomId,'locked'),lk);
+  const user=gs('currentUser',null);
+  if(HAS_BACKEND&&roomId&&userId&&user&&!user.isGuest){
+    api('/api/state',{roomId,userId:user.id,key:'locked',value:lk}).then(()=>notifyStateChange());
+  }else if(STATIC_SHARED_ROOM_BACKEND&&roomId&&userId&&user&&!user.isGuest){
+    syncStaticSharedRoomState(roomId,(state)=>{
+      state.predictionsV2 ||= {};
+      state.predictionsV2[userId] ||= {};
+      state.predictionsV2[userId][matchId]=prediction;
+      state.locked ||= {};
+      state.locked[userId]=arr;
+    }).catch(()=>notifyStateChange());
+  }else{
+    notifyStateChange();
+  }
+  return {predictions:nextPreds,locked:lk};
 }
 function updateLocalUserRecord(nextUser, prevUsername=''){
   const rooms=gs('rooms',[]);
@@ -2142,7 +2494,7 @@ function updateLocalUserRecord(nextUser, prevUsername=''){
   return nextUser;
 }
 function clearCompetitionData(roomId){
-  ['predictions','predictionsV2','results','locked','koPreds'].forEach(k=>localStorage.removeItem(SK+roomDataKey(roomId,k)));
+  ['predictions','predictionsV2','results','locked','koPreds','scorerPreds'].forEach(k=>localStorage.removeItem(SK+roomDataKey(roomId,k)));
   const user=gs('currentUser',null);
   if(HAS_BACKEND&&roomId&&user?.id&&!user.isGuest){
     api('/api/state/clear',{roomId,userId:user.id});
@@ -2161,6 +2513,7 @@ function hydrateFromBootstrap(){
     ss(roomDataKey(roomId,'results'),state.results||{});
     ss(roomDataKey(roomId,'locked'),state.locked||{});
     ss(roomDataKey(roomId,'koPreds'),state.koPreds||{});
+    ss(roomDataKey(roomId,'scorerPreds'),state.scorerPreds||{});
     ss(roomDataKey(roomId,'settings'),state.settings||DEFAULT_ROOM_SETTINGS);
   });
   return true;
@@ -2191,6 +2544,7 @@ function initDemo(){
   const globalResults=gs('results',null);
   const globalLocked=gs('locked',null);
   const globalKo=gs('koPreds',null);
+  const globalScorer=gs('scorerPreds',null);
   const preds=globalPreds||{'demo-opp':{}};
   if(!globalPreds){
     GROUP_MATCHES.slice(0,18).forEach(m=>{preds['demo-opp'][m.id]={home:Math.floor(Math.random()*4),away:Math.floor(Math.random()*3)};});
@@ -2203,6 +2557,7 @@ function initDemo(){
   sr(demoRoomKey,'results',res);
   sr(demoRoomKey,'locked',globalLocked||{'demo-opp':GROUP_MATCHES.slice(0,6).map(m=>m.id)});
   sr(demoRoomKey,'koPreds',globalKo||{});
+  sr(demoRoomKey,'scorerPreds',globalScorer||{});
   if(!gr(demoRoomKey,'settings',null))ss(roomDataKey(demoRoomKey,'settings'),DEFAULT_ROOM_SETTINGS);
   if(!gs('settings',null))ss('settings',DEFAULT_UI_SETTINGS);
   ss('inited',true);
@@ -2226,7 +2581,12 @@ function calcPointSummary(preds,results,userId,settings){
   Object.entries(results).forEach(([mid,res])=>{
     const p=up[mid];if(!p)return;
     if(p.home===res.home&&p.away===res.away){
-      total+=exactPts;exactHits+=1;exactPoints+=exactPts;return;
+      total+=resultPts+exactPts;
+      resultHits+=1;
+      exactHits+=1;
+      resultPoints+=resultPts;
+      exactPoints+=exactPts;
+      return;
     }
     const pr=p.home>p.away?'H':p.home<p.away?'A':'D';
     const rr=res.home>res.away?'H':res.home<res.away?'A':'D';
@@ -2247,7 +2607,7 @@ function calcKoPointSummary(koPreds,results,userId,settings){
   }=settings||{};
   const userPreds=koPreds?.[userId]||{};
   let total=0,winnerHits=0,exactHits=0,penaltyHits=0,championHit=0,runnerUpHit=0,thirdPlaceHit=0;
-  KO_ROUNDS.flatMap((round)=>round.matches).forEach((match)=>{
+  KO_MATCHES.forEach((match)=>{
     const pred=normalizeKoRecord(userPreds[match.id]);
     const actual=normalizeKoRecord(results?.[match.id]);
     if(!pred||!actual)return;
@@ -2256,7 +2616,7 @@ function calcKoPointSummary(koPreds,results,userId,settings){
     if(predWinner&&actualWinner&&predWinner===actualWinner){
       total+=koWinnerPts;winnerHits+=1;
     }
-    if(koRecordHasScore(pred)&&koRecordHasScore(actual)&&pred.home===actual.home&&pred.away===actual.away){
+    if(actual.decidedBy!=='PK'&&koRecordHasScore(pred)&&koRecordHasScore(actual)&&pred.home===actual.home&&pred.away===actual.away){
       total+=koExactPts;exactHits+=1;
     }
     if(actual.decidedBy==='PK'&&pred.decidedBy==='PK'&&predWinner&&actualWinner&&predWinner===actualWinner){
@@ -2275,6 +2635,120 @@ function calcKoPointSummary(koPreds,results,userId,settings){
     total+=koThirdPlacePts;thirdPlaceHit=1;
   }
   return {total,winnerHits,exactHits,penaltyHits,championHit,runnerUpHit,thirdPlaceHit,koWinnerPts,koExactPts,koPenaltyPts,koChampionPts,koRunnerUpPts,koThirdPlacePts};
+}
+const SCORER_PREDICTION_SLOTS=[
+  {key:'first',label:'得点ランキング 1位的中',pickLabel:'1位予想',pointsKey:'scorerFirstPts',hitKey:'firstHit',pointsResultKey:'firstPoints',defaultPoints:5},
+  {key:'second',label:'得点ランキング 2位的中',pickLabel:'2位予想',pointsKey:'scorerSecondPts',hitKey:'secondHit',pointsResultKey:'secondPoints',defaultPoints:3},
+  {key:'third',label:'得点ランキング 3位的中',pickLabel:'3位予想',pointsKey:'scorerThirdPts',hitKey:'thirdHit',pointsResultKey:'thirdPoints',defaultPoints:2},
+];
+const TOTAL_PREDICTABLE_ITEMS=GROUP_MATCHES.length+KO_MATCHES.length+SCORER_PREDICTION_SLOTS.length;
+function scorerPlayerKey(player){
+  if(!player)return '';
+  const country=String(player.country||'').trim();
+  const id=String(player.id||'').trim();
+  return country&&id?`${country}::${id}`:'';
+}
+function normalizeScorerPredictionValue(value){
+  if(!value)return '';
+  if(typeof value==='string')return value;
+  if(typeof value==='object'){
+    const country=String(value.country||'').trim();
+    const id=String(value.playerId||value.id||'').trim();
+    return country&&id?`${country}::${id}`:'';
+  }
+  return '';
+}
+function scorerStatNumber(value,fallback=0){
+  const num=Number(value);
+  return Number.isFinite(num)?num:fallback;
+}
+function scorerMinutes(player){
+  for(const key of ['worldCupMinutes','worldCupMinutesPlayed','minutesPlayed','minutes']){
+    const num=Number(player?.[key]);
+    if(Number.isFinite(num)&&num>=0)return num;
+  }
+  return null;
+}
+function compareScorerPlayers(a,b){
+  const goalDiff=scorerStatNumber(b?.worldCupGoals)-scorerStatNumber(a?.worldCupGoals);
+  if(goalDiff)return goalDiff;
+  const assistDiff=scorerStatNumber(b?.worldCupAssists)-scorerStatNumber(a?.worldCupAssists);
+  if(assistDiff)return assistDiff;
+  const aMinutes=scorerMinutes(a), bMinutes=scorerMinutes(b);
+  if(aMinutes!==null&&bMinutes!==null&&aMinutes!==bMinutes)return aMinutes-bMinutes;
+  return scorerPlayerKey(a).localeCompare(scorerPlayerKey(b));
+}
+function sameScorerRankBucket(a,b){
+  if(scorerStatNumber(a?.worldCupGoals)!==scorerStatNumber(b?.worldCupGoals))return false;
+  if(scorerStatNumber(a?.worldCupAssists)!==scorerStatNumber(b?.worldCupAssists))return false;
+  const aMinutes=scorerMinutes(a), bMinutes=scorerMinutes(b);
+  return !(aMinutes!==null&&bMinutes!==null&&aMinutes!==bMinutes);
+}
+function makeScorerRankGroups(players=ALL_PLAYERS,limit=Infinity){
+  const groups=[];
+  const sorted=[...(players||[])]
+    .filter((player)=>Number(player?.worldCupGoals||0)>0&&scorerPlayerKey(player))
+    .sort(compareScorerPlayers);
+  sorted.forEach((player)=>{
+    let group=groups[groups.length-1];
+    if(!group||!sameScorerRankBucket(group.players[0],player)){
+      if(groups.length>=limit)return;
+      group={
+        rank:groups.length+1,
+        goals:scorerStatNumber(player.worldCupGoals),
+        assists:scorerStatNumber(player.worldCupAssists),
+        minutes:scorerMinutes(player),
+        players:[],
+        keys:new Set()
+      };
+      groups.push(group);
+    }
+    group.players.push(player);
+    group.keys.add(scorerPlayerKey(player));
+  });
+  return groups;
+}
+function buildScorerRankGroups(players=ALL_PLAYERS){
+  return makeScorerRankGroups(players,SCORER_PREDICTION_SLOTS.length);
+}
+function buildScorerRankingRows(players=ALL_PLAYERS){
+  return makeScorerRankGroups(players).flatMap((group)=>group.players.map((player)=>({
+    ...player,
+    rank:group.rank,
+    isTied:group.players.length>1,
+    scorerRankGroupSize:group.players.length,
+  })));
+}
+function scorerPredictionCount(userScorerPreds={}){
+  return SCORER_PREDICTION_SLOTS.reduce((count,slot)=>count+(normalizeScorerPredictionValue(userScorerPreds?.[slot.key])?1:0),0);
+}
+function calcScorerPointSummary(scorerPreds,userId,settings,players=ALL_PLAYERS){
+  const userPreds=scorerPreds?.[userId]||{};
+  const groups=buildScorerRankGroups(players);
+  const result={
+    total:0,
+    firstHit:0,
+    secondHit:0,
+    thirdHit:0,
+    firstPoints:0,
+    secondPoints:0,
+    thirdPoints:0,
+    scorerFirstPts:Number(settings?.scorerFirstPts??5),
+    scorerSecondPts:Number(settings?.scorerSecondPts??3),
+    scorerThirdPts:Number(settings?.scorerThirdPts??2),
+  };
+  SCORER_PREDICTION_SLOTS.forEach((slot,index)=>{
+    const predicted=normalizeScorerPredictionValue(userPreds[slot.key]);
+    const actualGroup=groups[index];
+    const pts=Number(settings?.[slot.pointsKey]??slot.defaultPoints);
+    result[slot.pointsResultKey]=0;
+    if(predicted&&actualGroup?.keys?.has(predicted)){
+      result[slot.hitKey]=1;
+      result[slot.pointsResultKey]=pts;
+      result.total+=pts;
+    }
+  });
+  return result;
 }
 function displayUserLabel(user,roomOrMembers){
   if(!user)return '--';
@@ -2582,7 +3056,7 @@ function AuthScreen({onAuth}){
       if(!acc.some((item)=>item.roomCode===profile.roomCode&&item.username===profile.username))acc.push(profile);
       return acc;
     },[])
-    .slice(0,5);
+    .slice(0,2);
   const set=k=>e=>setForm(f=>({...f,[k]:e.target.value}));
   function useRecentProfile(profile){
     setForm({
@@ -2643,6 +3117,7 @@ function AuthScreen({onAuth}){
         ss(roomDataKey(result.room.id,'results'),state.results||{});
         ss(roomDataKey(result.room.id,'locked'),state.locked||{});
         ss(roomDataKey(result.room.id,'koPreds'),state.koPreds||{});
+        ss(roomDataKey(result.room.id,'scorerPreds'),state.scorerPreds||{});
         ss(roomDataKey(result.room.id,'settings'),state.settings||DEFAULT_ROOM_SETTINGS);
       }
       const persisted={
@@ -2664,7 +3139,7 @@ function AuthScreen({onAuth}){
       try{
         const shared=normalizeSharedRoomPayload(await fetchSharedRoomPayload(code),code);
         const reuseMemberCode=canReuse?String(savedProfile?.memberCode||'').trim().toUpperCase():'';
-        const existing=(reuseMemberCode&&shared.users.find(u=>String(u.memberCode||'').toUpperCase()===reuseMemberCode&&u.roomId===shared.room.id))||null;
+        const existing=(reuseMemberCode&&shared.users.find(u=>String(u.memberCode||'').toUpperCase()===reuseMemberCode&&u.roomId===shared.room.id))||findUniqueRoomUserByName(shared.users,shared.room.id,rawName)||null;
         if(shared.room.members.length>=shared.room.maxMembers&&!existing){setErr('このルームは満員です');return;}
         let user=existing||null;
         if(user){
@@ -2703,7 +3178,7 @@ function AuthScreen({onAuth}){
     const users=[...gs('users',[])];
     const reuseMemberCode=canReuse?String(savedProfile?.memberCode||'').trim().toUpperCase():'';
     const existing=
-      (reuseMemberCode&&users.find(u=>u.memberCode===reuseMemberCode&&u.roomId===room.id))||null;
+      (reuseMemberCode&&users.find(u=>u.memberCode===reuseMemberCode&&u.roomId===room.id))||findUniqueRoomUserByName(users,room.id,rawName)||null;
     if(room.members.length>=2&&!existing){setErr('このルームは満員です');return;}
     let user=existing||null;
     if(user){
@@ -2794,20 +3269,23 @@ function BottomNav({screen,setScreen}){
 }
 
 // ===== HOME =====
-function HomeScreen({user,onLogout,syncToken}){
+function HomeScreen({user,onLogout,onManualSync,syncToken}){
   const lang=useContext(LangCtx);const l=T[lang];
   const [copied,setCopied]=useState(false);
   const [homeToast,setHomeToast]=useState('');
   const [homeUpdatingResults,setHomeUpdatingResults]=useState(false);
+  const [homeSyncing,setHomeSyncing]=useState(false);
   const rooms=gs('rooms',[]);
   const room=rooms.find(r=>r.id===user.roomId);
   const roomId=room?.id||user.roomId;
   const preds=grPred(roomId,{});
   const results=gr(roomId,'results',{});
   const koPreds=gr(roomId,'koPreds',{});
+  const scorerPreds=gr(roomId,'scorerPreds',{});
   const settings={...DEFAULT_ROOM_SETTINGS,...gr(roomId,'settings',{})};
   const mySummary=calcPointSummary(preds,results,user.id,settings);
   const myKoSummary=calcKoPointSummary(koPreds,results,user.id,settings);
+  const myScorerSummary=calcScorerPointSummary(scorerPreds,user.id,settings);
   const users=gs('users',[]);
   const roomUsers=(() => {
     const byId=new Map();
@@ -2824,15 +3302,22 @@ function HomeScreen({user,onLogout,syncToken}){
   const oppId=opp?.id||null;
   const oppSummary=oppId?calcPointSummary(preds,results,oppId,settings):{total:0,resultHits:0,exactHits:0};
   const oppKoSummary=oppId?calcKoPointSummary(koPreds,results,oppId,settings):{total:0,winnerHits:0,exactHits:0};
-  const myPredCount=Object.keys(preds[user.id]||{}).length;
+  const oppScorerSummary=oppId?calcScorerPointSummary(scorerPreds,oppId,settings):calcScorerPointSummary({},'',settings);
+  const myGroupPredCount=Object.keys(preds[user.id]||{}).length;
+  const myKoPredCount=koMatchPredictionCount(koPreds[user.id]||{});
+  const myScorerPredCount=scorerPredictionCount(scorerPreds[user.id]||{});
+  const myPredCount=myGroupPredCount+myKoPredCount+myScorerPredCount;
   const resultCount=Object.keys(results).length;
   const myLabel=displayUserLabel(user,roomMembers);
   const oppLabel=displayUserLabel(opp,roomMembers);
-  const myTotal=mySummary.total+myKoSummary.total;
-  const oppTotal=oppSummary.total+oppKoSummary.total;
-  const oppPredCount=oppId?Object.keys(preds[oppId]||{}).length:0;
-  const myGroupMiss=GROUP_MATCHES.length-myPredCount;
-  const oppGroupMiss=oppId?GROUP_MATCHES.length-oppPredCount:0;
+  const myTotal=mySummary.total+myKoSummary.total+myScorerSummary.total;
+  const oppTotal=oppSummary.total+oppKoSummary.total+oppScorerSummary.total;
+  const oppGroupPredCount=oppId?Object.keys(preds[oppId]||{}).length:0;
+  const oppKoPredCount=oppId?koMatchPredictionCount(koPreds[oppId]||{}):0;
+  const oppScorerPredCount=oppId?scorerPredictionCount(scorerPreds[oppId]||{}):0;
+  const oppPredCount=oppGroupPredCount+oppKoPredCount+oppScorerPredCount;
+  const myUnpredictedCount=TOTAL_PREDICTABLE_ITEMS-myPredCount;
+  const oppUnpredictedCount=oppId?TOTAL_PREDICTABLE_ITEMS-oppPredCount:0;
   const groupCompareRows=[
     {label:'勝敗的中',me:`${mySummary.resultHits}件 / +${mySummary.resultPoints}pt`,opp:`${oppSummary.resultHits||0}件 / +${oppSummary.resultPoints||0}pt`},
     {label:'スコア的中',me:`${mySummary.exactHits}件 / +${mySummary.exactPoints}pt`,opp:`${oppSummary.exactHits||0}件 / +${oppSummary.exactPoints||0}pt`},
@@ -2846,6 +3331,11 @@ function HomeScreen({user,onLogout,syncToken}){
     {label:'スコア的中',me:koScorePts(myKoSummary),opp:koScorePts(oppKoSummary)},
     {label:'順位的中',me:koPodiumPts(myKoSummary),opp:koPodiumPts(oppKoSummary)},
     {label:'合計',me:`${myKoSummary.total}pt`,opp:`${oppKoSummary.total||0}pt`},
+  ];
+  const scorerSlotPts=(summary,slot)=>`${summary[slot.hitKey]||0}件 / +${summary[slot.pointsResultKey]||0}pt`;
+  const scorerCompareRows=[
+    ...SCORER_PREDICTION_SLOTS.map((slot)=>({label:slot.label.replace('得点ランキング ',''),me:scorerSlotPts(myScorerSummary,slot),opp:scorerSlotPts(oppScorerSummary,slot)})),
+    {label:'合計',me:`${myScorerSummary.total}pt`,opp:`${oppScorerSummary.total||0}pt`},
   ];
   const primaryActionLabel=user?.isGuest?'トップに戻る':l.logout;
   const primaryActionClass=user?.isGuest?'btn ghost':'btn ghost danger';
@@ -2868,30 +3358,38 @@ function HomeScreen({user,onLogout,syncToken}){
       const meta=homeResultMetaMap.get(matchId);
       if(!meta)return null;
       const actual=meta.kind==='ko'?normalizeKoRecord(actualRaw):actualRaw;
-      const pred=meta.kind==='ko'
+      const myPred=meta.kind==='ko'
         ?normalizeKoRecord(koPreds[user.id]?.[matchId])
         :preds[user.id]?.[matchId];
-      const judgment=meta.kind==='ko'?getKoJudgment(pred,actual):getGroupJudgment(pred,actual);
-      const scoreText=meta.kind==='ko'
-        ?(actual?koRecordScoreText(actual):'未反映')
-        :(actual&&Number.isFinite(actual.home)&&Number.isFinite(actual.away)?`${actual.home}–${actual.away}`:'未反映');
-      return {...meta,actual,judgment,scoreText};
+      const oppPred=oppId?meta.kind==='ko'
+        ?normalizeKoRecord(koPreds[oppId]?.[matchId])
+        :preds[oppId]?.[matchId]:null;
+      const myJudgment=meta.kind==='ko'?getKoJudgment(myPred,actual):getGroupJudgment(myPred,actual);
+      const oppJudgment=oppId?(meta.kind==='ko'?getKoJudgment(oppPred,actual):getGroupJudgment(oppPred,actual)):null;
+      const scoreText=scorePairText(actual,'未反映');
+      const myPredText=scorePairText(myPred,'未予想');
+      const oppPredText=scorePairText(oppPred,'未予想');
+      return {...meta,actual,myJudgment,oppJudgment,scoreText,myPredText,oppPredText};
     })
     .filter(Boolean)
     .sort((a,b)=>a.order-b.order);
 
   async function applyAdminResults(){
-    if(!HAS_BACKEND){setHomeToast('サーバー接続時のみ更新できます');return;}
     sessionStorage.setItem('wc26AdminToken',homeAdminToken);
     setHomeUpdatingResults(true);
     try{
-      const res=await api('/api/admin/refresh-results',{adminToken:homeAdminToken,roomId});
+      const res=HAS_BACKEND
+        ?await api('/api/admin/refresh-results',{adminToken:homeAdminToken,roomId})
+        :STATIC_SHARED_ROOM_BACKEND
+          ?await refreshStaticSharedRoomResults(roomId)
+          :null;
       if(!res?.ok){
         setHomeToast(res?.error||'試合結果を取得できませんでした');
         return;
       }
       const nextResults=res.roomState?.results||{};
       ss(roomDataKey(roomId,'results'),nextResults);
+      if(res.dataStatus)setDataStatus(res.dataStatus);
       if(res.resultStatus)RESULT_STATUS=res.resultStatus;
       const updatedCount=Number(res.updatedCount||0);
       if(res.alreadyCurrent){
@@ -2903,8 +3401,20 @@ function HomeScreen({user,onLogout,syncToken}){
         ? `Web取得した試合結果を反映しました（${updatedCount}件）`
         : 'Webから取得しましたが、反映可能な試合結果はまだありません');
       notifyStateChange();
+    }catch(error){
+      setHomeToast(error?.message||'試合結果を取得できませんでした');
     }finally{
       setHomeUpdatingResults(false);
+    }
+  }
+  async function refreshSharedState(){
+    if(typeof onManualSync!=='function')return;
+    setHomeSyncing(true);
+    try{
+      const res=await onManualSync();
+      setHomeToast(res?.ok?'最新状態に更新しました':(res?.error||'最新状態を取得できませんでした'));
+    }finally{
+      setHomeSyncing(false);
     }
   }
 
@@ -2940,18 +3450,21 @@ function HomeScreen({user,onLogout,syncToken}){
       )}
       {room&&<div className="room-bar">
         <div><div className="room-lbl">{l.roomCode}</div><div className="room-code">{room.code}</div></div>
-        {user.isGuest
-          ?<button className="copy-btn" onClick={onLogout}>トップに戻る</button>
-          :<button className="copy-btn" onClick={()=>{navigator.clipboard?.writeText(room.code);setCopied(true);setTimeout(()=>setCopied(false),2000);}}>
-            {copied?l.copied:l.copy+' 📋'}
-          </button>}
+        <div className="room-actions">
+          {!user.isGuest&&<button className="copy-btn" onClick={refreshSharedState} disabled={homeSyncing}>{homeSyncing?'更新中…':'最新状態に更新'}</button>}
+          {user.isGuest
+            ?<button className="copy-btn" onClick={onLogout}>トップに戻る</button>
+            :<button className="copy-btn" onClick={()=>{navigator.clipboard?.writeText(room.code);setCopied(true);setTimeout(()=>setCopied(false),2000);}}>
+              {copied?l.copied:l.copy+' 📋'}
+            </button>}
+        </div>
       </div>}
       <div className="stats-grid">
         <div className="stats-frame">
           <div className="stats-table">
-            <div className="stats-head"><span>項目</span><span>自分</span><span>相手</span></div>
+            <div className="stats-head"><span>項目</span><span title={myLabel}>{myLabel}</span><span title={oppLabel}>{opp?oppLabel:'相手'}</span></div>
             <div className="stats-row"><span>{l.predicted}</span><b className="me">{myPredCount}件</b><b className="opp">{opp?oppPredCount:'-'}件</b></div>
-            <div className="stats-row"><span>{l.unpredicted}</span><b className="me">{myGroupMiss}件</b><b className="opp">{opp?oppGroupMiss:'-'}件</b></div>
+            <div className="stats-row"><span>{l.unpredicted}</span><b className="me">{myUnpredictedCount}件</b><b className="opp">{opp?oppUnpredictedCount:'-'}件</b></div>
             <div className="stats-row total"><span>{l.confirmed}</span><b className="me">{resultCount}件</b><b className="opp">{opp?Object.keys(results).length:'-'}件</b></div>
           </div>
         </div>
@@ -2961,9 +3474,13 @@ function HomeScreen({user,onLogout,syncToken}){
         <div className="home-breakdown-grid">
           <div className="home-break-card">
             <h3>グループリーグ</h3>
-            <div className="home-break-total"><strong>{mySummary.total}</strong><span>pt</span></div>
+            <div className="home-break-totals">
+              <div className="home-break-total-spacer" aria-hidden="true"></div>
+              <div className="home-break-total me"><span className="total-label" title={myLabel}>自分: {myLabel}</span><div className="total-score"><strong>{mySummary.total}</strong><span>pt</span></div></div>
+              <div className="home-break-total opp"><span className="total-label" title={oppLabel}>相手: {opp?oppLabel:'-'}</span><div className="total-score"><strong>{opp?oppSummary.total:'-'}</strong>{opp&&<span>pt</span>}</div></div>
+            </div>
             <div className="home-compare">
-              <div className="home-compare-row home-compare-head"><span>項目</span><b>自分</b><b>相手</b></div>
+              <div className="home-compare-row home-compare-head"><span>ユーザー名</span><b title={myLabel}>{myLabel}</b><b title={oppLabel}>{opp?oppLabel:'相手'}</b></div>
               {groupCompareRows.map(row=>(
                 <div className="home-compare-row" key={`group-${row.label}`}>
                   <span>{row.label}</span><b className="me">{row.me}</b><b className="opp">{opp?row.opp:'-'}</b>
@@ -2973,11 +3490,31 @@ function HomeScreen({user,onLogout,syncToken}){
           </div>
           <div className="home-break-card">
             <h3>決勝トーナメント</h3>
-            <div className="home-break-total"><strong>{myKoSummary.total}</strong><span>pt</span></div>
+            <div className="home-break-totals">
+              <div className="home-break-total-spacer" aria-hidden="true"></div>
+              <div className="home-break-total me"><span className="total-label" title={myLabel}>自分: {myLabel}</span><div className="total-score"><strong>{myKoSummary.total}</strong><span>pt</span></div></div>
+              <div className="home-break-total opp"><span className="total-label" title={oppLabel}>相手: {opp?oppLabel:'-'}</span><div className="total-score"><strong>{opp?oppKoSummary.total:'-'}</strong>{opp&&<span>pt</span>}</div></div>
+            </div>
             <div className="home-compare">
-              <div className="home-compare-row home-compare-head"><span>項目</span><b>自分</b><b>相手</b></div>
+              <div className="home-compare-row home-compare-head"><span>ユーザー名</span><b title={myLabel}>{myLabel}</b><b title={oppLabel}>{opp?oppLabel:'相手'}</b></div>
               {koCompareRows.map(row=>(
                 <div className="home-compare-row" key={`ko-${row.label}`}>
+                  <span>{row.label}</span><b className="me">{row.me}</b><b className="opp">{opp?row.opp:'-'}</b>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div className="home-break-card">
+            <h3>得点ランキング</h3>
+            <div className="home-break-totals">
+              <div className="home-break-total-spacer" aria-hidden="true"></div>
+              <div className="home-break-total me"><span className="total-label" title={myLabel}>自分: {myLabel}</span><div className="total-score"><strong>{myScorerSummary.total}</strong><span>pt</span></div></div>
+              <div className="home-break-total opp"><span className="total-label" title={oppLabel}>相手: {opp?oppLabel:'-'}</span><div className="total-score"><strong>{opp?oppScorerSummary.total:'-'}</strong>{opp&&<span>pt</span>}</div></div>
+            </div>
+            <div className="home-compare">
+              <div className="home-compare-row home-compare-head"><span>ユーザー名</span><b title={myLabel}>{myLabel}</b><b title={oppLabel}>{opp?oppLabel:'相手'}</b></div>
+              {scorerCompareRows.map(row=>(
+                <div className="home-compare-row" key={`scorer-${row.label}`}>
                   <span>{row.label}</span><b className="me">{row.me}</b><b className="opp">{opp?row.opp:'-'}</b>
                 </div>
               ))}
@@ -2996,7 +3533,7 @@ function HomeScreen({user,onLogout,syncToken}){
           </div>
           <div className="result-judge-form">
             <button className="btn result-judge-btn" onClick={applyAdminResults} disabled={homeUpdatingResults}>
-              {homeUpdatingResults?'反映中…':'結果反映'}
+              {homeUpdatingResults?'反映中…':'試合結果を反映'}
             </button>
           </div>
           <div className="result-judge-list-head">試合結果一覧</div>
@@ -3013,12 +3550,20 @@ function HomeScreen({user,onLogout,syncToken}){
                     {item.kind==='ko'
                       ?`${koTeamName(item.match.home)} vs ${koTeamName(item.match.away)}`
                       :`${teamJa(item.match.home)} vs ${teamJa(item.match.away)}`}
-                    <span className="result-match-stadium">・ {stadiumLabel(item.match.stadium,lang)}</span>
                   </div>
                 </div>
                 <div className="result-match-side">
-                  <div className={`result-match-score${item.judgment.state==='pending'?' pending':''}`}>{item.scoreText}</div>
-                  <span className={`match-status-badge ${item.judgment.state}`}>{item.judgment.label}</span>
+                  <div className={`result-match-score${item.scoreText==='未反映'?' pending':''}`}>{item.scoreText}</div>
+                  <div className="result-match-judge-col me">
+                    <span className="result-match-judge-label" title={myLabel}>{myLabel}</span>
+                    <span className="result-pred-score">{item.myPredText}</span>
+                    <span className={`match-status-badge ${item.myJudgment.state}`}>{item.myJudgment.label}</span>
+                  </div>
+                  <div className="result-match-judge-col opp">
+                    <span className="result-match-judge-label" title={oppLabel}>{opp?oppLabel:'相手'}</span>
+                    <span className="result-pred-score">{item.oppPredText}</span>
+                    <span className={`match-status-badge ${item.oppJudgment?.state||'pending'}`}>{item.oppJudgment?.label||'-'}</span>
+                  </div>
                 </div>
               </div>
             ))}
@@ -3032,6 +3577,13 @@ function HomeScreen({user,onLogout,syncToken}){
   );
 }
 
+function PredictionPointTag({score}){
+  if(!score)return null;
+  const type=score.type==='exact'?'exact':score.type==='result'?'result':'miss';
+  const label=score.type==='exact'?`⭐ +${score.pts}pt`:score.type==='result'?`✓ +${score.pts}pt`:'✗ +0';
+  return <div className={`prediction-point-tag ${type}`}>{label}</div>;
+}
+
 // ===== MATCH CARD =====
 function MatchCard({match,userId,opponentId,preds,results,onSave,roomId,syncToken,readOnly=false}){
   const lang=useContext(LangCtx);const l=T[lang];
@@ -3039,12 +3591,16 @@ function MatchCard({match,userId,opponentId,preds,results,onSave,roomId,syncToke
   const myPred=preds[userId]?.[match.id];
   const oppPred=opponentId?preds[opponentId]?.[match.id]:null;
   const result=results[match.id];
+  const isFinished=!!result;
+  const isPredictionClosed=isMatchPredictionClosed(match);
+  const isPredictionReadOnly=readOnly||isFinished||isPredictionClosed;
   const uiSettings=gs('settings',DEFAULT_UI_SETTINGS);
   const timeZone=uiSettings.timeZone||DEFAULT_UI_SETTINGS.timeZone;
   const locked=gr(roomId,'locked',{});
   const isLocked=(locked[userId]||[]).includes(match.id);
   const [home,setHome]=useState(myPred?.home??0);
   const [away,setAway]=useState(myPred?.away??0);
+  const scoreDraftRef=useRef({home:myPred?.home??0,away:myPred?.away??0});
   const [localLocked,setLocalLocked]=useState(isLocked&&!!myPred);
   const myUserName=users.find((u)=>u.id===userId)?.username||'ユーザー名';
   const oppUserName=users.find((u)=>u.id===opponentId)?.username||'ユーザー名';
@@ -3053,20 +3609,26 @@ function MatchCard({match,userId,opponentId,preds,results,onSave,roomId,syncToke
   useEffect(()=>{
     setHome(myPred?.home??0);
     setAway(myPred?.away??0);
+    scoreDraftRef.current={home:myPred?.home??0,away:myPred?.away??0};
     setLocalLocked(isLocked&&!!myPred);
   },[syncToken,myPred?.home,myPred?.away,isLocked,match.id]);
 
+  function updateScore(side,delta){
+    if(isPredictionReadOnly||localLocked||isMatchPredictionClosed(match))return;
+    const current=scoreDraftRef.current;
+    const nextValue=Math.max(0,Math.min(20,(current[side]||0)+delta));
+    scoreDraftRef.current={...current,[side]:nextValue};
+    if(side==='home')setHome(nextValue);else setAway(nextValue);
+  }
   function doConfirm(){
-    if(readOnly)return;
-    onSave(match.id,{home,away});
-    const lk=gr(roomId,'locked',{});
-    const arr=[...(lk[userId]||[])];
-    if(!arr.includes(match.id))arr.push(match.id);
-    lk[userId]=arr;sr(roomId,'locked',lk);
+    if(readOnly||isFinished||isMatchPredictionClosed(match))return;
+    const prediction={...scoreDraftRef.current};
+    onSave(match.id,prediction,true);
+    saveAndLockGroupPrediction(roomId,userId,match.id,prediction);
     setLocalLocked(true);
   }
   function doUnlock(){
-    if(readOnly)return;
+    if(readOnly||isFinished||isMatchPredictionClosed(match))return;
     const lk=gr(roomId,'locked',{});
     lk[userId]=(lk[userId]||[]).filter(id=>id!==match.id);
     sr(roomId,'locked',lk);
@@ -3075,23 +3637,27 @@ function MatchCard({match,userId,opponentId,preds,results,onSave,roomId,syncToke
   function getPts(pred,res){
     if(!pred||!res)return null;
     const s={...DEFAULT_ROOM_SETTINGS,...gr(roomId,'settings',{})};
-    if(pred.home===res.home&&pred.away===res.away)return{pts:s.exactPts,type:'exact'};
+    if(pred.home===res.home&&pred.away===res.away)return{pts:s.resultPts+s.exactPts,type:'exact'};
     const pr=pred.home>pred.away?'H':pred.home<pred.away?'A':'D';
     const rr=res.home>res.away?'H':res.home<res.away?'A':'D';
     return pr===rr?{pts:s.resultPts,type:'result'}:{pts:0,type:'miss'};
   }
   const myScore=myPred&&result?getPts(myPred,result):null;
+  const oppScore=oppPred&&result?getPts(oppPred,result):null;
   const groupJudgment=getGroupJudgment(myPred,result);
   return(
     <div className="mcard">
       <div className="mcard-hdr">
         <span>グループ {match.groupId}</span>
         <div className="mcard-hdr-right">
-          {localLocked&&<span className="lock-tag">🔒 {l.confirm}済み</span>}
-          {result&&<span style={{fontSize:10,background:'var(--goldf)',color:'var(--gold)',fontWeight:800,padding:'2px 8px',borderRadius:20}}>
-            結果: {result.home}–{result.away}
-          </span>}
-          <span className={`match-status-badge ${groupJudgment.state}`}>{groupJudgment.label}</span>
+          {result?
+            <span className="match-finished-tag">終了</span>
+            :<>
+              {isPredictionClosed
+                ?<span className="lock-tag">締切</span>
+                :localLocked&&<span className="lock-tag">🔒 {l.confirm}済み</span>}
+              <span className={`match-status-badge ${groupJudgment.state}`}>{isPredictionClosed?'締切':groupJudgment.label}</span>
+            </>}
         </div>
       </div>
       <div style={{padding:'7px 12px 0',fontSize:10,color:'var(--text2)',fontWeight:700,display:'flex',justifyContent:'space-between',gap:8,flexWrap:'wrap'}}>
@@ -3114,29 +3680,24 @@ function MatchCard({match,userId,opponentId,preds,results,onSave,roomId,syncToke
               <span className="pred-role">自分</span>
               <div className="pred-name">{myUserName}</div>
             </div>
-            {(localLocked||readOnly)
+            {(localLocked||isPredictionReadOnly)
               ?<div className="pred-score">
                 <div>
-                  <div className="pred-value big">{myPred?`${myPred.home}–${myPred.away}`:l.noPred}</div>
+                  <div className={`pred-value big${myPred?'':' no-pred'}`}>{scorePairText(myPred,l.noPred)}</div>
                 </div>
-                {myScore&&<div style={{fontSize:11,fontWeight:800,padding:'6px 10px',borderRadius:10,
-                  background:myScore.type==='exact'?'var(--goldf)':myScore.type==='result'?'var(--greenf)':'rgba(100,100,100,.08)',
-                  color:myScore.type==='exact'?'var(--gold)':myScore.type==='result'?'var(--green)':'var(--text2)',
-                  whiteSpace:'nowrap'}}>
-                  {myScore.type==='exact'?`⭐ +${myScore.pts}pt`:myScore.type==='result'?`✓ +${myScore.pts}pt`:'✗ +0'}
-                </div>}
+                <PredictionPointTag score={myScore}/>
               </div>
               :<div className="pred-edit">
                 <div className="scw">
-                  <button className="sarr" onClick={()=>setHome(h=>Math.min(20,h+1))}>▲</button>
+                  <button className="sarr" onClick={()=>updateScore('home',1)}>▲</button>
                   <div className={`snum${home>0?' active':''}`}>{home}</div>
-                  <button className="sarr" onClick={()=>setHome(h=>Math.max(0,h-1))}>▼</button>
+                  <button className="sarr" onClick={()=>updateScore('home',-1)}>▼</button>
                 </div>
                 <div className="sdiv">–</div>
                 <div className="scw">
-                  <button className="sarr" onClick={()=>setAway(a=>Math.min(20,a+1))}>▲</button>
+                  <button className="sarr" onClick={()=>updateScore('away',1)}>▲</button>
                   <div className={`snum${away>0?' active':''}`}>{away}</div>
-                  <button className="sarr" onClick={()=>setAway(a=>Math.max(0,a-1))}>▼</button>
+                  <button className="sarr" onClick={()=>updateScore('away',-1)}>▼</button>
                 </div>
               </div>
             }
@@ -3148,14 +3709,19 @@ function MatchCard({match,userId,opponentId,preds,results,onSave,roomId,syncToke
             </div>
             <div className="pred-score">
               <div>
-                <div className="pred-value">{oppPred?`${oppPred.home}–${oppPred.away}`:'未予想'}</div>
+                <div className={`pred-value${oppPred?'':' no-pred'}`}>{scorePairText(oppPred,'未予想')}</div>
               </div>
+              <PredictionPointTag score={oppScore}/>
             </div>
           </div>
         </div>
         <div className="mactions">
-          {readOnly
+          {isFinished
+            ?null
+            :readOnly
             ?<div className="readonly-note">ゲスト閲覧中のため予想入力はできません</div>
+            :isPredictionClosed
+            ?<div className="readonly-note">試合開始後のため予想は変更できません</div>
             :localLocked
             ?<button className="ubtn" onClick={doUnlock}>🔓 {l.unlock}</button>
             :<button className="pbtn" onClick={doConfirm}>{l.confirm}</button>
@@ -3211,7 +3777,11 @@ function GroupsScreen({user,onOpenTeam,syncToken}){
   }
   const standings=calcStandings(group.teams,results,activeG);
 
-  function savePred(matchId,pred){
+  function savePred(matchId,pred,localOnly=false){
+    if(localOnly){
+      setPreds(p=>({...p,[user.id]:{...(p[user.id]||{}),[matchId]:pred}}));
+      return null;
+    }
     const u=savePrediction(roomId,user.id,matchId,pred);
     setPreds(u);
   }
@@ -3310,6 +3880,7 @@ function BracketScreen({user,syncToken}){
   const R32_VISUAL_SLOT=R32_VISUAL_ORDER.reduce((acc,index,slot)=>({...acc,[index]:slot}),{});
   const canvasZoom=viewMode==='overview'?0.72:1;
   const podium=koPodiumPredictions(myPreds,{});
+  const oppPodium=oppId?koPodiumPredictions(oppPreds,{}):{};
   const podiumCandidates=koPodiumCandidates(myPreds,results);
   const champion=podium.champion;
 
@@ -3366,6 +3937,9 @@ function BracketScreen({user,syncToken}){
     const left=source==='proxy'?proxy.scrollLeft:scroller.scrollLeft;
     if(labels&&Math.abs(labels.scrollLeft-left)>1)labels.scrollLeft=left;
   }
+  function podiumPickLabel(value){
+    return value?koTeamName(value):'未選択';
+  }
   function matchPoints(match,predsForUser=myPreds){
     const pred=normalizeKoRecord(predsForUser[match.id]);
     const actual=normalizeKoRecord(results[match.id]);
@@ -3373,7 +3947,7 @@ function BracketScreen({user,syncToken}){
     let pts=0;
     const pw=koRecordWinnerSide(pred), aw=koRecordWinnerSide(actual);
     if(pw&&aw&&pw===aw)pts+=settings.koWinnerPts||0;
-    if(koRecordHasScore(pred)&&koRecordHasScore(actual)&&pred.home===actual.home&&pred.away===actual.away)pts+=settings.koExactPts||0;
+    if(actual.decidedBy!=='PK'&&koRecordHasScore(pred)&&koRecordHasScore(actual)&&pred.home===actual.home&&pred.away===actual.away)pts+=settings.koExactPts||0;
     if(actual.decidedBy==='PK'&&pred.decidedBy==='PK'&&pw&&aw&&pw===aw)pts+=settings.koPenaltyPts||0;
     return pts;
   }
@@ -3390,14 +3964,15 @@ function BracketScreen({user,syncToken}){
     };
   }
   function openMatch(round,index){
-    if(!canEditKo)return;
     const match=round.matches[index];
+    if(!canEditKo||normalizeKoRecord(results[match.id])||isMatchPredictionClosed(match))return;
     setEditing({roundId:round.id,index,match});
     setDraft(buildDraft(match));
     setStatus('');
   }
   function saveDraft(){
     if(!editing||!draft||!canEditKo)return;
+    if(normalizeKoRecord(results[editing.match.id])||isMatchPredictionClosed(editing.match)){setStatus('試合開始後のため予想は変更できません');return;}
     const home=Math.max(0,Number(draft.home)||0);
     const away=Math.max(0,Number(draft.away)||0);
     const tied=home===away;
@@ -3423,6 +3998,7 @@ function BracketScreen({user,syncToken}){
   }
   function clearDraft(){
     if(!editing||!canEditKo)return;
+    if(normalizeKoRecord(results[editing.match.id])||isMatchPredictionClosed(editing.match)){setStatus('試合開始後のため予想は変更できません');return;}
     const userKo={...(koPreds[user.id]||{})};
     delete userKo[editing.match.id];
     const next={...koPreds,[user.id]:userKo};
@@ -3552,6 +4128,7 @@ function BracketScreen({user,syncToken}){
   function renderMatch(round,index){
     const match=round.matches[index];
     const actual=normalizeKoRecord(results[match.id]);
+    const isPredictionClosed=isMatchPredictionClosed(match);
     const pred=normalizeKoRecord(myPreds[match.id]);
     const oppPred=oppId?normalizeKoRecord(oppPreds[match.id]):null;
     const winnerSide=koRecordWinnerSide(actual);
@@ -3560,13 +4137,14 @@ function BracketScreen({user,syncToken}){
     const pts=matchPoints(match,myPreds);
     const koJudgment=getKoJudgment(pred,actual);
     const matchKindLabel=round.id==='F'?'決勝':round.id==='3RD'?'3位決定戦':'';
+    const canEditMatch=canEditKo&&!actual&&!isPredictionClosed;
     return(
       <button
         key={match.id}
-        className={`ko-match-node ${round.id.toLowerCase()}${round.id==='3RD'?' third-place':''}${actual?' actual':pred?' predicted':''}${canEditKo?'':' readonly'}`}
+        className={`ko-match-node ${round.id.toLowerCase()}${round.id==='3RD'?' third-place':''}${actual?' actual':pred?' predicted':''}${canEditMatch?'':' readonly'}`}
         style={{left:roundX(round.id),top:cardY(round.id,index),width:BOARD.w,height:BOARD.h}}
         onClick={()=>openMatch(round,index)}
-        disabled={!canEditKo}
+        disabled={!canEditMatch}
       >
         <div className="ko-match-meta">
           <div className="ko-match-meta-main">
@@ -3577,7 +4155,7 @@ function BracketScreen({user,syncToken}){
             </span>
             <em className="ko-match-stadium">{stadiumLabel(match.stadium,lang)}</em>
           </div>
-          <span className={`ko-match-status ${koJudgment.state}`}>{koJudgment.label}</span>
+          <span className={`ko-match-status ${koJudgment.state}`}>{!actual&&isPredictionClosed?'締切':koJudgment.label}</span>
         </div>
         <div className="ko-teams-line">
           {renderTeamBlock(round.id,index,'home',homeLabel,winnerSide)}
@@ -3613,6 +4191,7 @@ function BracketScreen({user,syncToken}){
                   <option value="">{item.enabled?'未選択':'設定で無効'}</option>
                   {podiumCandidates.map(candidate=><option key={`${item.key}-${candidate}`} value={candidate}>{koTeamName(candidate)}</option>)}
                 </select>
+                <div className="ko-podium-opp"><b>相手</b><span>{oppId?podiumPickLabel(oppPodium[item.key]):'-'}</span></div>
                 <div className="ko-podium-note">{!item.enabled?'採点しない場合はこのままでOK':canEditKo?`的中で +${item.points}pt`:'ゲストは閲覧のみ'}</div>
               </div>
             ))}
@@ -3697,22 +4276,132 @@ function BracketScreen({user,syncToken}){
 }
 
 // ===== LEADERBOARD =====
-function LeaderboardScreen({user,onOpenTeam}){
+function LeaderboardScreen({user,onOpenTeam,syncToken}){
   const lang=useContext(LangCtx);const l=T[lang];
   const players=[...ALL_PLAYERS];
-  const rankedPlayers=[...players]
-    .filter((p)=>Number(p.worldCupGoals||0)>0)
-    .sort((a,b)=>Number(b.worldCupGoals||0)-Number(a.worldCupGoals||0)||playerDisplayName(a).localeCompare(playerDisplayName(b),'ja'));
-  const top=rankedPlayers[0]||null;
+  const rankedScorerRows=buildScorerRankingRows(players);
+  const top=rankedScorerRows[0]||null;
+  const rooms=gs('rooms',[]);
+  const room=rooms.find(r=>r.id===user.roomId);
+  const roomId=room?.id||user.roomId;
+  const settings={...DEFAULT_ROOM_SETTINGS,...gr(roomId,'settings',{})};
+  const users=gs('users',[]);
+  const roomMembers=(room?.members||[]).map(id=>users.find(u=>u.id===id)).filter(Boolean);
+  const opp=roomMembers.find((m)=>m.id!==user.id)||null;
+  const oppId=opp?.id||null;
+  const [scorerPreds,setScorerPreds]=useState(()=>gr(roomId,'scorerPreds',{}));
+  const [scorerCountryFilters,setScorerCountryFilters]=useState({});
+  const [scorerRefreshing,setScorerRefreshing]=useState(false);
+  const [scorerToast,setScorerToast]=useState('');
+  useEffect(()=>{setScorerPreds(gr(roomId,'scorerPreds',{}));},[syncToken,roomId,user.id]);
+  const myScorerPreds=scorerPreds[user.id]||{};
+  const oppScorerPreds=oppId?(scorerPreds[oppId]||{}):{};
+  const myScorerPredCount=scorerPredictionCount(myScorerPreds);
+  const oppScorerPredCount=oppId?scorerPredictionCount(oppScorerPreds):0;
+  const scorerSummary=calcScorerPointSummary(scorerPreds,user.id,settings);
+  const countryOptions=Object.keys(PLAYER_DATA).sort((a,b)=>teamJa(a).localeCompare(teamJa(b),'ja'));
+  const playerByScorerKey=Object.fromEntries(ALL_PLAYERS.map((player)=>[scorerPlayerKey(player),player]).filter(([key])=>key));
   const uiSettings=gs('settings',DEFAULT_UI_SETTINGS);
   const dataStamp=PLAYER_DATA_META.generatedAt ? formatTimestamp(PLAYER_DATA_META.generatedAt,uiSettings.timeZone) : '';
+  const rankingStamp=PLAYER_DATA_META.meta?.worldFootballArchiveRankingUpdatedAt||'';
+  const readOnly=!!user?.isGuest;
+
+  function scorerPredictionLabel(playerKey){
+    const player=playerByScorerKey[normalizeScorerPredictionValue(playerKey)];
+    return player?`${teamJa(player.country)} / ${playerDisplayName(player)}`:'未選択';
+  }
+  function selectedCountryFor(slotKey){
+    const selectedPlayer=playerByScorerKey[normalizeScorerPredictionValue(myScorerPreds[slotKey])];
+    return scorerCountryFilters[slotKey] || selectedPlayer?.country || '';
+  }
+  function saveScorerPrediction(slotKey,playerKey){
+    if(readOnly)return;
+    const current=gr(roomId,'scorerPreds',{});
+    const nextUser={...(current[user.id]||{})};
+    if(playerKey)nextUser[slotKey]=playerKey;else delete nextUser[slotKey];
+    const next={...current,[user.id]:nextUser};
+    setScorerPreds(next);
+    sr(roomId,'scorerPreds',next);
+  }
+  async function refreshScorerData(){
+    const token=String(sessionStorage.getItem('wc26AdminToken')||DEFAULT_ADMIN_TOKEN).trim();
+    sessionStorage.setItem('wc26AdminToken',token);
+    setScorerRefreshing(true);
+    try{
+      const res=STATIC_SHARED_ROOM_BACKEND&&!HAS_BACKEND?await refreshStaticPlayerData():await api('/api/admin/refresh-players',{adminToken:token});
+      if(!res?.ok){
+        if(res?.dataStatus)setDataStatus(res.dataStatus);
+        setScorerToast(res?.error||'得点ランキングデータを取得できませんでした');
+        return;
+      }
+      const refreshed=setPlayerDataFromResponse(res,true);
+      if(res.dataStatus)setDataStatus(res.dataStatus);
+      setScorerToast(refreshed?'得点ランキングデータを更新しました':'得点ランキングデータを取得できませんでした');
+    }catch(error){
+      setScorerToast(error?.message||'得点ランキングデータを取得できませんでした');
+    }finally{
+      setScorerRefreshing(false);
+    }
+  }
+  function renderScorerPick(slot){
+    const selectedKey=normalizeScorerPredictionValue(myScorerPreds[slot.key]);
+    const selectedCountry=selectedCountryFor(slot.key);
+    const playersByCountry=PLAYER_DATA[selectedCountry]||[];
+    const unavailableKeys=new Set(SCORER_PREDICTION_SLOTS
+      .filter((other)=>other.key!==slot.key)
+      .map((other)=>normalizeScorerPredictionValue(myScorerPreds[other.key]))
+      .filter(Boolean));
+    const hit=!!scorerSummary[slot.hitKey];
+    return(
+      <div className={`scorer-pred-card${hit?' hit':''}`} key={slot.key}>
+        <div className="scorer-pred-head">
+          <span>{slot.pickLabel}</span>
+          <b>+{settings[slot.pointsKey]??slot.defaultPoints}pt</b>
+        </div>
+        <div className="scorer-pred-controls">
+          <select
+            className="scorer-select"
+            value={selectedCountry}
+            disabled={readOnly}
+            onChange={(e)=>{
+              const country=e.target.value;
+              setScorerCountryFilters({...scorerCountryFilters,[slot.key]:country});
+              saveScorerPrediction(slot.key,'');
+            }}
+          >
+            <option value="">国を選択</option>
+            {countryOptions.map((country)=><option key={`${slot.key}-${country}`} value={country}>{teamJa(country)}</option>)}
+          </select>
+          <select
+            className="scorer-select"
+            value={selectedKey}
+            disabled={readOnly||!selectedCountry}
+            onChange={(e)=>saveScorerPrediction(slot.key,e.target.value)}
+          >
+            <option value="">選手を選択</option>
+            {playersByCountry.map((player)=>{
+              const key=scorerPlayerKey(player);
+              return <option key={`${slot.key}-${key}`} value={key} disabled={unavailableKeys.has(key)}>{playerDisplayName(player)}</option>;
+            })}
+          </select>
+        </div>
+        <div className="scorer-pred-note">
+          <span>自分: {scorerPredictionLabel(selectedKey)}</span>
+          <span>相手: {oppId?scorerPredictionLabel(oppScorerPreds[slot.key]):'-'}</span>
+          <strong>{hit?'現在的中':'判定待ち'}</strong>
+        </div>
+      </div>
+    );
+  }
 
   return(
     <div className="page page-enter">
+      {scorerToast&&<Toast msg={scorerToast} onDone={()=>setScorerToast('')}/>}
       <div className="shdr"><h2>得点ランキング</h2></div>
       <div className="lb-hero">
         <div className="lb-bg-txt">W杯</div>
         {dataStamp&&<div style={{fontSize:10,color:'rgba(255,255,255,.68)',marginTop:4}}>公開データ更新: {dataStamp}</div>}
+        {rankingStamp&&<div style={{fontSize:10,color:'rgba(255,255,255,.68)',marginTop:4}}>得点データ更新: {rankingStamp}</div>}
         <div className="lb-vs-row" style={{gridTemplateColumns:'1fr'}}>
           <div className="lb-pl">
             <div className="lb-pl-name">トップスコアラー</div>
@@ -3722,27 +4411,60 @@ function LeaderboardScreen({user,onOpenTeam}){
           </div>
         </div>
       </div>
+      <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',gap:10,margin:'12px 14px 0',padding:'10px 12px',background:'var(--s1)',border:'1px solid var(--border)',borderRadius:14,boxShadow:'var(--shadow)'}}>
+        <div style={{minWidth:0}}>
+          <div style={{fontSize:12,fontWeight:900,color:'var(--text)'}}>得点ランキングデータ</div>
+          <div style={{fontSize:10,fontWeight:800,color:'var(--text2)',lineHeight:1.4}}>試合結果とは別に、公開済みの得点ランキングJSONを再読み込みします</div>
+        </div>
+        <button className="btn" style={{width:'auto',padding:'9px 13px',fontSize:12,whiteSpace:'nowrap',marginTop:0}} onClick={refreshScorerData} disabled={scorerRefreshing}>
+          {scorerRefreshing?'更新中…':'最新を反映'}
+        </button>
+      </div>
+      <details className="scorer-pred-panel">
+        <summary className="scorer-pred-summary">
+          <div className="scorer-pred-summary-title">
+            <strong>得点ランキング予想</strong>
+            <span>一覧を見ながら必要な時だけ入力</span>
+          </div>
+          <div className="scorer-pred-counts">
+            <span>自分 <b>{myScorerPredCount}/3</b></span>
+            <span>相手 <b>{oppId?`${oppScorerPredCount}/3`:'-'}</b></span>
+          </div>
+          <span className="scorer-pred-caret" aria-hidden="true"></span>
+        </summary>
+        <div className="scorer-pred-body">
+          <div className="scorer-pred-grid">
+            {SCORER_PREDICTION_SLOTS.map(renderScorerPick)}
+          </div>
+          <div className="scorer-pred-help">
+            同率の場合は同じ得点数の選手全員をその順位の正解扱いにします。得点数そのものは予想対象ではありません。
+          </div>
+        </div>
+      </details>
       <div className="rank-meta" style={{paddingTop:10}}>
-        <span>表示 {rankedPlayers.length} 人</span>
+        <span>表示 {rankedScorerRows.length} 人</span>
         <span>2026ワールドカップ得点順</span>
       </div>
       <div className="section-title">選手一覧</div>
       <div className="rank-list">
-        {rankedPlayers.length===0&&<div style={{padding:24,textAlign:'center',color:'var(--text2)',fontSize:13,fontWeight:800}}>得点者はいません</div>}
-        {rankedPlayers.map((p,i)=>(
-          <div className="rank-card" key={p.id}>
+        {rankedScorerRows.length===0&&<div style={{padding:24,textAlign:'center',color:'var(--text2)',fontSize:13,fontWeight:800}}>得点者はいません</div>}
+        {rankedScorerRows.map((row)=>(
+          <div className="rank-card" key={row.id}>
             <div className="rank-card-top">
               <div className="rank-card-left">
-                <div className="rank-card-rank">{i+1}位</div>
-                <div className="rank-card-name">{playerDisplayName(p)}</div>
+                <div className="rank-card-rank">{row.isTied?`同率${row.rank}位`:`${row.rank}位`}</div>
+                <div className="rank-card-name">{playerDisplayName(row)}</div>
                 <div className="rank-card-meta">
-                  <span className={`rank-pos ${positionClass(p.position)}`}>{positionJa(p.position)}</span>
-                  <span>{p.club||'Unknown'}</span>
-                  {playerPhysicalMeta(p)&&<span>{playerPhysicalMeta(p)}</span>}
+                  <span className={`rank-pos ${positionClass(row.position)}`}>{positionJa(row.position)}</span>
+                  <span>{row.countryJa||teamJa(row.country)}</span>
+                  <span>{row.club||'Unknown'}</span>
+                  {playerPhysicalMeta(row)&&<span>{playerPhysicalMeta(row)}</span>}
+                  {Number(row.worldCupAssists||0)>0&&<span>アシスト {row.worldCupAssists}</span>}
+                  {scorerMinutes(row)!==null&&<span>出場 {scorerMinutes(row)}分</span>}
                 </div>
               </div>
               <div style={{textAlign:'right'}}>
-                <div className="rank-score">{p.worldCupGoals??0}</div>
+                <div className="rank-score">{row.worldCupGoals??0}</div>
                 <div className="rank-score-sub">得点</div>
               </div>
             </div>
@@ -3773,8 +4495,6 @@ function SettingsScreen({user,syncToken,onRenameUser}){
   const [nameDraft,setNameDraft]=useState(user?.username||'');
   const [savingName,setSavingName]=useState(false);
   const [toast,setToast]=useState('');
-  const [adminToken,setAdminToken]=useState(()=>sessionStorage.getItem('wc26AdminToken')||DEFAULT_ADMIN_TOKEN);
-  const [adminRefreshing,setAdminRefreshing]=useState(false);
 
   useEffect(()=>{
     setPointSettings({...DEFAULT_ROOM_SETTINGS,...gr(roomId,'settings',{})});
@@ -3811,29 +4531,6 @@ function SettingsScreen({user,syncToken,onRenameUser}){
       setToast('ユーザー名を更新しました');
     }finally{
       setSavingName(false);
-    }
-  }
-  async function refreshOfficialData(){
-    if(!HAS_BACKEND){setToast('サーバー接続時のみ更新できます');return;}
-    const token=String(adminToken||'').trim();
-    if(!token){setToast('管理者トークンを入力してください');return;}
-    sessionStorage.setItem('wc26AdminToken',token);
-    setAdminRefreshing(true);
-    try{
-      const res=await api('/api/admin/refresh-players',{adminToken:token});
-      if(!res?.ok){
-        setToast(res?.error||'更新できませんでした');
-        if(res?.dataStatus)setDataStatus(res.dataStatus);
-        return;
-      }
-      if(res.playersByCountry&&Object.keys(res.playersByCountry).length){
-        setPlayerData(res.playersByCountry,{generatedAt:res.generatedAt||PLAYER_DATA_META.generatedAt},false);
-      }
-      if(res.dataStatus)setDataStatus(res.dataStatus);
-      setToast('選手データを更新しました');
-      notifyStateChange();
-    }finally{
-      setAdminRefreshing(false);
     }
   }
   return(
@@ -3978,22 +4675,31 @@ function SettingsScreen({user,syncToken,onRenameUser}){
               </div>
             </div>
           )}
+          <div className="set-row">
+            <div className="sl">得点ランキング 1位的中<span>大会得点ランキング1位の選手が当たった場合</span></div>
+            <div className="pts-ctrl">
+              <button className="ptsbtn" onClick={()=>changePts('scorerFirstPts',-1)}>−</button>
+              <div className="pts-val">{pointSettings.scorerFirstPts}</div>
+              <button className="ptsbtn" onClick={()=>changePts('scorerFirstPts',1)}>+</button>
+            </div>
+          </div>
+          <div className="set-row">
+            <div className="sl">得点ランキング 2位的中<span>大会得点ランキング2位の選手が当たった場合</span></div>
+            <div className="pts-ctrl">
+              <button className="ptsbtn" onClick={()=>changePts('scorerSecondPts',-1)}>−</button>
+              <div className="pts-val">{pointSettings.scorerSecondPts}</div>
+              <button className="ptsbtn" onClick={()=>changePts('scorerSecondPts',1)}>+</button>
+            </div>
+          </div>
+          <div className="set-row">
+            <div className="sl">得点ランキング 3位的中<span>大会得点ランキング3位の選手が当たった場合</span></div>
+            <div className="pts-ctrl">
+              <button className="ptsbtn" onClick={()=>changePts('scorerThirdPts',-1)}>−</button>
+              <div className="pts-val">{pointSettings.scorerThirdPts}</div>
+              <button className="ptsbtn" onClick={()=>changePts('scorerThirdPts',1)}>+</button>
+            </div>
+          </div>
         </>
-      </div>
-      <div className="set-sec">
-        <h3>🔐 管理者更新</h3>
-        <div className="set-row" style={{flexDirection:'column',alignItems:'flex-start',gap:10}}>
-          <div className="sl">選手データ更新</div>
-          <div className="player-field" style={{marginTop:0,width:'100%'}}>
-            <input type="password" value={adminToken} onChange={(e)=>setAdminToken(e.target.value)} />
-          </div>
-          <button className="btn" style={{width:'auto',padding:'10px 18px'}} onClick={refreshOfficialData} disabled={adminRefreshing}>
-            {adminRefreshing?'更新中…':'選手データを更新'}
-          </button>
-          <div style={{fontSize:12,color:'var(--text2)',lineHeight:1.5}}>
-            最終更新: {DATA_STATUS.lastUpdatedAt?formatTimestamp(DATA_STATUS.lastUpdatedAt,uiSettings.timeZone||'Asia/Tokyo'):'未更新'}
-          </div>
-        </div>
       </div>
     </div>
   );
@@ -4062,53 +4768,73 @@ function App(){
   },[]);
 
   useEffect(()=>{
+    let alive=true;
+    if(STATIC_SHARED_ROOM_BACKEND&&!HAS_BACKEND){
+      refreshStaticPlayerData()
+        .then((payload)=>{
+          if(alive&&payload.dataStatus)setDataStatus(payload.dataStatus);
+          if(alive)setSyncTick(t=>t+1);
+        })
+        .catch(()=>{});
+    }
+    return()=>{alive=false;};
+  },[]);
+
+  useEffect(()=>{
     refreshPlayerDataView();
     setSyncTick(t=>t+1);
   },[user?.roomId,user?.id]);
 
+  async function syncCurrentRoom(options={}){
+    const isAlive=options.isAlive||(()=>true);
+    if(!user?.roomId||user?.isGuest)return {ok:false,error:'ログイン中のルームがありません'};
+    try{
+      if(STATIC_SHARED_ROOM_BACKEND&&!HAS_BACKEND){
+        const code=localRoomCodeForId(user.roomId);
+        if(!code)return {ok:false,error:'ルームコードが見つかりません'};
+        const shared=await fetchSharedRoomPayload(code);
+        if(!isAlive()||!shared)return {ok:false,error:'共有ルームを取得できませんでした'};
+        const reconciled=reconcileCurrentUserWithSharedRoom(shared);
+        const payloadToApply=reconciled.saveRequired?await saveSharedRoomPayload(reconciled.payload):reconciled.payload;
+        applySharedRoomPayload(payloadToApply);
+        if(reconciled.changed&&reconciled.user){
+          ss('currentUser',reconciled.user);
+          setUser(reconciled.user);
+        }
+        return {ok:true};
+      }
+      if(!HAS_BACKEND)return {ok:false,error:'共有同期は利用できません'};
+      const res=await fetch(`/api/room/${encodeURIComponent(user.roomId)}`);
+      if(!res.ok)return {ok:false,error:'ルーム情報を取得できませんでした'};
+      const data=await res.json();
+      if(!isAlive())return {ok:false,error:'更新を中断しました'};
+      if(Array.isArray(data.rooms))ss('rooms',data.rooms);
+      if(Array.isArray(data.users))ss('users',data.users);
+      if(data.dataStatus)setDataStatus(data.dataStatus);
+      if(data.resultStatus)RESULT_STATUS=data.resultStatus;
+      setPlayerDataFromResponse(data,false);
+      const roomState=data.room?.state||data.roomState;
+      const roomId=data.room?.id||user.roomId;
+      if(roomState){
+        ss(roomDataKey(roomId,PREDICTION_STORE_KEY),roomState.predictionsV2||roomState.predictions||{});
+        ss(roomDataKey(roomId,'results'),roomState.results||{});
+        ss(roomDataKey(roomId,'locked'),roomState.locked||{});
+        ss(roomDataKey(roomId,'koPreds'),roomState.koPreds||{});
+        ss(roomDataKey(roomId,'scorerPreds'),roomState.scorerPreds||{});
+        ss(roomDataKey(roomId,'settings'),roomState.settings||DEFAULT_ROOM_SETTINGS);
+      }
+      setSyncTick(t=>t+1);
+      return {ok:true};
+    }catch(error){
+      return {ok:false,error:error?.message||'最新状態を取得できませんでした'};
+    }
+  }
+
   useEffect(()=>{
     if(!user?.roomId||user?.isGuest)return;
     let alive=true;
-    const sync=async()=>{
-      try{
-        if(STATIC_SHARED_ROOM_BACKEND&&!HAS_BACKEND){
-          const code=localRoomCodeForId(user.roomId);
-          if(!code)return;
-          const shared=await fetchSharedRoomPayload(code);
-          if(!alive||!shared)return;
-          applySharedRoomPayload(shared);
-          return;
-        }
-        if(!HAS_BACKEND)return;
-        const res=await fetch(`/api/room/${encodeURIComponent(user.roomId)}`);
-        if(!res.ok)return;
-        const data=await res.json();
-        if(!alive)return;
-        if(Array.isArray(data.rooms))ss('rooms',data.rooms);
-        if(Array.isArray(data.users))ss('users',data.users);
-        if(data.dataStatus)setDataStatus(data.dataStatus);
-        if(data.resultStatus)RESULT_STATUS=data.resultStatus;
-        if(data.playersByCountry&&Object.keys(data.playersByCountry).length){
-          setPlayerData(data.playersByCountry,{
-            generatedAt:data.generatedAt||PLAYER_DATA_META.generatedAt,
-            sources:data.sources||PLAYER_DATA_META.sources,
-          },false);
-        }
-        const roomState=data.room?.state||data.roomState;
-        const roomId=data.room?.id||user.roomId;
-        if(roomState){
-          ss(roomDataKey(roomId,PREDICTION_STORE_KEY),roomState.predictionsV2||roomState.predictions||{});
-          ss(roomDataKey(roomId,'results'),roomState.results||{});
-          ss(roomDataKey(roomId,'locked'),roomState.locked||{});
-          ss(roomDataKey(roomId,'koPreds'),roomState.koPreds||{});
-          ss(roomDataKey(roomId,'settings'),roomState.settings||DEFAULT_ROOM_SETTINGS);
-        }
-        setSyncTick(t=>t+1);
-      }catch{}
-    };
-    sync();
-    const timer=setInterval(sync,10000);
-    return()=>{alive=false;clearInterval(timer);};
+    syncCurrentRoom({isAlive:()=>alive});
+    return()=>{alive=false;};
   },[user?.roomId]);
 
   function handleLogout(){
@@ -4160,7 +4886,7 @@ function App(){
   const room=rooms.find(r=>r.id===user.roomId);
 
   const screens={
-    home:<HomeScreen user={user} onLogout={handleLogout} syncToken={syncTick}/>,
+    home:<HomeScreen user={user} onLogout={handleLogout} onManualSync={syncCurrentRoom} syncToken={syncTick}/>,
     groups:<GroupsScreen user={user} onOpenTeam={setSelectedTeam} syncToken={syncTick}/>,
     bracket:<BracketScreen user={user} syncToken={syncTick}/>,
     leaderboard:<LeaderboardScreen user={user} onOpenTeam={setSelectedTeam} syncToken={syncTick}/>,

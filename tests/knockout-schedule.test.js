@@ -17,6 +17,29 @@ test('knockout matches include scheduled UTC kickoff data', () => {
   );
 });
 
+test('knockout match predictions close at kickoff time before results arrive', () => {
+  assert.match(
+    html,
+    /if\(!canEditKo\|\|normalizeKoRecord\(results\[match\.id\]\)\|\|isMatchPredictionClosed\(match\)\)return;/,
+  );
+  assert.match(
+    html,
+    /if\(normalizeKoRecord\(results\[editing\.match\.id\]\)\|\|isMatchPredictionClosed\(editing\.match\)\)\{setStatus\('試合開始後のため予想は変更できません'\);return;\}/,
+  );
+  assert.match(
+    html,
+    /function clearDraft\(\)\{\s*if\(!editing\|\|!canEditKo\)return;\s*if\(normalizeKoRecord\(results\[editing\.match\.id\]\)\|\|isMatchPredictionClosed\(editing\.match\)\)\{setStatus\('試合開始後のため予想は変更できません'\);return;\}/,
+  );
+  assert.match(
+    html,
+    /const canEditMatch=canEditKo&&!actual&&!isPredictionClosed;/,
+  );
+  assert.match(
+    html,
+    /disabled=\{!canEditMatch\}/,
+  );
+});
+
 test('knockout route uses official match-number bracket sources', () => {
   assert.match(
     html,
@@ -134,4 +157,29 @@ test('knockout bracket zoom is user adjustable without changing board geometry',
     html,
     /\.ko-canvas\{zoom:\.72;\}/,
   );
+});
+
+test('knockout podium picks expose opponent selections', () => {
+  assert.match(
+    html,
+    /const oppPodium=oppId\?koPodiumPredictions\(oppPreds,\{\}\):\{\};/,
+  );
+  assert.match(
+    html,
+    /function podiumPickLabel\(value\)\{/,
+  );
+  assert.match(
+    html,
+    /className="ko-podium-opp"/,
+  );
+  assert.match(
+    html,
+    /\{oppId\?podiumPickLabel\(oppPodium\[item\.key\]\):'-'\}/,
+  );
+});
+
+test('knockout PK entry has dedicated penalty score fields', () => {
+  assert.match(html, /PK戦で決着/);
+  assert.match(html, /draft\.decidedBy==='PK'&&\(/);
+  assert.match(html, /className="ko-score-editor pk"/);
 });

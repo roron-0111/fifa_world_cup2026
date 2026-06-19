@@ -222,9 +222,13 @@
         "koRunnerUpPts": 3,
         "koThirdPlacePts": 2,
         "koRunnerUpEnabled": false,
-        "koThirdPlaceEnabled": false
+        "koThirdPlaceEnabled": false,
+        "scorerFirstPts": 5,
+        "scorerSecondPts": 3,
+        "scorerThirdPts": 2
       },
-      "predictionsV2": {}
+      "predictionsV2": {},
+      "scorerPreds": {}
     },
     "room-1776577956313": {
       "results": {},
@@ -257,9 +261,13 @@
         "koRunnerUpPts": 3,
         "koThirdPlacePts": 2,
         "koRunnerUpEnabled": false,
-        "koThirdPlaceEnabled": false
+        "koThirdPlaceEnabled": false,
+        "scorerFirstPts": 5,
+        "scorerSecondPts": 3,
+        "scorerThirdPts": 2
       },
-      "predictionsV2": {}
+      "predictionsV2": {},
+      "scorerPreds": {}
     },
     "room-1776593771328": {
       "results": {},
@@ -279,7 +287,10 @@
         "koRunnerUpPts": 3,
         "koThirdPlacePts": 2,
         "koRunnerUpEnabled": false,
-        "koThirdPlaceEnabled": false
+        "koThirdPlaceEnabled": false,
+        "scorerFirstPts": 5,
+        "scorerSecondPts": 3,
+        "scorerThirdPts": 2
       },
       "predictionsV2": {
         "u-1776593778651-361r": {
@@ -288,7 +299,8 @@
             "away": 0
           }
         }
-      }
+      },
+      "scorerPreds": {}
     },
     "room-1776599215207": {
       "results": {},
@@ -319,7 +331,10 @@
         "koRunnerUpPts": 3,
         "koThirdPlacePts": 2,
         "koRunnerUpEnabled": false,
-        "koThirdPlaceEnabled": false
+        "koThirdPlaceEnabled": false,
+        "scorerFirstPts": 5,
+        "scorerSecondPts": 3,
+        "scorerThirdPts": 2
       },
       "predictionsV2": {
         "u-1776599215207-uc44": {
@@ -328,7 +343,8 @@
             "away": 0
           }
         }
-      }
+      },
+      "scorerPreds": {}
     },
     "room-1776601323801": {
       "predictionsV2": {
@@ -370,8 +386,12 @@
         "koRunnerUpPts": 3,
         "koThirdPlacePts": 2,
         "koRunnerUpEnabled": false,
-        "koThirdPlaceEnabled": false
-      }
+        "koThirdPlaceEnabled": false,
+        "scorerFirstPts": 5,
+        "scorerSecondPts": 3,
+        "scorerThirdPts": 2
+      },
+      "scorerPreds": {}
     },
     "room-1776602144345": {
       "predictionsV2": {
@@ -404,8 +424,12 @@
         "koRunnerUpPts": 3,
         "koThirdPlacePts": 2,
         "koRunnerUpEnabled": false,
-        "koThirdPlaceEnabled": false
-      }
+        "koThirdPlaceEnabled": false,
+        "scorerFirstPts": 5,
+        "scorerSecondPts": 3,
+        "scorerThirdPts": 2
+      },
+      "scorerPreds": {}
     },
     "room-1776602654600": {
       "predictionsV2": {
@@ -461,8 +485,12 @@
         "koRunnerUpPts": 3,
         "koThirdPlacePts": 2,
         "koRunnerUpEnabled": false,
-        "koThirdPlaceEnabled": false
-      }
+        "koThirdPlaceEnabled": false,
+        "scorerFirstPts": 5,
+        "scorerSecondPts": 3,
+        "scorerThirdPts": 2
+      },
+      "scorerPreds": {}
     },
     "room-1776605164304": {
       "predictionsV2": {},
@@ -479,8 +507,12 @@
         "koRunnerUpPts": 3,
         "koThirdPlacePts": 2,
         "koRunnerUpEnabled": false,
-        "koThirdPlaceEnabled": false
-      }
+        "koThirdPlaceEnabled": false,
+        "scorerFirstPts": 5,
+        "scorerSecondPts": 3,
+        "scorerThirdPts": 2
+      },
+      "scorerPreds": {}
     },
     "room-1777955460631": {
       "predictionsV2": {},
@@ -497,8 +529,12 @@
         "koRunnerUpPts": 3,
         "koThirdPlacePts": 2,
         "koRunnerUpEnabled": false,
-        "koThirdPlaceEnabled": false
-      }
+        "koThirdPlaceEnabled": false,
+        "scorerFirstPts": 5,
+        "scorerSecondPts": 3,
+        "scorerThirdPts": 2
+      },
+      "scorerPreds": {}
     },
     "room-1780734118091": {
       "predictionsV2": {},
@@ -528,8 +564,12 @@
         "koRunnerUpPts": 3,
         "koThirdPlacePts": 2,
         "koRunnerUpEnabled": false,
-        "koThirdPlaceEnabled": false
-      }
+        "koThirdPlaceEnabled": false,
+        "scorerFirstPts": 5,
+        "scorerSecondPts": 3,
+        "scorerThirdPts": 2
+      },
+      "scorerPreds": {}
     },
     "room-1780734766504": {
       "predictionsV2": {},
@@ -546,8 +586,12 @@
         "koRunnerUpPts": 3,
         "koThirdPlacePts": 2,
         "koRunnerUpEnabled": false,
-        "koThirdPlaceEnabled": false
-      }
+        "koThirdPlaceEnabled": false,
+        "scorerFirstPts": 5,
+        "scorerSecondPts": 3,
+        "scorerThirdPts": 2
+      },
+      "scorerPreds": {}
     }
   },
   "meta": {

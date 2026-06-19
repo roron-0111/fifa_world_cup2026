@@ -54,6 +54,17 @@ function loadPlayerData() {
   };
 }
 
+function playerDataResponseFields(playerData) {
+  playerData = playerData || loadPlayerData();
+  return {
+    playersByCountry: playerData.playersByCountry || {},
+    generatedAt: playerData.generatedAt || null,
+    sources: playerData.sources || sources || {},
+    meta: playerData.meta || {},
+    dataStatus: makeDataRefreshStatus(state),
+  };
+}
+
 const AUTO_REFRESH_PLAYERS = process.env.WC26_AUTO_REFRESH_PLAYERS === '1';
 const PLAYER_REFRESH_INTERVAL_MS = Number(process.env.WC26_PLAYER_REFRESH_INTERVAL_MS || 6 * 60 * 60 * 1000);
 let playerRefreshPromise = null;
@@ -79,6 +90,31 @@ function refreshPlayerData() {
     );
   });
   return playerRefreshPromise;
+}
+
+async function refreshPlayerDataForResultReflection() {
+  try {
+    const playerData = await refreshPlayerData();
+    applyDataRefreshSuccess(state, {
+      source: playerData.meta?.playerSource || 'result-reflection-player-refresh',
+      generatedAt: playerData.generatedAt || '',
+    });
+    persistState();
+    return {
+      ...playerDataResponseFields(playerData),
+      playerDataStatus: { ok: true },
+    };
+  } catch (error) {
+    applyDataRefreshFailure(state, {
+      source: 'result-reflection-player-refresh',
+      error: error.message,
+    });
+    persistState();
+    return {
+      ...playerDataResponseFields(loadPlayerData()),
+      playerDataStatus: { ok: false, error: error.message },
+    };
+  }
 }
 
 async function runPlayerRefresh(trigger) {
@@ -129,6 +165,7 @@ function ensureStateShape() {
     next.results ||= {};
     next.locked ||= {};
     next.koPreds ||= {};
+    next.scorerPreds ||= {};
     next.settings = {
       resultPts: 1,
       exactPts: 2,
@@ -140,6 +177,9 @@ function ensureStateShape() {
       koThirdPlacePts: 2,
       koRunnerUpEnabled: false,
       koThirdPlaceEnabled: false,
+      scorerFirstPts: 5,
+      scorerSecondPts: 3,
+      scorerThirdPts: 2,
       ...(next.settings || {}),
     };
     return [roomId, next];
@@ -181,6 +221,7 @@ function makeRoomState() {
     results: {},
     locked: {},
     koPreds: {},
+    scorerPreds: {},
     settings: {
       resultPts: 1,
       exactPts: 2,
@@ -192,6 +233,9 @@ function makeRoomState() {
       koThirdPlacePts: 2,
       koRunnerUpEnabled: false,
       koThirdPlaceEnabled: false,
+      scorerFirstPts: 5,
+      scorerSecondPts: 3,
+      scorerThirdPts: 2,
     },
   };
 }
@@ -205,6 +249,7 @@ function ensureRoomState(roomId) {
     state.roomStates[roomId].results ||= {};
     state.roomStates[roomId].locked ||= {};
     state.roomStates[roomId].koPreds ||= {};
+    state.roomStates[roomId].scorerPreds ||= {};
     state.roomStates[roomId].settings = {
       resultPts: 1,
       exactPts: 2,
@@ -216,6 +261,9 @@ function ensureRoomState(roomId) {
       koThirdPlacePts: 2,
       koRunnerUpEnabled: false,
       koThirdPlaceEnabled: false,
+      scorerFirstPts: 5,
+      scorerSecondPts: 3,
+      scorerThirdPts: 2,
       ...(state.roomStates[roomId].settings || {}),
     };
   }
@@ -240,6 +288,19 @@ function getUserByMemberCode(memberCode) {
   return state.users.find((user) => String(user.memberCode || '').toUpperCase() === code);
 }
 
+function normalizedUserNameKey(name) {
+  return String(name || '').trim().toLowerCase();
+}
+
+function getUniqueRoomUserByName(roomId, username) {
+  const key = normalizedUserNameKey(username);
+  if (!key) return null;
+  const matches = state.users.filter((user) => (
+    user.roomId === roomId && normalizedUserNameKey(user.username) === key
+  ));
+  return matches.length === 1 ? matches[0] : null;
+}
+
 function getRoomSnapshot(room) {
   if (!room) return null;
   const roomState = ensureRoomState(room.id);
@@ -254,9 +315,7 @@ function bootstrapPayload() {
   const playerData = loadPlayerData();
   return {
     state,
-    playersByCountry: playerData.playersByCountry || {},
-    sources,
-    generatedAt: playerData.generatedAt || null,
+    ...playerDataResponseFields(playerData),
     dataStatus: makeDataRefreshStatus(state),
     resultStatus: state.meta?.resultUpdates || {},
   };
@@ -337,7 +396,12 @@ function joinRoom({ username, roomCode, memberCode, userId }) {
 
   const requestedMemberCode = String(memberCode || '').trim().toUpperCase();
   const byCode = requestedMemberCode ? getUserByMemberCode(requestedMemberCode) : null;
-  const existingUser = byCode && byCode.roomId === room.id ? byCode : null;
+  const existingByCode = byCode && byCode.roomId === room.id ? byCode : null;
+  const requestedUserId = String(userId || '').trim();
+  const byId = requestedUserId ? getUserById(requestedUserId) : null;
+  const existingById = byId && byId.roomId === room.id ? byId : null;
+  const byName = getUniqueRoomUserByName(room.id, rawName);
+  const existingUser = existingByCode || existingById || byName || null;
 
   if (room.members.length >= (room.maxMembers || 2) && !existingUser) {
     return { error: 'このルームは満員です', status: 409 };
@@ -425,7 +489,7 @@ function applyRoomStateKey(roomId, key, value, userId) {
 
   const roomState = ensureRoomState(roomId);
 
-  if (key === 'predictionsV2' || key === 'locked' || key === 'koPreds' || key === 'results' || key === 'settings') {
+  if (key === 'predictionsV2' || key === 'locked' || key === 'koPreds' || key === 'scorerPreds' || key === 'results' || key === 'settings') {
     roomState[key] = value;
     return { roomState };
   }
@@ -437,7 +501,7 @@ function buildPublicState(roomId) {
   const playerData = loadPlayerData();
   return {
     room: getRoomSnapshot(getRoomById(roomId)),
-    playersByCountry: playerData.playersByCountry || {},
+    ...playerDataResponseFields(playerData),
     roomState: roomId ? ensureRoomState(roomId) : null,
     rooms: state.rooms,
     users: state.users,
@@ -588,9 +652,7 @@ const server = http.createServer(async (req, res) => {
         persistState();
         sendJson(res, 200, {
           ok: true,
-          generatedAt: data.generatedAt || null,
-          playersByCountry: data.playersByCountry || {},
-          dataStatus: makeDataRefreshStatus(state),
+          ...playerDataResponseFields(data),
         });
       } catch (error) {
         applyDataRefreshFailure(state, {
@@ -860,6 +922,9 @@ const server = http.createServer(async (req, res) => {
           koThirdPlacePts: 2,
           koRunnerUpEnabled: false,
           koThirdPlaceEnabled: false,
+          scorerFirstPts: 5,
+          scorerSecondPts: 3,
+          scorerThirdPts: 2,
           ...(current.settings || {}),
         },
       };

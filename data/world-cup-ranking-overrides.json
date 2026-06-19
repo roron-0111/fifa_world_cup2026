@@ -1,0 +1,23 @@
+{
+  "updatedAt": "2026-06-17",
+  "notes": [
+    "Verified scorer corrections used only when the primary World Football Archive ranking is temporarily behind current match reports.",
+    "Values are treated as minimum confirmed totals; primary-source values above these numbers are preserved."
+  ],
+  "sources": [
+    {
+      "url": "https://www.theguardian.com/football/live/2026/jun/17/fifa-world-cup-2026-live-argentina-v-algeria-updates-arg-vs-alg-group-j-match-score-latest",
+      "description": "Argentina 3-0 Algeria, Lionel Messi goals at 17, 60, and 76 minutes."
+    }
+  ],
+  "goals": [
+    {
+      "rank": 1,
+      "name": "リオネル・メッシ",
+      "countryJa": "アルゼンチン",
+      "goals": 3,
+      "source": "guardian-argentina-algeria-2026-06-17"
+    }
+  ],
+  "assists": []
+}

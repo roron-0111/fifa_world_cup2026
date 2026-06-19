@@ -17,6 +17,8 @@ test('maps fifa calendar group-stage matches by official team pairing', () => {
       Away: { ShortClubName: 'Bosnia And Herzegovina' },
       HomeTeamScore: 2,
       AwayTeamScore: 1,
+      MatchStatus: 0,
+      ResultType: 1,
     },
     {
       MatchNumber: 25,
@@ -24,6 +26,8 @@ test('maps fifa calendar group-stage matches by official team pairing', () => {
       Away: { ShortClubName: 'South Africa' },
       HomeTeamScore: 1,
       AwayTeamScore: 0,
+      MatchStatus: 0,
+      ResultType: 1,
     },
     {
       MatchNumber: 53,
@@ -31,6 +35,8 @@ test('maps fifa calendar group-stage matches by official team pairing', () => {
       Away: { ShortClubName: 'Mexico' },
       HomeTeamScore: 0,
       AwayTeamScore: 1,
+      MatchStatus: 0,
+      ResultType: 1,
     },
     {
       MatchNumber: 67,
@@ -38,6 +44,8 @@ test('maps fifa calendar group-stage matches by official team pairing', () => {
       Away: { ShortClubName: 'England' },
       HomeTeamScore: 1,
       AwayTeamScore: 3,
+      MatchStatus: 0,
+      ResultType: 1,
     },
   ]);
 
@@ -45,6 +53,22 @@ test('maps fifa calendar group-stage matches by official team pairing', () => {
   assert.deepEqual(results['A-3'], { home: 1, away: 0, status: 'final' });
   assert.deepEqual(results['A-5'], { home: 0, away: 1, status: 'final' });
   assert.deepEqual(results['L-5'], { home: 1, away: 3, status: 'final' });
+});
+
+test('ignores in-progress fifa scores until the result is final', () => {
+  const results = mapFifaCalendarMatchesToResults([
+    {
+      MatchNumber: 1,
+      Home: { ShortClubName: 'Mexico' },
+      Away: { ShortClubName: 'South Africa' },
+      HomeTeamScore: 1,
+      AwayTeamScore: 0,
+      MatchStatus: 1,
+      ResultType: 0,
+    },
+  ]);
+
+  assert.deepEqual(results, {});
 });
 
 test('maps fifa knockout matches by official match number', () => {

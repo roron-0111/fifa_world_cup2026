@@ -3,6 +3,7 @@ const assert = require('node:assert/strict');
 
 const {
   buildWorldFootballArchiveTeamUrl,
+  parseWorldFootballArchiveTournamentRankings,
   parseWorldFootballArchiveTeamText,
 } = require('../scripts/world-football-archive');
 
@@ -140,4 +141,41 @@ test('parseWorldFootballArchiveTeamText keeps English-only rows with physical da
       note: '最終メンバー',
     },
   );
+});
+
+test('parseWorldFootballArchiveTournamentRankings extracts current goal and assist tables', () => {
+  const html = `
+    <p><span class="update-date">｜最終更新：2026/6/14</span></p>
+    <section id="rankings">
+      <div class="rank-card">
+        <h3>🥇 得点ランキング</h3>
+        <table class="rank" aria-label="WC2026 goal ranking">
+          <thead><tr><th>順位</th><th>選手</th><th>国</th><th>得点</th></tr></thead>
+          <tbody>
+            <tr><td class="rank"><b>1</b></td><td>フォラリン・バログン</td><td><a href="/wc/2026/team/%E3%82%A2%E3%83%A1%E3%83%AA%E3%82%AB/">アメリカ</a></td><td class="num"><b>2</b></td></tr>
+            <tr><td class="rank"><b>2</b></td><td>ラウル・ヒメネス</td><td><a href="/wc/2026/team/%E3%83%A1%E3%82%AD%E3%82%B7%E3%82%B3/">メキシコ</a></td><td class="num"><b>1</b></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="rank-card">
+        <h3>🎯 アシストランキング</h3>
+        <table class="rank" aria-label="WC2026 assist ranking">
+          <tbody>
+            <tr><td class="rank"><b>1</b></td><td>クリスチャン・プルシック</td><td><a href="/wc/2026/team/%E3%82%A2%E3%83%A1%E3%83%AA%E3%82%AB/">アメリカ</a></td><td class="num"><b>1</b></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  `;
+
+  const rankings = parseWorldFootballArchiveTournamentRankings(html);
+
+  assert.equal(rankings.updatedAtLabel, '2026-06-14');
+  assert.deepEqual(rankings.goals, [
+    { rank: 1, name: 'フォラリン・バログン', countryJa: 'アメリカ', goals: 2 },
+    { rank: 2, name: 'ラウル・ヒメネス', countryJa: 'メキシコ', goals: 1 },
+  ]);
+  assert.deepEqual(rankings.assists, [
+    { rank: 1, name: 'クリスチャン・プルシック', countryJa: 'アメリカ', assists: 1 },
+  ]);
 });

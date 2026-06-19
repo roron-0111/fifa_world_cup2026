@@ -156,6 +156,18 @@ function extractClassText(html, className) {
   return stripTags(match?.[1] || '');
 }
 
+function escapeRegExp(value) {
+  return String(value || '').replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+function extractTableByAriaLabel(html, ariaLabel) {
+  const pattern = new RegExp(
+    `<table\\b(?=[^>]*aria-label=["']${escapeRegExp(ariaLabel)}["'])[^>]*>([\\s\\S]*?)<\\/table>`,
+    'i',
+  );
+  return String(html || '').match(pattern)?.[1] || '';
+}
+
 function extractTableName(nameCell) {
   const ja = extractClassText(nameCell, 'name2-ja');
   const en = extractClassText(nameCell, 'name2-en');
@@ -231,6 +243,48 @@ function parseWorldFootballArchiveTableRows(html, spec) {
   return players;
 }
 
+function toRankNumber(value) {
+  const raw = String(value || '').replace(/[^\d.-]/g, '');
+  const num = Number(raw);
+  return Number.isFinite(num) ? num : 0;
+}
+
+function parseRankingTable(tableHtml, valueKey) {
+  const rows = [...String(tableHtml || '').matchAll(/<tr\b[^>]*>([\s\S]*?)<\/tr>/gi)];
+  const rankings = [];
+  for (const row of rows) {
+    const cells = cellValues(row[1]);
+    if (cells.length < 4) continue;
+    const rank = toRankNumber(stripTags(cells[0]));
+    const name = stripTags(cells[1]);
+    const countryJa = stripTags(cells[2]);
+    const value = toRankNumber(stripTags(cells[3]));
+    if (!rank || !name || !countryJa || !value) continue;
+    rankings.push({
+      rank,
+      name,
+      countryJa,
+      [valueKey]: value,
+    });
+  }
+  return rankings;
+}
+
+function parseWorldFootballArchiveTournamentRankings(html) {
+  const text = /<[^>]+>/.test(html) ? htmlToText(html) : String(html || '');
+  const lines = text
+    .split(/\r?\n/)
+    .map((line) => decodeHtml(line))
+    .filter(Boolean);
+  const goalTable = extractTableByAriaLabel(html, 'WC2026 goal ranking');
+  const assistTable = extractTableByAriaLabel(html, 'WC2026 assist ranking');
+  return {
+    updatedAtLabel: parseUpdateLabel(lines),
+    goals: parseRankingTable(goalTable, 'goals'),
+    assists: parseRankingTable(assistTable, 'assists'),
+  };
+}
+
 function parseWorldFootballArchiveTeamText(textOrHtml, spec) {
   const fromTable = /<tr\b/i.test(textOrHtml) ? parseWorldFootballArchiveTableRows(textOrHtml, spec) : [];
   const text = /<[^>]+>/.test(textOrHtml) ? htmlToText(textOrHtml) : String(textOrHtml || '');
@@ -267,6 +321,7 @@ function parseWorldFootballArchiveTeamText(textOrHtml, spec) {
 module.exports = {
   WFA_BASE_URL,
   buildWorldFootballArchiveTeamUrl,
+  parseWorldFootballArchiveTournamentRankings,
   parseWorldFootballArchiveTeamText,
   htmlToText,
 };
