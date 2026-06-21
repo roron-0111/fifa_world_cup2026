@@ -4431,7 +4431,6 @@ function LeaderboardScreen({user,onOpenTeam,syncToken}){
       <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',gap:10,margin:'12px 14px 0',padding:'10px 12px',background:'var(--s1)',border:'1px solid var(--border)',borderRadius:14,boxShadow:'var(--shadow)'}}>
         <div style={{minWidth:0}}>
           <div style={{fontSize:12,fontWeight:900,color:'var(--text)'}}>得点ランキングデータ</div>
-          <div style={{fontSize:10,fontWeight:800,color:'var(--text2)',lineHeight:1.4}}>{HAS_BACKEND?'WFAから得点ランキングを取得し、選手データへ反映します':'公開サイトでは更新ジョブで公開済みの得点ランキングJSONを再読み込みします'}</div>
         </div>
         <button className="btn" style={{width:'auto',padding:'9px 13px',fontSize:12,whiteSpace:'nowrap',marginTop:0}} onClick={refreshScorerData} disabled={scorerRefreshing}>
           {scorerRefreshing?'更新中…':(HAS_BACKEND?'最新を反映':'公開データを再読込')}

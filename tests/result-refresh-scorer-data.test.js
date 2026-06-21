@@ -28,8 +28,8 @@ test('static hosting loads scorer ranking data on startup and from leaderboard r
   assert.match(html, /HAS_BACKEND\?'最新を反映':'公開データを再読込'/);
   assert.match(html, /得点ランキングデータを更新しました/);
   assert.match(html, /公開済みの得点ランキングデータは変更ありません/);
-  assert.match(html, /公開サイトでは更新ジョブで公開済みの得点ランキングJSONを再読み込みします/);
-  assert.match(html, /WFAから得点ランキングを取得し、選手データへ反映します/);
+  assert.doesNotMatch(html, /公開サイトでは更新ジョブで公開済みの得点ランキングJSONを再読み込みします/);
+  assert.doesNotMatch(html, /WFAから得点ランキングを取得し、選手データへ反映します/);
 });
 
 test('home result reflection does not refresh scorer ranking data', () => {
