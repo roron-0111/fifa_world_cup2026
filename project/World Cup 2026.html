@@ -334,7 +334,7 @@ html,body{background:#ddd8ce;color:var(--text);font-family:'Inter',sans-serif;mi
 .str .team-n{display:flex;align-items:center;gap:6px;font-weight:700;min-width:0;}
 .str .team-n .flag-ico{flex-shrink:0;}
 .str .team-name{min-width:0;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:clamp(8px,1vw,12px);line-height:1.15;letter-spacing:-.01em;}
-.qual-badge{flex-shrink:0;display:inline-flex;align-items:center;justify-content:center;min-width:max-content;border-radius:999px;background:rgba(51,124,255,.14);color:#1e6ef0;border:1px solid rgba(51,124,255,.24);padding:2px 6px;font-size:9px;font-weight:1000;line-height:1;white-space:nowrap;}
+.qual-badge{flex-shrink:0;display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;min-width:18px;border-radius:999px;background:rgba(51,124,255,.14);color:#1e6ef0;border:1px solid rgba(51,124,255,.24);padding:0;font-size:10px;font-weight:1000;line-height:1;white-space:nowrap;}
 .qual-badge.rank{background:rgba(14,165,90,.14);color:#0f8f52;border-color:rgba(14,165,90,.28);}
 .str .sv{text-align:center;color:var(--text2);font-size:12px;}
 .str .pts-v{text-align:center;font-weight:900;font-size:15px;color:var(--accent);}
@@ -3944,12 +3944,14 @@ function GroupsScreen({user,onOpenTeam,syncToken}){
         {standings.map((t,i)=>{
           const q=qualificationMeta[t.name]||{};
           const fixtureMeta=fixtureQualificationMeta[t.name]||{};
-          const fixtureBadge=fixtureMeta.qualified?`${fixtureMeta.rank||''}位突破確定`:'';
-          const badge=fixtureBadge||(q.rankConfirmed?`${q.rankConfirmed}位確定`:q.qualified?'突破確定':'');
+          const fixtureBadgeLabel=fixtureMeta.qualified?`${fixtureMeta.rank||''}位突破確定`:'';
+          const badgeLabel=fixtureBadgeLabel||(q.rankConfirmed?`${q.rankConfirmed}位確定`:q.qualified?'突破確定':'');
+          const badgeRank=fixtureMeta.rank||q.rankConfirmed||'';
+          const badgeText=badgeRank||'✓';
           return (
           <div className={`str${i<2?' qual':''}${fixtureMeta.qualified||q.rankConfirmed?' rank-confirmed':''}`} key={t.name} style={{cursor:'pointer'}} onClick={()=>onOpenTeam?.(t.name)}>
             <span className="pos">{i+1}</span>
-            <span className="team-n"><div className="qi" style={{background:qualColors[i]||'transparent'}}/><span style={{fontSize:18}}><TeamFlag team={t.name}/></span><span className="team-name" style={{fontSize:11}}>{t.name.startsWith('TBD-')?placeholderLabel(t.name):teamJa(t.name)}</span>{badge&&<span className={`qual-badge${fixtureMeta.qualified||q.rankConfirmed?' rank':''}`}>{badge}</span>}</span>
+            <span className="team-n"><div className="qi" style={{background:qualColors[i]||'transparent'}}/><span style={{fontSize:18}}><TeamFlag team={t.name}/></span><span className="team-name" style={{fontSize:11}}>{t.name.startsWith('TBD-')?placeholderLabel(t.name):teamJa(t.name)}</span>{badgeLabel&&<span className={`qual-badge${fixtureMeta.qualified||q.rankConfirmed?' rank':''}`} title={badgeLabel} aria-label={badgeLabel}>{badgeText}</span>}</span>
             <span className="sv">{t.p}</span>
             <span className="sv">{t.w}</span>
             <span className="sv">{t.d}</span>

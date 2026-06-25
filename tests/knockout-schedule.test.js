@@ -147,7 +147,15 @@ test('group standings mark qualified and rank-confirmed teams clearly', () => {
   );
   assert.match(
     html,
-    /const badge=fixtureBadge\|\|\(q\.rankConfirmed\?`\$\{q\.rankConfirmed\}位確定`:q\.qualified\?'突破確定':''\);/,
+    /const badgeLabel=fixtureBadgeLabel\|\|\(q\.rankConfirmed\?`\$\{q\.rankConfirmed\}位確定`:q\.qualified\?'突破確定':''\);/,
+  );
+  assert.match(
+    html,
+    /const badgeRank=fixtureMeta\.rank\|\|q\.rankConfirmed\|\|'';/,
+  );
+  assert.match(
+    html,
+    /const badgeText=badgeRank\|\|'✓';/,
   );
   assert.match(
     html,
@@ -155,15 +163,20 @@ test('group standings mark qualified and rank-confirmed teams clearly', () => {
   );
   assert.match(
     html,
-    /<span className=\{`qual-badge\$\{fixtureMeta\.qualified\|\|q\.rankConfirmed\?' rank':''\}`\}>\{badge\}<\/span>/,
+    /<span className=\{`qual-badge\$\{fixtureMeta\.qualified\|\|q\.rankConfirmed\?' rank':''\}`\} title=\{badgeLabel\} aria-label=\{badgeLabel\}>\{badgeText\}<\/span>/,
   );
+  assert.doesNotMatch(html, /">\{badge\}<\/span>/);
   assert.match(
     html,
     /\.str\.rank-confirmed/,
   );
   assert.match(
     html,
-    /\.qual-badge/,
+    /\.qual-badge\{[^}]*width:18px/,
+  );
+  assert.match(
+    html,
+    /\.qual-badge\{[^}]*height:18px/,
   );
 });
 
@@ -178,11 +191,11 @@ test('group standings mark teams found in official knockout fixtures', () => {
   );
   assert.match(
     html,
-    /const fixtureBadge=fixtureMeta\.qualified\?`\$\{fixtureMeta\.rank\|\|''\}位突破確定`:'';/,
+    /const fixtureBadgeLabel=fixtureMeta\.qualified\?`\$\{fixtureMeta\.rank\|\|''\}位突破確定`:'';/,
   );
   assert.match(
     html,
-    /const badge=fixtureBadge\|\|\(q\.rankConfirmed\?`\$\{q\.rankConfirmed\}位確定`:q\.qualified\?'突破確定':''\);/,
+    /const badgeLabel=fixtureBadgeLabel\|\|\(q\.rankConfirmed\?`\$\{q\.rankConfirmed\}位確定`:q\.qualified\?'突破確定':''\);/,
   );
 });
 
