@@ -70,7 +70,7 @@ test('knockout predictions do not visually advance teams as official winners', (
   );
   assert.match(
     html,
-    /function koOfficialResolvedTeam\(roundId,matchIndex,side,results=\{\}\)/,
+    /function koOfficialResolvedTeam\(roundId,matchIndex,side,results=\{\},koFixtures=\{\}\)/,
   );
   assert.match(
     html,
@@ -78,15 +78,111 @@ test('knockout predictions do not visually advance teams as official winners', (
   );
   assert.match(
     html,
-    /const homeLabel=koOfficialResolvedTeam\(round\.id,index,'home',results\)\|\|match\.home;/,
+    /const homeLabel=koOfficialResolvedTeam\(round\.id,index,'home',results,koFixtures\)\|\|match\.home;/,
   );
   assert.match(
     html,
-    /const awayLabel=koOfficialResolvedTeam\(round\.id,index,'away',results\)\|\|match\.away;/,
+    /const awayLabel=koOfficialResolvedTeam\(round\.id,index,'away',results,koFixtures\)\|\|match\.away;/,
   );
   assert.match(
     html,
-    /<TeamFlag team=\{koOfficialResolvedTeam\(editing\.roundId,editing\.index,side,results\)\|\|editing\.match\[side\]\}\/>/,
+    /<TeamFlag team=\{koOfficialResolvedTeam\(editing\.roundId,editing\.index,side,results,koFixtures\)\|\|editing\.match\[side\]\}\/>/,
+  );
+});
+
+test('knockout seeds resolve only from confirmed group ranks', () => {
+  assert.match(
+    html,
+    /function calcGroupQualificationMeta\(groupId,results=\{\}\)\{/,
+  );
+  assert.match(
+    html,
+    /const rankConfirmed=complete&&index<2\?index\+1:null;/,
+  );
+  assert.match(
+    html,
+    /function groupSeedTeam\(seedLabel,results=\{\}\)\{/,
+  );
+  assert.match(
+    html,
+    /return Object\.entries\(meta\)\.find\(\(\[,value\]\)=>value\.rankConfirmed===desiredRank\)\?\.\[0\]\|\|null;/,
+  );
+  assert.match(
+    html,
+    /return groupSeedTeam\(seed,results\)\|\|seed;/,
+  );
+});
+
+test('knockout official fixtures override ambiguous third-place seeds', () => {
+  assert.match(
+    html,
+    /function koFixtureTeam\(roundId,matchIndex,side,koFixtures=\{\}\)\{/,
+  );
+  assert.match(
+    html,
+    /function koOfficialResolvedTeam\(roundId,matchIndex,side,results=\{\},koFixtures=\{\}\)\{/,
+  );
+  assert.match(
+    html,
+    /const fixtureTeam=koFixtureTeam\(roundId,matchIndex,side,koFixtures\);/,
+  );
+  assert.match(
+    html,
+    /if\(fixtureTeam\)return fixtureTeam;/,
+  );
+  assert.match(
+    html,
+    /const homeLabel=koOfficialResolvedTeam\(round\.id,index,'home',results,koFixtures\)\|\|match\.home;/,
+  );
+  assert.match(
+    html,
+    /const awayLabel=koOfficialResolvedTeam\(round\.id,index,'away',results,koFixtures\)\|\|match\.away;/,
+  );
+});
+
+test('group standings mark qualified and rank-confirmed teams clearly', () => {
+  assert.match(
+    html,
+    /const qualificationMeta=calcGroupQualificationMeta\(activeG,results\);/,
+  );
+  assert.match(
+    html,
+    /const badge=fixtureBadge\|\|\(q\.rankConfirmed\?`\$\{q\.rankConfirmed\}位確定`:q\.qualified\?'突破確定':''\);/,
+  );
+  assert.match(
+    html,
+    /className=\{`str\$\{i<2\?' qual':''\}\$\{fixtureMeta\.qualified\|\|q\.rankConfirmed\?' rank-confirmed':''\}`\}/,
+  );
+  assert.match(
+    html,
+    /<span className=\{`qual-badge\$\{fixtureMeta\.qualified\|\|q\.rankConfirmed\?' rank':''\}`\}>\{badge\}<\/span>/,
+  );
+  assert.match(
+    html,
+    /\.str\.rank-confirmed/,
+  );
+  assert.match(
+    html,
+    /\.qual-badge/,
+  );
+});
+
+test('group standings mark teams found in official knockout fixtures', () => {
+  assert.match(
+    html,
+    /function calcFixtureQualificationMeta\(koFixtures=\{\}\)\{/,
+  );
+  assert.match(
+    html,
+    /const fixtureQualificationMeta=calcFixtureQualificationMeta\(koFixtures\);/,
+  );
+  assert.match(
+    html,
+    /const fixtureBadge=fixtureMeta\.qualified\?`\$\{fixtureMeta\.rank\|\|''\}位突破確定`:'';/,
+  );
+  assert.match(
+    html,
+    /const badge=fixtureBadge\|\|\(q\.rankConfirmed\?`\$\{q\.rankConfirmed\}位確定`:q\.qualified\?'突破確定':''\);/,
   );
 });
 
@@ -149,6 +245,22 @@ test('knockout bracket zoom is user adjustable without changing board geometry',
     html,
     /\.ko-zoom-toggle\{position:fixed;right:16px;bottom:72px;/,
   );
+  assert.match(
+    html,
+    /\.ko-zoom-toggle\{[^}]*display:inline-flex/,
+  );
+  assert.match(
+    html,
+    /\.ko-zoom-toggle\{[^}]*width:max-content/,
+  );
+  assert.match(
+    html,
+    /\.ko-zoom-toggle\{[^}]*max-width:88px/,
+  );
+  assert.match(
+    html,
+    /\.ko-zoom-toggle\{[^}]*white-space:nowrap/,
+  );
   assert.doesNotMatch(
     html,
     /<div className="ko-view-controls"/,
@@ -162,7 +274,7 @@ test('knockout bracket zoom is user adjustable without changing board geometry',
 test('knockout podium picks expose opponent selections', () => {
   assert.match(
     html,
-    /const oppPodium=oppId\?koPodiumPredictions\(oppPreds,\{\}\):\{\};/,
+    /const oppPodium=oppId\?koPodiumPredictions\(oppPreds,\{\},koFixtures\):\{\};/,
   );
   assert.match(
     html,

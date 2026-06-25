@@ -12,6 +12,7 @@ const {
 const {
   FIFA_MATCHES_URL,
   fetchFifaWorldCupResults,
+  fixtureSnapshotSignature,
   resultSnapshotSignature,
 } = require('./lib/fifa-results');
 
@@ -163,6 +164,7 @@ function ensureStateShape() {
     next.predictionsV2 = next.predictionsV2 || next.predictions || {};
     delete next.predictions;
     next.results ||= {};
+    next.koFixtures ||= {};
     next.locked ||= {};
     next.koPreds ||= {};
     next.scorerPreds ||= {};
@@ -219,6 +221,7 @@ function makeRoomState() {
   return {
     predictionsV2: {},
     results: {},
+    koFixtures: {},
     locked: {},
     koPreds: {},
     scorerPreds: {},
@@ -247,6 +250,7 @@ function ensureRoomState(roomId) {
   } else {
     state.roomStates[roomId].predictionsV2 ||= {};
     state.roomStates[roomId].results ||= {};
+    state.roomStates[roomId].koFixtures ||= {};
     state.roomStates[roomId].locked ||= {};
     state.roomStates[roomId].koPreds ||= {};
     state.roomStates[roomId].scorerPreds ||= {};
@@ -489,7 +493,7 @@ function applyRoomStateKey(roomId, key, value, userId) {
 
   const roomState = ensureRoomState(roomId);
 
-  if (key === 'predictionsV2' || key === 'locked' || key === 'koPreds' || key === 'scorerPreds' || key === 'results' || key === 'settings') {
+  if (key === 'predictionsV2' || key === 'locked' || key === 'koPreds' || key === 'scorerPreds' || key === 'results' || key === 'koFixtures' || key === 'settings') {
     roomState[key] = value;
     return { roomState };
   }
@@ -678,16 +682,27 @@ const server = http.createServer(async (req, res) => {
         return;
       }
       try {
-        const { results: incoming, fetchedCount, updatedCount } = await fetchFifaWorldCupResults();
+        const { results: incoming, koFixtures: incomingFixtures, fetchedCount } = await fetchFifaWorldCupResults();
         const roomState = ensureRoomState(roomId);
         roomState.results ||= {};
-        const currentSignature = resultSnapshotSignature(roomState.results || {});
-        const incomingSignature = resultSnapshotSignature(incoming);
-        const alreadyCurrent = currentSignature === incomingSignature;
+        roomState.koFixtures ||= {};
+        const currentResults = roomState.results || {};
+        const currentFixtures = roomState.koFixtures || {};
+        const mergedResults = { ...currentResults, ...incoming };
+        const mergedFixtures = { ...currentFixtures, ...incomingFixtures };
+        const alreadyCurrent = resultSnapshotSignature(currentResults) === resultSnapshotSignature(mergedResults)
+          && fixtureSnapshotSignature(currentFixtures) === fixtureSnapshotSignature(mergedFixtures);
+        const updatedCount = Object.keys(incoming).filter((matchId) => (
+          resultSnapshotSignature({ [matchId]: currentResults[matchId] })
+          !== resultSnapshotSignature({ [matchId]: incoming[matchId] })
+        )).length;
+        const fixtureUpdatedCount = Object.keys(incomingFixtures).filter((matchId) => (
+          fixtureSnapshotSignature({ [matchId]: currentFixtures[matchId] })
+          !== fixtureSnapshotSignature({ [matchId]: incomingFixtures[matchId] })
+        )).length;
         if (!alreadyCurrent) {
-          Object.entries(incoming).forEach(([matchId, result]) => {
-            roomState.results[matchId] = result;
-          });
+          roomState.results = mergedResults;
+          roomState.koFixtures = mergedFixtures;
         }
         const now = new Date().toISOString();
         if (!alreadyCurrent) {
@@ -699,6 +714,7 @@ const server = http.createServer(async (req, res) => {
             source: 'fifa-live-results',
             fetchedCount,
             updatedCount,
+            fixtureUpdatedCount,
             history: [
               {
                 updatedAt: now,
@@ -706,6 +722,7 @@ const server = http.createServer(async (req, res) => {
                 source: 'fifa-live-results',
                 fetchedCount,
                 updatedCount,
+                fixtureUpdatedCount,
                 sourceUrl: FIFA_MATCHES_URL,
               },
               ...history,
@@ -717,6 +734,7 @@ const server = http.createServer(async (req, res) => {
             resultStatus: state.meta.resultUpdates,
             fetchedCount,
             updatedCount,
+            fixtureUpdatedCount,
             sourceUrl: FIFA_MATCHES_URL,
             alreadyCurrent,
           });
@@ -728,6 +746,7 @@ const server = http.createServer(async (req, res) => {
           resultStatus: state.meta?.resultUpdates || {},
           fetchedCount,
           updatedCount: 0,
+          fixtureUpdatedCount: 0,
           sourceUrl: FIFA_MATCHES_URL,
           alreadyCurrent,
         });

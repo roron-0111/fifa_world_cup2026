@@ -7,8 +7,11 @@ const html = fs.readFileSync(path.join(__dirname, '..', 'project', 'World Cup 20
 const server = fs.readFileSync(path.join(__dirname, '..', 'server.js'), 'utf8');
 
 test('scorer ranking predictions are part of every shared room state shape', () => {
-  assert.match(html, /return \{predictionsV2:\{\},results:\{\},locked:\{\},koPreds:\{\},scorerPreds:\{\},settings:\{\.\.\.DEFAULT_ROOM_SETTINGS\}\};/);
-  assert.match(html, /\['predictions','predictionsV2','results','locked','koPreds','scorerPreds'\]/);
+  assert.match(html, /return \{predictionsV2:\{\},results:\{\},koFixtures:\{\},locked:\{\},koPreds:\{\},scorerPreds:\{\},settings:\{\.\.\.DEFAULT_ROOM_SETTINGS\}\};/);
+  assert.match(html, /\['predictions','predictionsV2','results','koFixtures','locked','koPreds','scorerPreds'\]/);
+  assert.match(server, /koFixtures:\s*\{\}/);
+  assert.match(server, /state\.roomStates\[roomId\]\.koFixtures \|\|= \{\};/);
+  assert.match(server, /key === 'koFixtures'/);
   assert.match(server, /scorerPreds:\s*\{\}/);
   assert.match(server, /state\.roomStates\[roomId\]\.scorerPreds \|\|= \{\};/);
   assert.match(server, /key === 'scorerPreds'/);

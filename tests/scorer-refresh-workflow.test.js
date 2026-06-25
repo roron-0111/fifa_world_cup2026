@@ -14,6 +14,7 @@ test('scorer ranking has a real source refresh workflow', () => {
   assert.match(workflow, /cron: "0 3 \* \* \*"/);
   assert.match(workflow, /npm run refresh:data/);
   assert.match(workflow, /data\/players\.generated\.json project\/players\.generated\.json/);
-  assert.match(workflow, /firebase-tools deploy --only hosting --project fifa-world-cup2026/);
+  assert.doesNotMatch(workflow, /FIREBASE_TOKEN/);
+  assert.doesNotMatch(workflow, /firebase-tools deploy --only hosting/);
   assert.equal(packageJson.scripts['refresh:data'], 'npm run import:data && npm test');
 });

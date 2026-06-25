@@ -5,6 +5,7 @@ const {
   FIFA_MATCHES_URL,
   fetchFifaWorldCupResults,
   mapFifaCalendarMatchesToResults,
+  mapFifaCalendarMatchesToKoFixtures,
   matchIdFromMatchNumber,
   resultSnapshotSignature,
 } = require('../lib/fifa-results');
@@ -115,6 +116,55 @@ test('maps fifa knockout matches by official match number', () => {
   });
 });
 
+test('maps official knockout fixture teams before match results are final', () => {
+  const fixtures = mapFifaCalendarMatchesToKoFixtures([
+    {
+      MatchNumber: 73,
+      Home: { ShortClubName: 'South Africa' },
+      Away: { ShortClubName: 'Canada' },
+      MatchStatus: 1,
+      ResultType: 0,
+    },
+    {
+      MatchNumber: 74,
+      Home: { ShortClubName: 'Germany' },
+      Away: null,
+      MatchStatus: 1,
+      ResultType: 0,
+    },
+    {
+      MatchNumber: 87,
+      Home: { ShortClubName: 'United States' },
+      Away: { ShortClubName: 'Congo DR' },
+      MatchStatus: 1,
+      ResultType: 0,
+    },
+    {
+      MatchNumber: 25,
+      Home: { ShortClubName: 'Czechia' },
+      Away: { ShortClubName: 'South Africa' },
+      MatchStatus: 0,
+      ResultType: 1,
+    },
+  ]);
+
+  assert.deepEqual(fixtures['R32-0'], {
+    home: 'South Africa',
+    away: 'Canada',
+    matchNo: 73,
+  });
+  assert.deepEqual(fixtures['R32-1'], {
+    home: 'Germany',
+    matchNo: 74,
+  });
+  assert.deepEqual(fixtures['R32-14'], {
+    home: 'USA',
+    away: 'Congo',
+    matchNo: 87,
+  });
+  assert.equal(fixtures['A-3'], undefined);
+});
+
 test('group-stage numbers do not map through the knockout helper anymore', () => {
   assert.equal(matchIdFromMatchNumber(25), null);
   assert.equal(matchIdFromMatchNumber(73), 'R32-0');
@@ -133,6 +183,34 @@ test('fetches fifa calendar matches from the live fixtures endpoint', async () =
   await fetchFifaWorldCupResults({ fetchImpl: fakeFetch });
 
   assert.equal(requestedUrl, FIFA_MATCHES_URL);
+});
+
+test('fetches fifa calendar results with knockout fixtures', async () => {
+  const fakeFetch = async () => ({
+    ok: true,
+    json: async () => ({
+      Results: [
+        {
+          MatchNumber: 73,
+          Home: { ShortClubName: 'South Africa' },
+          Away: { ShortClubName: 'Canada' },
+          MatchStatus: 1,
+          ResultType: 0,
+        },
+      ],
+    }),
+  });
+
+  const data = await fetchFifaWorldCupResults({ fetchImpl: fakeFetch });
+
+  assert.deepEqual(data.results, {});
+  assert.deepEqual(data.koFixtures, {
+    'R32-0': {
+      home: 'South Africa',
+      away: 'Canada',
+      matchNo: 73,
+    },
+  });
 });
 
 test('result snapshot signature treats identical reflected results as unchanged', () => {

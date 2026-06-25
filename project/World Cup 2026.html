@@ -326,12 +326,16 @@ html,body{background:#ddd8ce;color:var(--text);font-family:'Inter',sans-serif;mi
 .sth{display:grid;grid-template-columns:24px minmax(112px,1.25fr) repeat(8,minmax(0,.82fr));gap:4px;padding:9px 10px;background:var(--s2);font-size:10px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.5px;align-items:center;border-bottom:1px solid var(--border);}
 .str{display:grid;grid-template-columns:24px minmax(112px,1.25fr) repeat(8,minmax(0,.82fr));gap:4px;padding:9px 10px;background:var(--s1);border-top:1px solid var(--border);align-items:center;font-size:12px;}
 .str.qual{background:linear-gradient(90deg,rgba(51,124,255,.14),rgba(51,124,255,.06));box-shadow:inset 3px 0 0 rgba(51,124,255,.85);}
+.str.rank-confirmed{background:linear-gradient(90deg,rgba(14,165,90,.18),rgba(14,165,90,.06));box-shadow:inset 3px 0 0 rgba(14,165,90,.9);}
 .str.qual:hover{background:linear-gradient(90deg,rgba(51,124,255,.18),rgba(51,124,255,.08));}
+.str.rank-confirmed:hover{background:linear-gradient(90deg,rgba(14,165,90,.22),rgba(14,165,90,.08));}
 .str:hover{background:var(--accentf);}
 .str .pos{color:var(--text2);font-weight:700;font-size:11px;text-align:center;}
 .str .team-n{display:flex;align-items:center;gap:6px;font-weight:700;min-width:0;}
 .str .team-n .flag-ico{flex-shrink:0;}
 .str .team-name{min-width:0;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:clamp(8px,1vw,12px);line-height:1.15;letter-spacing:-.01em;}
+.qual-badge{flex-shrink:0;display:inline-flex;align-items:center;justify-content:center;min-width:max-content;border-radius:999px;background:rgba(51,124,255,.14);color:#1e6ef0;border:1px solid rgba(51,124,255,.24);padding:2px 6px;font-size:9px;font-weight:1000;line-height:1;white-space:nowrap;}
+.qual-badge.rank{background:rgba(14,165,90,.14);color:#0f8f52;border-color:rgba(14,165,90,.28);}
 .str .sv{text-align:center;color:var(--text2);font-size:12px;}
 .str .pts-v{text-align:center;font-weight:900;font-size:15px;color:var(--accent);}
 .qi{width:3px;height:18px;border-radius:2px;flex-shrink:0;}
@@ -899,7 +903,7 @@ html,body{background:#ddd8ce;color:var(--text);font-family:'Inter',sans-serif;mi
 
 /* KNOCKOUT BOARD */
 .ko-toolbar{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;padding:12px 14px 0;}
-.ko-zoom-toggle{position:fixed;right:16px;bottom:72px;z-index:330;border:1.5px solid var(--accent);background:linear-gradient(135deg,var(--accent),#0f4cc4);color:#fff;border-radius:999px;padding:12px 16px;font:inherit;font-size:13px;font-weight:1000;cursor:pointer;box-shadow:0 14px 34px rgba(30,110,240,.32);}
+.ko-zoom-toggle{position:fixed;right:16px;bottom:72px;z-index:330;display:inline-flex;align-items:center;justify-content:center;width:max-content;min-width:62px;max-width:88px;white-space:nowrap;box-sizing:border-box;border:1.5px solid var(--accent);background:linear-gradient(135deg,var(--accent),#0f4cc4);color:#fff;border-radius:999px;padding:12px 16px;font:inherit;font-size:13px;line-height:1;font-weight:1000;cursor:pointer;box-shadow:0 14px 34px rgba(30,110,240,.32);}
 .ko-summary-card{background:linear-gradient(135deg,var(--s1),var(--s2));border:1px solid var(--border);border-radius:14px;padding:12px 14px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:4px;min-width:0;position:relative;overflow:hidden;}
 .ko-summary-card::after{content:'';position:absolute;right:-28px;top:-34px;width:92px;height:92px;border-radius:999px;background:var(--accentf);pointer-events:none;}
 .ko-summary-card span{font-size:10px;font-weight:900;color:var(--text2);text-transform:uppercase;letter-spacing:.4px;}
@@ -1565,14 +1569,33 @@ function setPlayerDataFromResponse(data,shouldNotify=true){
 function setDataStatus(next){
   DATA_STATUS={...DATA_STATUS,...(next||{})};
 }
+const REMOTE_PLAYER_DATA_JSON_URL='https://raw.githubusercontent.com/roron-0111/fifa_world_cup2026/main/project/players.generated.json';
 async function refreshStaticPlayerData(){
-  const res=await fetch(`./players.generated.json?refresh=${Date.now()}`,{cache:'no-store'});
-  if(!res.ok)throw new Error('得点ランキングデータを取得できませんでした');
-  const payload=await res.json();
+  const sources=STATIC_SHARED_ROOM_BACKEND&&!HAS_BACKEND
+    ?[
+      {url:`${REMOTE_PLAYER_DATA_JSON_URL}?refresh=${Date.now()}`,label:'github-main players.generated.json'},
+      {url:`./players.generated.json?refresh=${Date.now()}`,label:'players.generated.json'},
+    ]
+    :[{url:`./players.generated.json?refresh=${Date.now()}`,label:'players.generated.json'}];
+  let payload=null;
+  let sourceLabel='';
+  let lastError=null;
+  for(const source of sources){
+    try{
+      const res=await fetch(source.url,{cache:'no-store'});
+      if(!res.ok)throw new Error(`HTTP ${res.status}`);
+      payload=await res.json();
+      sourceLabel=source.label;
+      break;
+    }catch(error){
+      lastError=error;
+    }
+  }
+  if(!payload)throw new Error(lastError?.message||'得点ランキングデータを取得できませんでした');
   setPlayerDataFromResponse(payload,true);
   const dataStatus={
     lastUpdatedAt:new Date().toISOString(),
-    source:'players.generated.json',
+    source:sourceLabel,
     generatedAt:payload.generatedAt||'',
     status:'success',
     error:'',
@@ -1884,6 +1907,15 @@ function fifaTeamName(team){
   const name=candidates.find((candidate)=>typeof candidate==='string'&&candidate.trim());
   return name?String(name).trim():null;
 }
+function canonicalFifaTeamName(value){
+  const raw=String(value||'').trim();
+  if(!raw)return '';
+  return FIFA_TEAM_NAME_ALIASES[raw]||raw;
+}
+function fifaFixtureTeamName(team){
+  const name=fifaTeamName(team);
+  return name?canonicalFifaTeamName(name):null;
+}
 function fifaPairKey(homeName,awayName){
   return `${normalizeFifaTeamName(homeName)}|${normalizeFifaTeamName(awayName)}`;
 }
@@ -1936,6 +1968,21 @@ function mapFifaCalendarMatchesToResults(matches=[]){
   });
   return results;
 }
+function mapFifaCalendarMatchesToKoFixtures(matches=[]){
+  const fixtures={};
+  (matches||[]).forEach((match)=>{
+    const matchNo=toFiniteResultNumber(match?.MatchNumber??match?.matchNumber??match?.matchNo);
+    const matchId=fifaMatchIdFromMatchNumber(matchNo);
+    if(!matchId)return;
+    const home=fifaFixtureTeamName(match?.Home??match?.home);
+    const away=fifaFixtureTeamName(match?.Away??match?.away);
+    if(!home&&!away)return;
+    fixtures[matchId]={matchNo};
+    if(home)fixtures[matchId].home=home;
+    if(away)fixtures[matchId].away=away;
+  });
+  return fixtures;
+}
 function normalizeStoredResult(value){
   if(!value||typeof value!=='object'||Array.isArray(value))return null;
   const normalized={home:toFiniteResultNumber(value.home??value.homeScore??value.homeGoal),away:toFiniteResultNumber(value.away??value.awayScore??value.awayGoal),status:String(value.status||'final')};
@@ -1951,34 +1998,44 @@ function normalizeStoredResult(value){
 function resultSnapshotSignature(results={}){
   return JSON.stringify(Object.keys(results||{}).sort().map((matchId)=>[matchId,normalizeStoredResult(results[matchId])]));
 }
+function fixtureSnapshotSignature(fixtures={}){
+  return JSON.stringify(Object.keys(fixtures||{}).sort().map((matchId)=>[matchId,fixtures[matchId]]));
+}
 async function fetchFifaWorldCupResultsClient(){
   const res=await fetch(FIFA_MATCHES_URL,{headers:{Accept:'application/json'},cache:'no-store'});
   if(!res.ok)throw new Error(`FIFA試合結果の取得に失敗しました (${res.status})`);
   const payload=await res.json();
   const matches=Array.isArray(payload?.Results)?payload.Results:Array.isArray(payload?.results)?payload.results:[];
   const results=mapFifaCalendarMatchesToResults(matches);
-  return {results,fetchedCount:matches.length,updatedCount:Object.keys(results).length};
+  const koFixtures=mapFifaCalendarMatchesToKoFixtures(matches);
+  return {results,koFixtures,fetchedCount:matches.length,updatedCount:Object.keys(results).length};
 }
 async function refreshStaticSharedRoomResults(roomId){
   const code=localRoomCodeForId(roomId);
   if(!code)throw new Error('ルームコードが見つかりません');
-  const {results:incoming,fetchedCount}=await fetchFifaWorldCupResultsClient();
+  const {results:incoming,koFixtures:incomingFixtures,fetchedCount}=await fetchFifaWorldCupResultsClient();
   const payload=normalizeSharedRoomPayload(await fetchSharedRoomPayload(code),code);
   const currentResults=payload.state.results||{};
+  const currentFixtures=payload.state.koFixtures||{};
   const mergedResults={...currentResults,...incoming};
-  const alreadyCurrent=resultSnapshotSignature(currentResults)===resultSnapshotSignature(mergedResults);
+  const mergedFixtures={...currentFixtures,...incomingFixtures};
+  const alreadyCurrent=resultSnapshotSignature(currentResults)===resultSnapshotSignature(mergedResults)&&fixtureSnapshotSignature(currentFixtures)===fixtureSnapshotSignature(mergedFixtures);
   const changedCount=Object.keys(incoming).filter((matchId)=>(
     resultSnapshotSignature({[matchId]:currentResults[matchId]})!==resultSnapshotSignature({[matchId]:incoming[matchId]})
+  )).length;
+  const fixtureChangedCount=Object.keys(incomingFixtures||{}).filter((matchId)=>(
+    fixtureSnapshotSignature({[matchId]:currentFixtures[matchId]})!==fixtureSnapshotSignature({[matchId]:incomingFixtures[matchId]})
   )).length;
   let saved=payload;
   if(!alreadyCurrent){
     payload.state.results=mergedResults;
+    payload.state.koFixtures=mergedFixtures;
     saved=await saveSharedRoomPayload(payload);
   }
   applySharedRoomPayload(saved);
   const now=new Date().toISOString();
-  RESULT_STATUS={lastUpdatedAt:now,source:'fifa-live-results',fetchedCount,updatedCount:alreadyCurrent?0:changedCount,sourceUrl:FIFA_MATCHES_URL};
-  return {ok:true,roomState:saved.state,resultStatus:RESULT_STATUS,fetchedCount,updatedCount:alreadyCurrent?0:changedCount,sourceUrl:FIFA_MATCHES_URL,alreadyCurrent};
+  RESULT_STATUS={lastUpdatedAt:now,source:'fifa-live-results',fetchedCount,updatedCount:alreadyCurrent?0:changedCount,fixtureUpdatedCount:alreadyCurrent?0:fixtureChangedCount,sourceUrl:FIFA_MATCHES_URL};
+  return {ok:true,roomState:saved.state,resultStatus:RESULT_STATUS,fetchedCount,updatedCount:alreadyCurrent?0:changedCount,fixtureUpdatedCount:alreadyCurrent?0:fixtureChangedCount,sourceUrl:FIFA_MATCHES_URL,alreadyCurrent};
 }
 function koMatchPredictionCount(userKoPreds={}){
   return KO_MATCHES.reduce((count,match)=>count+(normalizeKoRecord(userKoPreds?.[match.id])?1:0),0);
@@ -2034,13 +2091,20 @@ function koOfficialWinnerSideForMatch(match,results={}){
   if(!match)return null;
   return koRecordWinnerSide(normalizeKoRecord(results?.[match.id]));
 }
-function koResolvedTeam(roundId,matchIndex,side,picks={},results={}){
+function koFixtureTeam(roundId,matchIndex,side,koFixtures={}){
+  const match=koGetMatch(roundId,matchIndex);
+  return match?.id?koFixtures?.[match.id]?.[side]||null:null;
+}
+function koResolvedTeam(roundId,matchIndex,side,picks={},results={},koFixtures={}){
   const round = KO_ROUNDS.find(r=>r.id===roundId);
   if(!round) return null;
   const match = round.matches[matchIndex];
   if(!match) return null;
+  const fixtureTeam=koFixtureTeam(roundId,matchIndex,side,koFixtures);
+  if(fixtureTeam)return fixtureTeam;
   if(roundId==='R32'){
-    return side==='home'?match.home:match.away;
+    const seed=side==='home'?match.home:match.away;
+    return groupSeedTeam(seed,results)||seed;
   }
   const sourceRef = koSourceRef(roundId,matchIndex,side);
   if(!sourceRef) return side==='home'?match.home:match.away;
@@ -2049,15 +2113,18 @@ function koResolvedTeam(roundId,matchIndex,side,picks={},results={}){
   const winnerSide = koWinnerSideForMatch(sourceMatch,picks,results);
   if(!winnerSide || !sourceMatch) return sourceLabel;
   const resolvedSide = sourceRef.loser ? (winnerSide==='home'?'away':'home') : winnerSide;
-  return koResolvedTeam(sourceRef.round, sourceRef.index, resolvedSide, picks, results) || sourceLabel;
+  return koResolvedTeam(sourceRef.round, sourceRef.index, resolvedSide, picks, results, koFixtures) || sourceLabel;
 }
-function koOfficialResolvedTeam(roundId,matchIndex,side,results={}){
+function koOfficialResolvedTeam(roundId,matchIndex,side,results={},koFixtures={}){
   const round = KO_ROUNDS.find(r=>r.id===roundId);
   if(!round) return null;
   const match = round.matches[matchIndex];
   if(!match) return null;
+  const fixtureTeam=koFixtureTeam(roundId,matchIndex,side,koFixtures);
+  if(fixtureTeam)return fixtureTeam;
   if(roundId==='R32'){
-    return side==='home'?match.home:match.away;
+    const seed=side==='home'?match.home:match.away;
+    return groupSeedTeam(seed,results)||seed;
   }
   const sourceRef = koSourceRef(roundId,matchIndex,side);
   if(!sourceRef) return side==='home'?match.home:match.away;
@@ -2066,43 +2133,44 @@ function koOfficialResolvedTeam(roundId,matchIndex,side,results={}){
   const winnerSide = koOfficialWinnerSideForMatch(sourceMatch,results);
   if(!winnerSide || !sourceMatch) return sourceLabel;
   const resolvedSide = sourceRef.loser ? (winnerSide==='home'?'away':'home') : winnerSide;
-  return koOfficialResolvedTeam(sourceRef.round, sourceRef.index, resolvedSide, results) || sourceLabel;
+  return koOfficialResolvedTeam(sourceRef.round, sourceRef.index, resolvedSide, results, koFixtures) || sourceLabel;
 }
-function koWinnerLabel(roundId,matchIndex,picks={},results={}){
+function koWinnerLabel(roundId,matchIndex,picks={},results={},koFixtures={}){
   const match=koGetMatch(roundId,matchIndex);
   const choice = koWinnerSideForMatch(match,picks,results);
   if(!choice) return null;
-  return koResolvedTeam(roundId,matchIndex,choice,picks,results);
+  return koResolvedTeam(roundId,matchIndex,choice,picks,results,koFixtures);
 }
-function koLoserLabel(roundId,matchIndex,picks={},results={}){
+function koLoserLabel(roundId,matchIndex,picks={},results={},koFixtures={}){
   const match=koGetMatch(roundId,matchIndex);
   const choice = koWinnerSideForMatch(match,picks,results);
   if(!choice) return null;
-  return koResolvedTeam(roundId,matchIndex,choice==='home'?'away':'home',picks,results);
+  return koResolvedTeam(roundId,matchIndex,choice==='home'?'away':'home',picks,results,koFixtures);
 }
-function koPodiumCandidates(picks={},results={}){
-  const base=KO_SEED_PAIRS.flat().map(koSeedLabel);
+function koPodiumCandidates(picks={},results={},koFixtures={}){
+  const base=KO_SEED_PAIRS.flat().map(seed=>groupSeedTeam(seed,results)||koSeedLabel(seed));
+  const fixtureTeams=Object.values(koFixtures||{}).flatMap((fixture)=>[fixture.home,fixture.away]).filter(Boolean);
   const derived=[
-    koWinnerLabel('F',0,picks,results),
-    koLoserLabel('F',0,picks,results),
-    koWinnerLabel('3RD',0,picks,results),
-    koLoserLabel('3RD',0,picks,results),
+    koWinnerLabel('F',0,picks,results,koFixtures),
+    koLoserLabel('F',0,picks,results,koFixtures),
+    koWinnerLabel('3RD',0,picks,results,koFixtures),
+    koLoserLabel('3RD',0,picks,results,koFixtures),
   ].filter(Boolean).map(koSeedLabel);
-  return [...new Set([...derived,...base])].filter(Boolean);
+  return [...new Set([...derived,...fixtureTeams,...base])].filter(Boolean);
 }
-function koPodiumPredictions(userPreds={},results={}){
+function koPodiumPredictions(userPreds={},results={},koFixtures={}){
   const explicit=userPreds?._podium||{};
   return {
-    champion:explicit.champion||koWinnerLabel('F',0,userPreds,results)||'',
-    runnerUp:explicit.runnerUp||koLoserLabel('F',0,userPreds,results)||'',
-    third:explicit.third||koWinnerLabel('3RD',0,userPreds,results)||'',
+    champion:explicit.champion||koWinnerLabel('F',0,userPreds,results,koFixtures)||'',
+    runnerUp:explicit.runnerUp||koLoserLabel('F',0,userPreds,results,koFixtures)||'',
+    third:explicit.third||koWinnerLabel('3RD',0,userPreds,results,koFixtures)||'',
   };
 }
-function koActualPodium(results={}){
+function koActualPodium(results={},koFixtures={}){
   return {
-    champion:koWinnerLabel('F',0,{},results)||'',
-    runnerUp:koLoserLabel('F',0,{},results)||'',
-    third:koWinnerLabel('3RD',0,{},results)||'',
+    champion:koWinnerLabel('F',0,{},results,koFixtures)||'',
+    runnerUp:koLoserLabel('F',0,{},results,koFixtures)||'',
+    third:koWinnerLabel('3RD',0,{},results,koFixtures)||'',
   };
 }
 function normalizeSearchText(value){
@@ -2281,7 +2349,7 @@ function findUniqueRoomUserByName(users,roomId,username){
   return matches.length===1?matches[0]:null;
 }
 function makeClientRoomState(){
-  return {predictionsV2:{},results:{},locked:{},koPreds:{},scorerPreds:{},settings:{...DEFAULT_ROOM_SETTINGS}};
+  return {predictionsV2:{},results:{},koFixtures:{},locked:{},koPreds:{},scorerPreds:{},settings:{...DEFAULT_ROOM_SETTINGS}};
 }
 function normalizeSharedRoomPayload(payload,roomCode=''){
   const code=normalizeRoomCode(payload?.room?.code||roomCode||genCode());
@@ -2335,6 +2403,7 @@ function applySharedRoomPayload(payload){
   ss('users',users);
   ss(roomDataKey(normalized.room.id,PREDICTION_STORE_KEY),normalized.state.predictionsV2||{});
   ss(roomDataKey(normalized.room.id,'results'),normalized.state.results||{});
+  ss(roomDataKey(normalized.room.id,'koFixtures'),normalized.state.koFixtures||{});
   ss(roomDataKey(normalized.room.id,'locked'),normalized.state.locked||{});
   ss(roomDataKey(normalized.room.id,'koPreds'),normalized.state.koPreds||{});
   ss(roomDataKey(normalized.room.id,'scorerPreds'),normalized.state.scorerPreds||{});
@@ -2494,7 +2563,7 @@ function updateLocalUserRecord(nextUser, prevUsername=''){
   return nextUser;
 }
 function clearCompetitionData(roomId){
-  ['predictions','predictionsV2','results','locked','koPreds','scorerPreds'].forEach(k=>localStorage.removeItem(SK+roomDataKey(roomId,k)));
+  ['predictions','predictionsV2','results','koFixtures','locked','koPreds','scorerPreds'].forEach(k=>localStorage.removeItem(SK+roomDataKey(roomId,k)));
   const user=gs('currentUser',null);
   if(HAS_BACKEND&&roomId&&user?.id&&!user.isGuest){
     api('/api/state/clear',{roomId,userId:user.id});
@@ -2511,6 +2580,7 @@ function hydrateFromBootstrap(){
     if(!state)return;
     ss(roomDataKey(roomId,PREDICTION_STORE_KEY),state.predictionsV2||state.predictions||{});
     ss(roomDataKey(roomId,'results'),state.results||{});
+    ss(roomDataKey(roomId,'koFixtures'),state.koFixtures||{});
     ss(roomDataKey(roomId,'locked'),state.locked||{});
     ss(roomDataKey(roomId,'koPreds'),state.koPreds||{});
     ss(roomDataKey(roomId,'scorerPreds'),state.scorerPreds||{});
@@ -2542,6 +2612,7 @@ function initDemo(){
   const demoRoomKey=demoRoom.id;
   const globalPreds=gs(PREDICTION_STORE_KEY,null);
   const globalResults=gs('results',null);
+  const globalKoFixtures=gs('koFixtures',null);
   const globalLocked=gs('locked',null);
   const globalKo=gs('koPreds',null);
   const globalScorer=gs('scorerPreds',null);
@@ -2555,6 +2626,7 @@ function initDemo(){
     GROUP_MATCHES.slice(0,6).forEach(m=>{res[m.id]={home:Math.floor(Math.random()*4),away:Math.floor(Math.random()*3)};});
   }
   sr(demoRoomKey,'results',res);
+  sr(demoRoomKey,'koFixtures',globalKoFixtures||{});
   sr(demoRoomKey,'locked',globalLocked||{'demo-opp':GROUP_MATCHES.slice(0,6).map(m=>m.id)});
   sr(demoRoomKey,'koPreds',globalKo||{});
   sr(demoRoomKey,'scorerPreds',globalScorer||{});
@@ -2593,6 +2665,77 @@ function calcPointSummary(preds,results,userId,settings){
     if(pr===rr){total+=resultPts;resultHits+=1;resultPoints+=resultPts;}
   });
   return {total,resultHits,exactHits,resultPoints,exactPoints,resultPts,exactPts};
+}
+function calcGroupStandings(teams,results,groupId){
+  const gm=GROUP_MATCHES.filter(m=>m.groupId===groupId);
+  const st={};teams.forEach(t=>{st[t]={p:0,w:0,d:0,l:0,gf:0,ga:0,pts:0};});
+  gm.forEach(m=>{
+    const r=results[m.id];if(!r)return;
+    st[m.home].p++;st[m.away].p++;
+    st[m.home].gf+=r.home;st[m.home].ga+=r.away;
+    st[m.away].gf+=r.away;st[m.away].ga+=r.home;
+    if(r.home>r.away){st[m.home].w++;st[m.home].pts+=3;st[m.away].l++;}
+    else if(r.home<r.away){st[m.away].w++;st[m.away].pts+=3;st[m.home].l++;}
+    else{st[m.home].d++;st[m.home].pts++;st[m.away].d++;st[m.away].pts++;}
+  });
+  return teams.map(t=>({name:t,...st[t]})).sort((a,b)=>b.pts-a.pts||(b.gf-b.ga)-(a.gf-a.ga)||b.gf-a.gf||b.w-a.w);
+}
+function groupMatches(groupId){
+  return GROUP_MATCHES.filter(m=>m.groupId===groupId);
+}
+function isGroupComplete(groupId,results={}){
+  const gm=groupMatches(groupId);
+  return gm.length>0&&gm.every(m=>!!results[m.id]);
+}
+function maxGroupPoints(team,groupId,results={}){
+  const group=GROUPS_RAW.find(g=>g.id===groupId);
+  if(!group)return 0;
+  const standings=calcGroupStandings(group.teams,results,groupId);
+  const current=standings.find(t=>t.name===team)?.pts||0;
+  const remaining=groupMatches(groupId).filter(m=>!results[m.id]&&(m.home===team||m.away===team)).length;
+  return current+remaining*3;
+}
+function calcGroupQualificationMeta(groupId,results={}){
+  const group=GROUPS_RAW.find(g=>g.id===groupId);
+  if(!group)return {};
+  const complete=isGroupComplete(groupId,results);
+  const standings=calcGroupStandings(group.teams,results,groupId);
+  const meta={};
+  standings.forEach((team,index)=>{
+    const threats=standings.filter(other=>other.name!==team.name&&maxGroupPoints(other.name,groupId,results)>=team.pts).length;
+    const rankConfirmed=complete&&index<2?index+1:null;
+    meta[team.name]={
+      qualified:index<2&&(complete||threats<2),
+      rankConfirmed,
+    };
+  });
+  return meta;
+}
+function groupSeedTeam(seedLabel,results={}){
+  const seed=koSeedLabel(seedLabel);
+  const match=seed.match(/^([A-L])組([12])位$/);
+  if(!match)return null;
+  const desiredRank=Number(match[2]);
+  const meta=calcGroupQualificationMeta(match[1],results);
+  return Object.entries(meta).find(([,value])=>value.rankConfirmed===desiredRank)?.[0]||null;
+}
+function koSeedRank(seedLabel){
+  const seed=koSeedLabel(seedLabel);
+  const match=seed.match(/^([A-L])組([123])位$/);
+  if(match)return Number(match[2]);
+  return seed.includes('組3位')?3:null;
+}
+function calcFixtureQualificationMeta(koFixtures={}){
+  const meta={};
+  const round=koGetRound('R32');
+  (round?.matches||[]).forEach((match)=>{
+    ['home','away'].forEach((side)=>{
+      const team=koFixtures?.[match.id]?.[side];
+      if(!team||!TEAM_JA[team])return;
+      meta[team]={qualified:true,rank:koSeedRank(match[side])};
+    });
+  });
+  return meta;
 }
 function calcKoPointSummary(koPreds,results,userId,settings){
   const {
@@ -3113,6 +3256,7 @@ function AuthScreen({onAuth}){
         const state=result.room.state;
         ss(roomDataKey(result.room.id,PREDICTION_STORE_KEY),state.predictionsV2||state.predictions||{});
         ss(roomDataKey(result.room.id,'results'),state.results||{});
+        ss(roomDataKey(result.room.id,'koFixtures'),state.koFixtures||{});
         ss(roomDataKey(result.room.id,'locked'),state.locked||{});
         ss(roomDataKey(result.room.id,'koPreds'),state.koPreds||{});
         ss(roomDataKey(result.room.id,'scorerPreds'),state.scorerPreds||{});
@@ -3267,12 +3411,11 @@ function BottomNav({screen,setScreen}){
 }
 
 // ===== HOME =====
-function HomeScreen({user,onLogout,onManualSync,syncToken}){
+function HomeScreen({user,onLogout,syncToken}){
   const lang=useContext(LangCtx);const l=T[lang];
   const [copied,setCopied]=useState(false);
   const [homeToast,setHomeToast]=useState('');
   const [homeUpdatingResults,setHomeUpdatingResults]=useState(false);
-  const [homeSyncing,setHomeSyncing]=useState(false);
   const rooms=gs('rooms',[]);
   const room=rooms.find(r=>r.id===user.roomId);
   const roomId=room?.id||user.roomId;
@@ -3394,17 +3537,20 @@ function HomeScreen({user,onLogout,onManualSync,syncToken}){
         return;
       }
       const nextResults=res.roomState?.results||{};
+      const nextFixtures=res.roomState?.koFixtures||{};
       ss(roomDataKey(roomId,'results'),nextResults);
+      ss(roomDataKey(roomId,'koFixtures'),nextFixtures);
       if(res.dataStatus)setDataStatus(res.dataStatus);
       if(res.resultStatus)RESULT_STATUS=res.resultStatus;
       const updatedCount=Number(res.updatedCount||0);
+      const fixtureUpdatedCount=Number(res.fixtureUpdatedCount||res.resultStatus?.fixtureUpdatedCount||0);
       if(res.alreadyCurrent){
         setHomeToast('Web取得した試合結果は既に反映済みです');
         notifyStateChange();
         return;
       }
-      setHomeToast(updatedCount
-        ? `Web取得した試合結果を反映しました（${updatedCount}件）`
+      setHomeToast(updatedCount||fixtureUpdatedCount
+        ? `Web取得した試合結果を反映しました（結果${updatedCount}件・決勝Tカード${fixtureUpdatedCount}件）`
         : 'Webから取得しましたが、反映可能な試合結果はまだありません');
       notifyStateChange();
     }catch(error){
@@ -3413,17 +3559,6 @@ function HomeScreen({user,onLogout,onManualSync,syncToken}){
       setHomeUpdatingResults(false);
     }
   }
-  async function refreshSharedState(){
-    if(typeof onManualSync!=='function')return;
-    setHomeSyncing(true);
-    try{
-      const res=await onManualSync();
-      setHomeToast(res?.ok?'最新状態に更新しました':(res?.error||'最新状態を取得できませんでした'));
-    }finally{
-      setHomeSyncing(false);
-    }
-  }
-
   return(
     <div className="page page-enter">
       {homeToast&&<Toast msg={homeToast} onDone={()=>setHomeToast('')}/>}
@@ -3457,7 +3592,6 @@ function HomeScreen({user,onLogout,onManualSync,syncToken}){
       {room&&<div className="room-bar">
         <div><div className="room-lbl">{l.roomCode}</div><div className="room-code">{room.code}</div></div>
         <div className="room-actions">
-          {!user.isGuest&&<button className="copy-btn" onClick={refreshSharedState} disabled={homeSyncing}>{homeSyncing?'更新中…':'最新状態に更新'}</button>}
           {user.isGuest
             ?<button className="copy-btn" onClick={onLogout}>トップに戻る</button>
             :<button className="copy-btn" onClick={()=>{navigator.clipboard?.writeText(room.code);setCopied(true);setTimeout(()=>setCopied(false),2000);}}>
@@ -3758,6 +3892,7 @@ function GroupsScreen({user,onOpenTeam,syncToken}){
   })();
   const [preds,setPreds]=useState(()=>grPred(roomId,{}));
   const [results,setResults]=useState(()=>gr(roomId,'results',{}));
+  const [koFixtures,setKoFixtures]=useState(()=>gr(roomId,'koFixtures',{}));
   const oppId=roomUsers.find((m)=>m.id!==user.id)?.id||null;
   const group=GROUPS_RAW.find(g=>g.id===activeG);
   const matches=GROUP_MATCHES.filter(m=>m.groupId===activeG);
@@ -3765,23 +3900,12 @@ function GroupsScreen({user,onOpenTeam,syncToken}){
   useEffect(()=>{
     setPreds(grPred(roomId,{}));
     setResults(gr(roomId,'results',{}));
+    setKoFixtures(gr(roomId,'koFixtures',{}));
   },[syncToken,roomId]);
 
-  function calcStandings(teams,results,groupId){
-    const gm=GROUP_MATCHES.filter(m=>m.groupId===groupId);
-    const st={};teams.forEach(t=>{st[t]={p:0,w:0,d:0,l:0,gf:0,ga:0,pts:0};});
-    gm.forEach(m=>{
-      const r=results[m.id];if(!r)return;
-      st[m.home].p++;st[m.away].p++;
-      st[m.home].gf+=r.home;st[m.home].ga+=r.away;
-      st[m.away].gf+=r.away;st[m.away].ga+=r.home;
-      if(r.home>r.away){st[m.home].w++;st[m.home].pts+=3;st[m.away].l++;}
-      else if(r.home<r.away){st[m.away].w++;st[m.away].pts+=3;st[m.home].l++;}
-      else{st[m.home].d++;st[m.home].pts++;st[m.away].d++;st[m.away].pts++;}
-    });
-    return teams.map(t=>({name:t,...st[t]})).sort((a,b)=>b.pts-a.pts||(b.gf-b.ga)-(a.gf-a.ga)||b.gf-a.gf||b.w-a.w);
-  }
-  const standings=calcStandings(group.teams,results,activeG);
+  const standings=calcGroupStandings(group.teams,results,activeG);
+  const qualificationMeta=calcGroupQualificationMeta(activeG,results);
+  const fixtureQualificationMeta=calcFixtureQualificationMeta(koFixtures);
 
   function savePred(matchId,pred,localOnly=false){
     if(localOnly){
@@ -3817,10 +3941,15 @@ function GroupsScreen({user,onOpenTeam,syncToken}){
           <span style={{textAlign:'center'}}>差</span>
           <span style={{textAlign:'center'}}>勝点</span>
         </div>
-        {standings.map((t,i)=>(
-          <div className={`str${i<2?' qual':''}`} key={t.name} style={{cursor:'pointer'}} onClick={()=>onOpenTeam?.(t.name)}>
+        {standings.map((t,i)=>{
+          const q=qualificationMeta[t.name]||{};
+          const fixtureMeta=fixtureQualificationMeta[t.name]||{};
+          const fixtureBadge=fixtureMeta.qualified?`${fixtureMeta.rank||''}位突破確定`:'';
+          const badge=fixtureBadge||(q.rankConfirmed?`${q.rankConfirmed}位確定`:q.qualified?'突破確定':'');
+          return (
+          <div className={`str${i<2?' qual':''}${fixtureMeta.qualified||q.rankConfirmed?' rank-confirmed':''}`} key={t.name} style={{cursor:'pointer'}} onClick={()=>onOpenTeam?.(t.name)}>
             <span className="pos">{i+1}</span>
-            <span className="team-n"><div className="qi" style={{background:qualColors[i]||'transparent'}}/><span style={{fontSize:18}}><TeamFlag team={t.name}/></span><span className="team-name" style={{fontSize:11}}>{t.name.startsWith('TBD-')?placeholderLabel(t.name):teamJa(t.name)}</span></span>
+            <span className="team-n"><div className="qi" style={{background:qualColors[i]||'transparent'}}/><span style={{fontSize:18}}><TeamFlag team={t.name}/></span><span className="team-name" style={{fontSize:11}}>{t.name.startsWith('TBD-')?placeholderLabel(t.name):teamJa(t.name)}</span>{badge&&<span className={`qual-badge${fixtureMeta.qualified||q.rankConfirmed?' rank':''}`}>{badge}</span>}</span>
             <span className="sv">{t.p}</span>
             <span className="sv">{t.w}</span>
             <span className="sv">{t.d}</span>
@@ -3830,7 +3959,7 @@ function GroupsScreen({user,onOpenTeam,syncToken}){
             <span className="sv">{t.gf-t.ga}</span>
             <span className="pts-v">{t.pts}</span>
           </div>
-        ))}
+        )})}
       </div>
       <div className="section-title">{l.predictions}</div>
       {matches.map(m=>(
@@ -3863,6 +3992,7 @@ function BracketScreen({user,syncToken}){
   const oppId=opp?.id||null;
   const [koPreds,setKoPreds]=useState(()=>gr(roomId,'koPreds',{}));
   const [results,setResults]=useState(()=>gr(roomId,'results',{}));
+  const [koFixtures,setKoFixtures]=useState(()=>gr(roomId,'koFixtures',{}));
   const [editing,setEditing]=useState(null);
   const [draft,setDraft]=useState(null);
   const [status,setStatus]=useState('');
@@ -3885,14 +4015,15 @@ function BracketScreen({user,syncToken}){
   const R32_VISUAL_ORDER=[1,4,0,2,10,11,8,9,3,5,6,7,13,15,12,14];
   const R32_VISUAL_SLOT=R32_VISUAL_ORDER.reduce((acc,index,slot)=>({...acc,[index]:slot}),{});
   const canvasZoom=viewMode==='overview'?0.72:1;
-  const podium=koPodiumPredictions(myPreds,{});
-  const oppPodium=oppId?koPodiumPredictions(oppPreds,{}):{};
-  const podiumCandidates=koPodiumCandidates(myPreds,results);
+  const podium=koPodiumPredictions(myPreds,{},koFixtures);
+  const oppPodium=oppId?koPodiumPredictions(oppPreds,{},koFixtures):{};
+  const podiumCandidates=koPodiumCandidates(myPreds,results,koFixtures);
   const champion=podium.champion;
 
   useEffect(()=>{
     setKoPreds(gr(roomId,'koPreds',{}));
     setResults(gr(roomId,'results',{}));
+    setKoFixtures(gr(roomId,'koFixtures',{}));
   },[syncToken,roomId]);
   useEffect(()=>{
     const measure=()=>setStickyHeight(Math.ceil(stickyStageRef.current?.getBoundingClientRect().height||0));
@@ -4138,8 +4269,8 @@ function BracketScreen({user,syncToken}){
     const pred=normalizeKoRecord(myPreds[match.id]);
     const oppPred=oppId?normalizeKoRecord(oppPreds[match.id]):null;
     const winnerSide=koRecordWinnerSide(actual);
-    const homeLabel=koOfficialResolvedTeam(round.id,index,'home',results)||match.home;
-    const awayLabel=koOfficialResolvedTeam(round.id,index,'away',results)||match.away;
+    const homeLabel=koOfficialResolvedTeam(round.id,index,'home',results,koFixtures)||match.home;
+    const awayLabel=koOfficialResolvedTeam(round.id,index,'away',results,koFixtures)||match.away;
     const pts=matchPoints(match,myPreds);
     const koJudgment=getKoJudgment(pred,actual);
     const matchKindLabel=round.id==='F'?'決勝':round.id==='3RD'?'3位決定戦':'';
@@ -4241,8 +4372,8 @@ function BracketScreen({user,syncToken}){
             <div className="ko-modal-teams">
               {['home','away'].map((side)=>(
                 <div className="ko-modal-team" key={side}>
-                  <TeamFlag team={koOfficialResolvedTeam(editing.roundId,editing.index,side,results)||editing.match[side]}/>
-                  <span>{koTeamName(koOfficialResolvedTeam(editing.roundId,editing.index,side,results)||editing.match[side])}</span>
+                  <TeamFlag team={koOfficialResolvedTeam(editing.roundId,editing.index,side,results,koFixtures)||editing.match[side]}/>
+                  <span>{koTeamName(koOfficialResolvedTeam(editing.roundId,editing.index,side,results,koFixtures)||editing.match[side])}</span>
                 </div>
               ))}
             </div>
@@ -4834,6 +4965,7 @@ function App(){
       if(roomState){
         ss(roomDataKey(roomId,PREDICTION_STORE_KEY),roomState.predictionsV2||roomState.predictions||{});
         ss(roomDataKey(roomId,'results'),roomState.results||{});
+        ss(roomDataKey(roomId,'koFixtures'),roomState.koFixtures||{});
         ss(roomDataKey(roomId,'locked'),roomState.locked||{});
         ss(roomDataKey(roomId,'koPreds'),roomState.koPreds||{});
         ss(roomDataKey(roomId,'scorerPreds'),roomState.scorerPreds||{});
@@ -4902,7 +5034,7 @@ function App(){
   const room=rooms.find(r=>r.id===user.roomId);
 
   const screens={
-    home:<HomeScreen user={user} onLogout={handleLogout} onManualSync={syncCurrentRoom} syncToken={syncTick}/>,
+    home:<HomeScreen user={user} onLogout={handleLogout} syncToken={syncTick}/>,
     groups:<GroupsScreen user={user} onOpenTeam={setSelectedTeam} syncToken={syncTick}/>,
     bracket:<BracketScreen user={user} syncToken={syncTick}/>,
     leaderboard:<LeaderboardScreen user={user} onOpenTeam={setSelectedTeam} syncToken={syncTick}/>,

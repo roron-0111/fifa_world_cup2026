@@ -369,7 +369,8 @@
         "scorerThirdPts": 2
       },
       "predictionsV2": {},
-      "scorerPreds": {}
+      "scorerPreds": {},
+      "koFixtures": {}
     },
     "room-1776577956313": {
       "results": {},
@@ -408,7 +409,8 @@
         "scorerThirdPts": 2
       },
       "predictionsV2": {},
-      "scorerPreds": {}
+      "scorerPreds": {},
+      "koFixtures": {}
     },
     "room-1776593771328": {
       "results": {},
@@ -441,7 +443,8 @@
           }
         }
       },
-      "scorerPreds": {}
+      "scorerPreds": {},
+      "koFixtures": {}
     },
     "room-1776599215207": {
       "results": {},
@@ -485,7 +488,8 @@
           }
         }
       },
-      "scorerPreds": {}
+      "scorerPreds": {},
+      "koFixtures": {}
     },
     "room-1776601323801": {
       "predictionsV2": {
@@ -532,7 +536,8 @@
         "scorerSecondPts": 3,
         "scorerThirdPts": 2
       },
-      "scorerPreds": {}
+      "scorerPreds": {},
+      "koFixtures": {}
     },
     "room-1776602144345": {
       "predictionsV2": {
@@ -570,7 +575,8 @@
         "scorerSecondPts": 3,
         "scorerThirdPts": 2
       },
-      "scorerPreds": {}
+      "scorerPreds": {},
+      "koFixtures": {}
     },
     "room-1776602654600": {
       "predictionsV2": {
@@ -631,7 +637,8 @@
         "scorerSecondPts": 3,
         "scorerThirdPts": 2
       },
-      "scorerPreds": {}
+      "scorerPreds": {},
+      "koFixtures": {}
     },
     "room-1776605164304": {
       "predictionsV2": {},
@@ -653,7 +660,8 @@
         "scorerSecondPts": 3,
         "scorerThirdPts": 2
       },
-      "scorerPreds": {}
+      "scorerPreds": {},
+      "koFixtures": {}
     },
     "room-1777955460631": {
       "predictionsV2": {},
@@ -675,7 +683,8 @@
         "scorerSecondPts": 3,
         "scorerThirdPts": 2
       },
-      "scorerPreds": {}
+      "scorerPreds": {},
+      "koFixtures": {}
     },
     "room-1780734118091": {
       "predictionsV2": {},
@@ -710,7 +719,8 @@
         "scorerSecondPts": 3,
         "scorerThirdPts": 2
       },
-      "scorerPreds": {}
+      "scorerPreds": {},
+      "koFixtures": {}
     },
     "room-1780734766504": {
       "predictionsV2": {},
@@ -732,194 +742,24 @@
         "scorerSecondPts": 3,
         "scorerThirdPts": 2
       },
-      "scorerPreds": {}
-    },
-    "room-ui-result-check": {
-      "predictionsV2": {},
-      "results": {
-        "A-1": {
-          "home": 2,
-          "away": 0,
-          "status": "final"
-        },
-        "A-2": {
-          "home": 2,
-          "away": 1,
-          "status": "final"
-        },
-        "B-1": {
-          "home": 1,
-          "away": 1,
-          "status": "final"
-        },
-        "D-1": {
-          "home": 4,
-          "away": 1,
-          "status": "final"
-        },
-        "B-2": {
-          "home": 1,
-          "away": 1,
-          "status": "final"
-        },
-        "C-2": {
-          "home": 1,
-          "away": 1,
-          "status": "final"
-        },
-        "C-1": {
-          "home": 0,
-          "away": 1,
-          "status": "final"
-        },
-        "D-2": {
-          "home": 2,
-          "away": 0,
-          "status": "final"
-        },
-        "E-2": {
-          "home": 7,
-          "away": 1,
-          "status": "final"
-        },
-        "F-1": {
-          "home": 2,
-          "away": 2,
-          "status": "final"
-        },
-        "E-1": {
-          "home": 1,
-          "away": 0,
-          "status": "final"
-        },
-        "F-2": {
-          "home": 5,
-          "away": 1,
-          "status": "final"
-        },
-        "H-2": {
-          "home": 0,
-          "away": 0,
-          "status": "final"
-        },
-        "G-2": {
-          "home": 1,
-          "away": 1,
-          "status": "final"
-        },
-        "H-1": {
-          "home": 1,
-          "away": 1,
-          "status": "final"
-        },
-        "G-1": {
-          "home": 2,
-          "away": 2,
-          "status": "final"
-        },
-        "I-1": {
-          "home": 3,
-          "away": 1,
-          "status": "final"
-        },
-        "I-2": {
-          "home": 1,
-          "away": 4,
-          "status": "final"
-        },
-        "J-1": {
-          "home": 3,
-          "away": 0,
-          "status": "final"
-        },
-        "J-2": {
-          "home": 3,
-          "away": 1,
-          "status": "final"
-        },
-        "K-1": {
-          "home": 1,
-          "away": 1,
-          "status": "final"
-        },
-        "L-2": {
-          "home": 4,
-          "away": 2,
-          "status": "final"
-        },
-        "L-1": {
-          "home": 1,
-          "away": 0,
-          "status": "final"
-        },
-        "K-2": {
-          "home": 1,
-          "away": 3,
-          "status": "final"
-        },
-        "A-3": {
-          "home": 1,
-          "away": 1,
-          "status": "final"
-        },
-        "B-3": {
-          "home": 4,
-          "away": 1,
-          "status": "final"
-        },
-        "B-4": {
-          "home": 6,
-          "away": 0,
-          "status": "final"
-        },
-        "A-4": {
-          "home": 1,
-          "away": 0,
-          "status": "final"
-        }
-      },
-      "locked": {},
-      "koPreds": {},
       "scorerPreds": {},
-      "settings": {
-        "resultPts": 1,
-        "exactPts": 2,
-        "koWinnerPts": 1,
-        "koExactPts": 2,
-        "koPenaltyPts": 1,
-        "koChampionPts": 5,
-        "koRunnerUpPts": 3,
-        "koThirdPlacePts": 2,
-        "koRunnerUpEnabled": false,
-        "koThirdPlaceEnabled": false,
-        "scorerFirstPts": 5,
-        "scorerSecondPts": 3,
-        "scorerThirdPts": 2
-      }
+      "koFixtures": {}
     }
   },
   "meta": {
     "dataRefresh": {
-      "lastUpdatedAt": "2026-06-19T09:04:56.164Z",
+      "lastUpdatedAt": "2026-06-21T00:23:00.944Z",
       "source": "world-football-archive",
-      "generatedAt": "2026-06-19T09:04:56.126Z",
+      "generatedAt": "2026-06-21T00:23:00.801Z",
       "status": "success",
       "error": ""
     },
     "resultUpdates": {
-      "lastUpdatedAt": "2026-06-19T09:14:59.557Z",
+      "lastUpdatedAt": "2026-06-19T08:57:56.604Z",
       "source": "fifa-live-results",
       "fetchedCount": 104,
       "updatedCount": 28,
       "history": [
-        {
-          "updatedAt": "2026-06-19T09:14:59.557Z",
-          "roomId": "room-ui-result-check",
-          "source": "fifa-live-results",
-          "fetchedCount": 104,
-          "updatedCount": 28,
-          "sourceUrl": "https://api.fifa.com/api/v3/calendar/matches?language=en&count=500&idSeason=285023"
-        },
         {
           "updatedAt": "2026-06-19T08:57:56.604Z",
           "roomId": "room-demo",

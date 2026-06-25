@@ -18,7 +18,10 @@ test('result reflection is limited to match results on the server path', () => {
 
 test('static hosting loads scorer ranking data on startup and from leaderboard refresh', () => {
   assert.match(html, /async function refreshStaticPlayerData\(\)\{/);
-  assert.match(html, /fetch\(`\.\/players\.generated\.json\?refresh=\$\{Date\.now\(\)\}`,\{cache:'no-store'\}\)/);
+  assert.match(html, /const REMOTE_PLAYER_DATA_JSON_URL='https:\/\/raw\.githubusercontent\.com\/roron-0111\/fifa_world_cup2026\/main\/project\/players\.generated\.json';/);
+  assert.match(html, /url:`\$\{REMOTE_PLAYER_DATA_JSON_URL\}\?refresh=\$\{Date\.now\(\)\}`,label:'github-main players\.generated\.json'/);
+  assert.match(html, /url:`\.\/players\.generated\.json\?refresh=\$\{Date\.now\(\)\}`,label:'players\.generated\.json'/);
+  assert.match(html, /fetch\(source\.url,\{cache:'no-store'\}\)/);
   assert.match(html, /setPlayerDataFromResponse\(payload,true\);/);
   assert.match(html, /useEffect\(\(\)=>\{\s*let alive=true;\s*if\(STATIC_SHARED_ROOM_BACKEND&&!HAS_BACKEND\)\{\s*refreshStaticPlayerData\(\)/);
   assert.match(html, /if\(alive&&payload\.dataStatus\)setDataStatus\(payload\.dataStatus\);/);

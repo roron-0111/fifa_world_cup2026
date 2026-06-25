@@ -41,13 +41,3 @@ jobs:
           git add data/players.generated.json project/players.generated.json
           git commit -m "Refresh player and scorer data"
           git push
-
-      - name: Deploy Firebase Hosting
-        env:
-          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
-        run: |
-          if [ -z "$FIREBASE_TOKEN" ]; then
-            echo "FIREBASE_TOKEN is not set. Skipping Firebase Hosting deploy."
-            exit 0
-          fi
-          npx firebase-tools deploy --only hosting --project fifa-world-cup2026 --token "$FIREBASE_TOKEN"
