@@ -1570,9 +1570,37 @@ function setDataStatus(next){
   DATA_STATUS={...DATA_STATUS,...(next||{})};
 }
 const REMOTE_PLAYER_DATA_JSON_URL='https://raw.githubusercontent.com/roron-0111/fifa_world_cup2026/main/project/players.generated.json';
+const GITHUB_PLAYER_DATA_CONTENTS_URL='https://api.github.com/repos/roron-0111/fifa_world_cup2026/contents/project/players.generated.json?ref=main';
+function decodeBase64Text(value){
+  const binary=atob(String(value||'').replace(/\s/g,''));
+  const bytes=new Uint8Array(binary.length);
+  for(let i=0;i<binary.length;i++)bytes[i]=binary.charCodeAt(i);
+  return new TextDecoder().decode(bytes);
+}
+async function fetchGitHubContentsJson(url){
+  const metaRes=await fetch(url,{cache:'no-store',headers:{Accept:'application/vnd.github+json'}});
+  if(!metaRes.ok)throw new Error(`HTTP ${metaRes.status}`);
+  const meta=await metaRes.json();
+  let content=meta.content;
+  if((!content||meta.encoding==='none')&&meta.git_url){
+    const blobRes=await fetch(meta.git_url,{cache:'no-store',headers:{Accept:'application/vnd.github+json'}});
+    if(!blobRes.ok)throw new Error(`HTTP ${blobRes.status}`);
+    const blob=await blobRes.json();
+    content=blob.content;
+  }
+  if(!content)throw new Error('GitHub players.generated.json content is empty');
+  return JSON.parse(decodeBase64Text(content));
+}
+async function fetchPlayerDataSource(source){
+  if(source.kind==='github-contents')return fetchGitHubContentsJson(source.url);
+  const res=await fetch(source.url,{cache:'no-store'});
+  if(!res.ok)throw new Error(`HTTP ${res.status}`);
+  return res.json();
+}
 async function refreshStaticPlayerData(){
   const sources=STATIC_SHARED_ROOM_BACKEND&&!HAS_BACKEND
     ?[
+      {url:GITHUB_PLAYER_DATA_CONTENTS_URL,label:'github-contents players.generated.json',kind:'github-contents'},
       {url:`${REMOTE_PLAYER_DATA_JSON_URL}?refresh=${Date.now()}`,label:'github-main players.generated.json'},
       {url:`./players.generated.json?refresh=${Date.now()}`,label:'players.generated.json'},
     ]
@@ -1582,9 +1610,7 @@ async function refreshStaticPlayerData(){
   let lastError=null;
   for(const source of sources){
     try{
-      const res=await fetch(source.url,{cache:'no-store'});
-      if(!res.ok)throw new Error(`HTTP ${res.status}`);
-      payload=await res.json();
+      payload=await fetchPlayerDataSource(source);
       sourceLabel=source.label;
       break;
     }catch(error){
