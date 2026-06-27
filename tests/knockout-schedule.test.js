@@ -310,7 +310,13 @@ test('knockout prediction modal places team labels next to score inputs', () => 
   assert.match(html, /className=\{`ko-score-side \$\{side\}`\}/);
   assert.match(html, /<div className="ko-score-separator" aria-hidden="true">-<\/div>/);
   assert.match(html, /<span className="ko-score-team-name">\{koModalTeamLabel\(side\)\}<\/span>/);
+  assert.match(html, /function adjustDraftScore\(side,delta\)\{/);
+  assert.match(html, /className="ko-score-stepper"/);
+  assert.match(html, /aria-label=\{`\$\{koModalTeamLabel\(side\)\}の得点を増やす`\}/);
+  assert.match(html, /onClick=\{\(\)=>adjustDraftScore\(side,1\)\}/);
   assert.match(html, /value=\{draft\[side\]\}/);
+  assert.match(html, /aria-label=\{`\$\{koModalTeamLabel\(side\)\}の得点を減らす`\}/);
+  assert.match(html, /onClick=\{\(\)=>adjustDraftScore\(side,-1\)\}/);
   assert.doesNotMatch(html, /左側.*が勝利/);
   assert.doesNotMatch(html, /右側.*が勝利/);
   assert.doesNotMatch(html, /className="ko-pick-row"/);
