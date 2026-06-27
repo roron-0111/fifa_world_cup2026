@@ -86,7 +86,7 @@ test('knockout predictions do not visually advance teams as official winners', (
   );
   assert.match(
     html,
-    /<TeamFlag team=\{koOfficialResolvedTeam\(editing\.roundId,editing\.index,side,results,koFixtures\)\|\|editing\.match\[side\]\}\/>/,
+    /function koModalTeamValue\(side\)\{[\s\S]*?return koOfficialResolvedTeam\(editing\.roundId,editing\.index,side,results,koFixtures\)\|\|editing\.match\[side\];/,
   );
 });
 
@@ -303,8 +303,22 @@ test('knockout podium picks expose opponent selections', () => {
   );
 });
 
-test('knockout PK entry has dedicated penalty score fields', () => {
-  assert.match(html, /PK戦で決着/);
-  assert.match(html, /draft\.decidedBy==='PK'&&\(/);
-  assert.match(html, /className="ko-score-editor pk"/);
+test('knockout prediction modal labels winner choices with teams and scores', () => {
+  assert.match(html, /function koModalTeamLabel\(side\)\{/);
+  assert.match(html, /function koWinnerPickScore\(side\)\{/);
+  assert.match(html, /<span className="ko-winner-team">\{koModalTeamLabel\(side\)\}<\/span>/);
+  assert.match(html, /<strong className="ko-winner-score">\{koWinnerPickScore\(side\)\}<\/strong>/);
+  assert.doesNotMatch(html, /左側.*が勝利/);
+  assert.doesNotMatch(html, /右側.*が勝利/);
+});
+
+test('knockout PK prediction only asks for the winner', () => {
+  assert.match(html, /同点の場合は選択した国をPK勝者として扱います/);
+  assert.match(html, /const wantsPk=tied;/);
+  assert.match(html, /const winnerSide=scoreWinner\|\|draft\.winnerSide;/);
+  assert.match(html, /decidedBy:wantsPk\?'PK':'REG'/);
+  assert.match(html, /homePen:null,awayPen:null/);
+  assert.doesNotMatch(html, /type="checkbox" checked=\{draft\.decidedBy==='PK'\}/);
+  assert.doesNotMatch(html, /className="ko-score-editor pk"/);
+  assert.doesNotMatch(html, /PKの得点差がつくように入力してください/);
 });

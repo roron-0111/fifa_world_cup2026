@@ -998,12 +998,13 @@ html,body{background:#ddd8ce;color:var(--text);font-family:'Inter',sans-serif;mi
 .ko-score-editor input{min-width:0;width:100%;padding:12px;border:1.5px solid var(--border);border-radius:12px;background:var(--s2);font-family:'Bebas Neue';font-size:32px;text-align:center;color:var(--text);outline:none;}
 .ko-score-editor input:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accentf);}
 .ko-score-editor span{font-family:'Bebas Neue';font-size:28px;color:var(--text2);}
-.ko-score-editor.pk input{font-size:24px;}
 .ko-pick-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:10px 0;}
-.ko-pick-row button{border:1.5px solid var(--border);background:var(--s2);color:var(--text2);border-radius:12px;padding:10px;font:inherit;font-size:13px;font-weight:900;cursor:pointer;}
+.ko-pick-row button{border:1.5px solid var(--border);background:var(--s2);color:var(--text2);border-radius:12px;padding:10px;font:inherit;font-weight:900;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;min-width:0;}
 .ko-pick-row button.on{background:var(--accent);border-color:var(--accent);color:#fff;}
-.ko-pk-toggle{display:flex;align-items:center;gap:8px;padding:10px 0;font-size:13px;font-weight:900;color:var(--text);}
-.ko-pk-toggle input{width:18px;height:18px;accent-color:var(--accent);}
+.ko-winner-team{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:12px;line-height:1.15;}
+.ko-winner-score{font-family:'Bebas Neue';font-size:24px;line-height:1;color:inherit;letter-spacing:.03em;}
+.ko-winner-note{font-size:10px;line-height:1;color:currentColor;opacity:.72;}
+.ko-pk-note{padding:8px 0 4px;font-size:11px;font-weight:900;color:var(--text2);line-height:1.4;}
 .ko-modal-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:12px;}
 .ko-modal-actions .primary{background:var(--accent);border-color:var(--accent);color:#fff;}
 .ko-modal-actions .ghost{background:transparent;color:var(--red);border-color:var(--red);}
@@ -4128,6 +4129,37 @@ function BracketScreen({user,syncToken}){
       awayPen:String(current.awayPen??0),
     };
   }
+  function koModalTeamValue(side){
+    if(!editing)return '';
+    return koOfficialResolvedTeam(editing.roundId,editing.index,side,results,koFixtures)||editing.match[side];
+  }
+  function koModalTeamLabel(side){
+    return koTeamName(koModalTeamValue(side));
+  }
+  function koWinnerPickScore(side){
+    const home=Math.max(0,Number(draft?.home)||0);
+    const away=Math.max(0,Number(draft?.away)||0);
+    return side==='home'?`${home} - ${away}`:`${away} - ${home}`;
+  }
+  function koDraftScoreWinner(){
+    if(!draft)return null;
+    const home=Math.max(0,Number(draft.home)||0);
+    const away=Math.max(0,Number(draft.away)||0);
+    return inferWinnerSide(home,away);
+  }
+  function koDraftScoresTied(){
+    if(!draft)return false;
+    const home=Math.max(0,Number(draft.home)||0);
+    const away=Math.max(0,Number(draft.away)||0);
+    return home===away;
+  }
+  function updateDraftScore(side,value){
+    const next={...draft,[side]:value};
+    const home=Math.max(0,Number(next.home)||0);
+    const away=Math.max(0,Number(next.away)||0);
+    const scoreWinner=inferWinnerSide(home,away);
+    setDraft({...next,winnerSide:scoreWinner||next.winnerSide||'home'});
+  }
   function openMatch(round,index){
     const match=round.matches[index];
     if(!canEditKo||normalizeKoRecord(results[match.id])||isMatchPredictionClosed(match))return;
@@ -4141,19 +4173,15 @@ function BracketScreen({user,syncToken}){
     const home=Math.max(0,Number(draft.home)||0);
     const away=Math.max(0,Number(draft.away)||0);
     const tied=home===away;
-    const wantsPk=tied&&draft.decidedBy==='PK';
-    const homePen=wantsPk?Math.max(0,Number(draft.homePen)||0):null;
-    const awayPen=wantsPk?Math.max(0,Number(draft.awayPen)||0):null;
+    const wantsPk=tied;
     const scoreWinner=inferWinnerSide(home,away);
-    const pkWinner=wantsPk?inferWinnerSide(homePen,awayPen):null;
-    const winnerSide=scoreWinner||pkWinner||draft.winnerSide;
+    const winnerSide=scoreWinner||draft.winnerSide;
     if(tied&&!winnerSide){setStatus('同点の場合は勝者を選んでください');return;}
-    if(wantsPk&&!pkWinner){setStatus('PKの得点差がつくように入力してください');return;}
     const record={
       home,away,
       winnerSide,
       decidedBy:wantsPk?'PK':'REG',
-      homePen,awayPen,
+      homePen:null,awayPen:null,
       locked:true,
       updatedAt:new Date().toISOString(),
     };
@@ -4400,34 +4428,26 @@ function BracketScreen({user,syncToken}){
             <div className="ko-modal-teams">
               {['home','away'].map((side)=>(
                 <div className="ko-modal-team" key={side}>
-                  <TeamFlag team={koOfficialResolvedTeam(editing.roundId,editing.index,side,results,koFixtures)||editing.match[side]}/>
-                  <span>{koTeamName(koOfficialResolvedTeam(editing.roundId,editing.index,side,results,koFixtures)||editing.match[side])}</span>
+                  <TeamFlag team={koModalTeamValue(side)}/>
+                  <span>{koModalTeamLabel(side)}</span>
                 </div>
               ))}
             </div>
             <div className="ko-score-editor">
-              <input type="number" min="0" value={draft.home} onChange={(e)=>setDraft({...draft,home:e.target.value})}/>
+              <input type="number" min="0" value={draft.home} onChange={(e)=>updateDraftScore('home',e.target.value)}/>
               <span>-</span>
-              <input type="number" min="0" value={draft.away} onChange={(e)=>setDraft({...draft,away:e.target.value})}/>
+              <input type="number" min="0" value={draft.away} onChange={(e)=>updateDraftScore('away',e.target.value)}/>
             </div>
             <div className="ko-pick-row">
               {['home','away'].map(side=>(
-                <button key={side} className={draft.winnerSide===side?'on':''} onClick={()=>setDraft({...draft,winnerSide:side})}>
-                  {side==='home'?'左側':'右側'}が勝利
+                <button key={side} className={(koDraftScoreWinner()||draft.winnerSide)===side?'on':''} onClick={()=>{if(!koDraftScoreWinner())setDraft({...draft,winnerSide:side});}} aria-label={`${koModalTeamLabel(side)} ${koWinnerPickScore(side)}で勝利`}>
+                  <span className="ko-winner-team">{koModalTeamLabel(side)}</span>
+                  <strong className="ko-winner-score">{koWinnerPickScore(side)}</strong>
+                  <small className="ko-winner-note">{koDraftScoresTied()?'PK勝者':'勝者'}</small>
                 </button>
               ))}
             </div>
-            <label className="ko-pk-toggle">
-              <input type="checkbox" checked={draft.decidedBy==='PK'} onChange={(e)=>setDraft({...draft,decidedBy:e.target.checked?'PK':'REG'})}/>
-              PK戦で決着
-            </label>
-            {draft.decidedBy==='PK'&&(
-              <div className="ko-score-editor pk">
-                <input type="number" min="0" value={draft.homePen} onChange={(e)=>setDraft({...draft,homePen:e.target.value})}/>
-                <span>PK</span>
-                <input type="number" min="0" value={draft.awayPen} onChange={(e)=>setDraft({...draft,awayPen:e.target.value})}/>
-              </div>
-            )}
+            <div className="ko-pk-note">同点の場合は選択した国をPK勝者として扱います</div>
             {status&&<div className="errmsg">{status}</div>}
             <div className="ko-modal-actions">
               <button className="ghost" onClick={clearDraft}>クリア</button>
