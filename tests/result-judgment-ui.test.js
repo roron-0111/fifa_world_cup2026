@@ -108,40 +108,6 @@ test('knockout PK-decided tie does not earn normal exact-score points', () => {
   });
 });
 
-test('knockout PK winner-only prediction earns penalty points', () => {
-  const match = html.match(/(function calcKoPointSummary\(koPreds,results,userId,settings\)\{[\s\S]*?)\nconst SCORER_PREDICTION_SLOTS=/);
-  assert.ok(match, 'calcKoPointSummary should be extractable');
-  const context = {
-    KO_MATCHES: [{ id: 'F-0' }],
-    normalizeKoRecord: (record) => record || null,
-    koRecordHasScore: (record) => Number.isFinite(record?.home) && Number.isFinite(record?.away),
-    koRecordWinnerSide: (record) => {
-      if (!record) return null;
-      if (record.decidedBy === 'PK') {
-        if (record.homePen > record.awayPen) return 'home';
-        if (record.homePen < record.awayPen) return 'away';
-        return record.winnerSide || null;
-      }
-      if (record.home > record.away) return 'home';
-      if (record.home < record.away) return 'away';
-      return record.winnerSide || null;
-    },
-    koPodiumPredictions: () => ({}),
-    koActualPodium: () => ({}),
-    koSeedLabel: (value) => value,
-  };
-  vm.runInNewContext(`${match[1]}; this.summary=calcKoPointSummary(
-    {user:{'F-0':{home:1,away:1,decidedBy:'PK',homePen:null,awayPen:null,winnerSide:'home'}}},
-    {'F-0':{home:1,away:1,decidedBy:'PK',homePen:4,awayPen:3,winnerSide:'home'}},
-    'user',
-    {koWinnerPts:1,koExactPts:2,koPenaltyPts:1,koChampionPts:5}
-  );`, context);
-  assert.equal(context.summary.total, 2);
-  assert.equal(context.summary.winnerHits, 1);
-  assert.equal(context.summary.exactHits, 0);
-  assert.equal(context.summary.penaltyHits, 1);
-});
-
 test('scorer ranking predictions score the top three goal tiers with ties', () => {
   const match = html.match(/(const SCORER_PREDICTION_SLOTS=\[[\s\S]*?)\nfunction displayUserLabel/);
   assert.ok(match, 'scorer ranking summary should be extractable');
