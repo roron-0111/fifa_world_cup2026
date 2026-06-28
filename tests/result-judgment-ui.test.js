@@ -237,6 +237,15 @@ test('group match cards show only finished state after results and score both us
   assert.doesNotMatch(html, /結果: \{result\.home\}/);
 });
 
+test('knockout finished cards show point tags for both users without wrapping', () => {
+  assert.match(html, /const pts=matchPoints\(match,myPreds\);/);
+  assert.match(html, /const oppPts=oppId\?matchPoints\(match,oppPreds\):null;/);
+  assert.match(html, /\{renderPredictionLine\('me','自分',pred,pts\)\}/);
+  assert.match(html, /\{renderPredictionLine\('opp','相手',oppId\?oppPred:null,oppPts\)\}/);
+  assert.match(html, /\.ko-pred-line\{height:31px;display:grid;grid-template-columns:auto minmax\(0,1fr\) auto;/);
+  assert.match(html, /\.ko-pred-line em\{[^}]*white-space:nowrap/);
+});
+
 test('finished group match cards cannot be edited or unlocked', () => {
   assert.match(html, /const isFinished=!!result;/);
   assert.match(html, /const isPredictionReadOnly=readOnly\|\|isFinished\|\|isPredictionClosed;/);

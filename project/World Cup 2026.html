@@ -978,13 +978,13 @@ html,body{background:#ddd8ce;color:var(--text);font-family:'Inter',sans-serif;mi
 .ko-actual-score{display:flex;align-items:center;justify-content:center;text-align:center;min-width:0;padding:0 4px;font-family:'Bebas Neue','Inter',sans-serif;font-size:17px;line-height:1.05;font-weight:900;color:#8a8a8a;background:rgba(255,255,255,.5);border-left:1px solid rgba(0,0,0,.08);border-right:1px solid rgba(0,0,0,.08);white-space:normal;}
 .ko-actual-score.on{font-family:'Inter',sans-serif;font-size:12px;color:#111;background:linear-gradient(180deg,#fff,#f6f1e8);}
 .ko-score-stack{border-top:1px solid rgba(0,0,0,.1);background:rgba(255,255,255,.72);display:grid;grid-template-columns:repeat(2,minmax(0,1fr));}
-.ko-pred-line{height:31px;display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;gap:5px;padding:4px 8px;font-size:10px;color:#555;font-weight:800;border-left:1px solid rgba(0,0,0,.06);min-width:0;}
+.ko-pred-line{height:31px;display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:4px;padding:4px 6px;font-size:10px;color:#555;font-weight:800;border-left:1px solid rgba(0,0,0,.06);min-width:0;}
 .ko-pred-line:first-child{border-left:none;}
 .ko-pred-line b{font-size:9px;color:#fff;border-radius:999px;padding:2px 6px;text-align:center;background:#64748b;white-space:nowrap;line-height:1.2;}
 .ko-pred-line.me b{background:#1e6ef0;}
 .ko-pred-line.opp b{background:#d4960a;}
 .ko-pred-line strong{font-family:'Inter',sans-serif;font-size:12px;line-height:1.1;color:#111;font-weight:900;letter-spacing:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.ko-pred-line em{font-style:normal;color:#ff140f;font-size:10px;font-weight:900;}
+.ko-pred-line em{font-style:normal;color:#ff140f;font-size:10px;font-weight:900;white-space:nowrap;line-height:1;}
 .ko-champion-node{position:absolute;z-index:2;width:142px;min-height:88px;background:#fff;color:#111;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:12px;border:1px solid rgba(255,255,255,.28);box-shadow:0 12px 30px rgba(0,0,0,.3);}
 .ko-champion-node span{font-size:12px;font-weight:900;color:#777;letter-spacing:.4px;}
 .ko-champion-node strong{font-size:18px;line-height:1.25;font-weight:900;text-align:center;display:flex;align-items:center;justify-content:center;gap:6px;flex-wrap:wrap;}
@@ -3481,6 +3481,7 @@ function HomeScreen({user,onLogout,syncToken}){
   const roomId=room?.id||user.roomId;
   const preds=grPred(roomId,{});
   const results=gr(roomId,'results',{});
+  const koFixtures=gr(roomId,'koFixtures',{});
   const koPreds=gr(roomId,'koPreds',{});
   const scorerPreds=gr(roomId,'scorerPreds',{});
   const settings={...DEFAULT_ROOM_SETTINGS,...gr(roomId,'settings',{})};
@@ -3552,6 +3553,7 @@ function HomeScreen({user,onLogout,syncToken}){
       match,
       roundId:round.id,
       roundLabel:round.label,
+      matchIndex:matchOrder,
       order:GROUP_MATCHES.length+(roundOrder*100)+matchOrder,
     }))),
   ];
@@ -3572,7 +3574,10 @@ function HomeScreen({user,onLogout,syncToken}){
       const scoreText=scorePairText(actual,'未反映');
       const myPredText=scorePairText(myPred,'未予想');
       const oppPredText=scorePairText(oppPred,'未予想');
-      return {...meta,actual,myJudgment,oppJudgment,scoreText,myPredText,oppPredText};
+      const koHome=meta.kind==='ko'?koOfficialResolvedTeam(meta.roundId,meta.matchIndex,'home',results,koFixtures)||meta.match.home:null;
+      const koAway=meta.kind==='ko'?koOfficialResolvedTeam(meta.roundId,meta.matchIndex,'away',results,koFixtures)||meta.match.away:null;
+      const teamsText=meta.kind==='ko'?`${koTeamName(koHome)} vs ${koTeamName(koAway)}`:`${teamJa(meta.match.home)} vs ${teamJa(meta.match.away)}`;
+      return {...meta,actual,myJudgment,oppJudgment,scoreText,myPredText,oppPredText,teamsText};
     })
     .filter(Boolean)
     .sort((a,b)=>{
@@ -3749,9 +3754,7 @@ function HomeScreen({user,onLogout,syncToken}){
                     <span className="result-match-time">{formatMatchDate(item.match.date,item.match.kickoff,uiSettings.timeZone||'Asia/Tokyo')}</span>
                   </div>
                   <div className="result-match-teams">
-                    {item.kind==='ko'
-                      ?`${koTeamName(item.match.home)} vs ${koTeamName(item.match.away)}`
-                      :`${teamJa(item.match.home)} vs ${teamJa(item.match.away)}`}
+                    {item.teamsText}
                   </div>
                 </div>
                 <div className="result-match-side">
@@ -4274,9 +4277,15 @@ function BracketScreen({user,syncToken}){
         const yTarget=centerY(roundId,index);
         const homeWinner=koOfficialWinnerSideForMatch(koGetMatch(homeRef.round,homeRef.index),results);
         const awayWinner=koOfficialWinnerSideForMatch(koGetMatch(awayRef.round,awayRef.index),results);
-        const active=homeWinner||awayWinner;
-        const d=`M ${x1} ${yHome} H ${mid} M ${x1} ${yAway} H ${mid} M ${mid} ${yHome} V ${yAway} M ${mid} ${yTarget} H ${x2}`;
-        lines.push(<path key={`${roundId}-${index}`} className={`ko-line${active?' on':''}`} d={d}/>);
+        const baseD=`M ${x1} ${yHome} H ${mid} M ${x1} ${yAway} H ${mid} M ${mid} ${yHome} V ${yAway}`;
+        const targetD=`M ${mid} ${yTarget} H ${x2}`;
+        lines.push(<path key={`${roundId}-${index}`} className="ko-line" d={`${baseD} ${targetD}`}/>);
+        const addActiveBranch=(key,ySource)=>{
+          const branchD=`M ${x1} ${ySource} H ${mid} M ${mid} ${ySource} V ${yTarget} ${targetD}`;
+          lines.push(<path key={key} className="ko-line on" d={branchD}/>);
+        };
+        if(homeWinner)addActiveBranch(`${roundId}-${index}-home-on`,yHome);
+        if(awayWinner)addActiveBranch(`${roundId}-${index}-away-on`,yAway);
       });
     });
     const finalMatch=koGetMatch('F',0);
@@ -4373,6 +4382,7 @@ function BracketScreen({user,syncToken}){
     const homeLabel=koOfficialResolvedTeam(round.id,index,'home',results,koFixtures)||match.home;
     const awayLabel=koOfficialResolvedTeam(round.id,index,'away',results,koFixtures)||match.away;
     const pts=matchPoints(match,myPreds);
+    const oppPts=oppId?matchPoints(match,oppPreds):null;
     const koJudgment=getKoJudgment(pred,actual);
     const matchKindLabel=round.id==='F'?'決勝':round.id==='3RD'?'3位決定戦':'';
     const canEditMatch=canEditKo&&!actual&&!isPredictionClosed;
@@ -4402,7 +4412,7 @@ function BracketScreen({user,syncToken}){
         </div>
         <div className="ko-score-stack">
           {renderPredictionLine('me','自分',pred,pts)}
-          {renderPredictionLine('opp','相手',oppId?oppPred:null,null)}
+          {renderPredictionLine('opp','相手',oppId?oppPred:null,oppPts)}
         </div>
       </button>
     );

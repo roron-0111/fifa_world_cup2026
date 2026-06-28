@@ -107,6 +107,7 @@ test('home result judge area is reordered and scrollable', () => {
   assert.doesNotMatch(html, /時刻は選択中の表示タイムゾーン基準です/);
   assert.doesNotMatch(html, />情報更新ステータス</);
   assert.match(html, /RESULT_STATUS=BOOTSTRAP\?\.resultStatus/);
+  assert.match(html, /const koFixtures=gr\(roomId,'koFixtures',\{\}\);/);
   assert.match(html, /const homeResultItems=Object\.entries\(results\)/);
   assert.match(html, /const myPred=meta\.kind==='ko'/);
   assert.match(html, /const oppPred=oppId\?meta\.kind==='ko'/);
@@ -115,6 +116,9 @@ test('home result judge area is reordered and scrollable', () => {
   assert.match(html, /const scoreText=scorePairText\(actual,'未反映'\);/);
   assert.match(html, /const myPredText=scorePairText\(myPred,'未予想'\);/);
   assert.match(html, /const oppPredText=scorePairText\(oppPred,'未予想'\);/);
+  assert.match(html, /const koHome=meta\.kind==='ko'\?koOfficialResolvedTeam\(meta\.roundId,meta\.matchIndex,'home',results,koFixtures\)\|\|meta\.match\.home:null;/);
+  assert.match(html, /const koAway=meta\.kind==='ko'\?koOfficialResolvedTeam\(meta\.roundId,meta\.matchIndex,'away',results,koFixtures\)\|\|meta\.match\.away:null;/);
+  assert.match(html, /const teamsText=meta\.kind==='ko'\?`\$\{koTeamName\(koHome\)\} vs \$\{koTeamName\(koAway\)\}`:`\$\{teamJa\(meta\.match\.home\)\} vs \$\{teamJa\(meta\.match\.away\)\}`;/);
   assert.match(html, /const bt=matchKickoffDate\(b\.match\)\?\.getTime\(\)\|\|0;/);
   assert.match(html, /const at=matchKickoffDate\(a\.match\)\?\.getTime\(\)\|\|0;/);
   assert.match(html, /return bt-at\|\|a\.order-b\.order;/);
@@ -129,6 +133,8 @@ test('home result judge area is reordered and scrollable', () => {
   assert.match(html, /className="result-match-judge-col me"/);
   assert.match(html, /className="result-match-judge-col opp"/);
   assert.match(html, /item\.oppJudgment\?\.label\|\|'-'/);
+  assert.match(html, /\{item\.teamsText\}/);
+  assert.doesNotMatch(html, /koTeamName\(item\.match\.home\)/);
   assert.match(html, /<span className="result-match-judge-label" title=\{myLabel\}>\{myLabel\}<\/span>/);
   assert.match(html, /<span className="result-match-judge-label" title=\{oppLabel\}>\{opp\?oppLabel:'相手'\}<\/span>/);
   assert.match(html, /<span className="result-pred-score">\{item\.myPredText\}<\/span>/);

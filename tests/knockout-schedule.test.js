@@ -237,6 +237,33 @@ test('knockout route highlights use official results only', () => {
   );
 });
 
+test('knockout route highlights only the completed source branch', () => {
+  assert.match(
+    html,
+    /const baseD=`M \$\{x1\} \$\{yHome\} H \$\{mid\} M \$\{x1\} \$\{yAway\} H \$\{mid\} M \$\{mid\} \$\{yHome\} V \$\{yAway\}`;/,
+  );
+  assert.match(
+    html,
+    /const addActiveBranch=\(key,ySource\)=>\{/,
+  );
+  assert.match(
+    html,
+    /if\(homeWinner\)addActiveBranch\(`\$\{roundId\}-\$\{index\}-home-on`,yHome\);/,
+  );
+  assert.match(
+    html,
+    /if\(awayWinner\)addActiveBranch\(`\$\{roundId\}-\$\{index\}-away-on`,yAway\);/,
+  );
+  assert.doesNotMatch(
+    html,
+    /const active=homeWinner\|\|awayWinner;/,
+  );
+  assert.doesNotMatch(
+    html,
+    /className=\{`ko-line\$\{active\?' on':''\}`\}/,
+  );
+});
+
 test('third-place route does not render an extra dotted guide line', () => {
   assert.doesNotMatch(
     html,
