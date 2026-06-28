@@ -51,8 +51,9 @@ test('scorer ranking prediction panel is compact and collapsible', () => {
   assert.match(html, /className="scorer-pred-body"/);
   assert.match(html, /className="scorer-pred-controls"/);
   assert.match(html, /\.scorer-pred-panel:not\(\[open\]\) \.scorer-pred-body\{display:none;\}/);
-  assert.match(html, /\.scorer-pred-card\{[^}]*grid-template-columns:minmax\(48px,\.32fr\) minmax\(0,1fr\)/);
-  assert.match(html, /\.scorer-pred-controls\{[^}]*grid-template-columns:minmax\(82px,\.38fr\) minmax\(0,1\.62fr\)/);
+  assert.match(html, /\.scorer-pred-card\{[^}]*padding:6px;[^}]*grid-template-columns:minmax\(44px,\.22fr\) minmax\(0,1fr\);gap:6px/);
+  assert.match(html, /\.scorer-pred-controls\{[^}]*grid-template-columns:minmax\(104px,\.46fr\) minmax\(0,1\.54fr\);gap:5px/);
+  assert.doesNotMatch(html, /@media \(max-width: 520px\)\{[\s\S]*?\.scorer-pred-card\{padding:9px;\}/);
 });
 
 test('scorer ranking list uses computed tie-aware ranks', () => {
@@ -67,6 +68,11 @@ test('scorer ranking prediction panel always exposes opponent picks', () => {
   assert.match(html, /<span>相手 <b>\{oppId\?`\$\{oppScorerPredCount\}\/3`:'-'\}<\/b><\/span>/);
   assert.match(html, /<span>相手: \{oppId\?scorerPredictionLabel\(oppScorerPreds\[slot\.key\]\):'-'\}<\/span>/);
   assert.doesNotMatch(html, /\{oppId&&<span>相手:/);
+});
+
+test('scorer ranking prediction labels show player names without country names', () => {
+  assert.match(html, /function scorerPredictionLabel\(playerKey\)\{[\s\S]*?return player\?playerDisplayName\(player\):'未選択';[\s\S]*?\}/);
+  assert.doesNotMatch(html, /return player\?`\$\{teamJa\(player\.country\)\} \/ \$\{playerDisplayName\(player\)\}`:'未選択';/);
 });
 
 test('scorer ranking predictions close at the final kickoff', () => {

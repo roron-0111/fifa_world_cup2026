@@ -512,11 +512,11 @@ html,body{background:#ddd8ce;color:var(--text);font-family:'Inter',sans-serif;mi
 .scorer-pred-panel:not([open]) .scorer-pred-body{display:none;}
 .scorer-pred-body{border-top:1px solid var(--border);padding:9px 12px 12px;background:linear-gradient(180deg,#fff,var(--s2));}
 .scorer-pred-grid{display:grid;grid-template-columns:1fr;gap:6px;}
-.scorer-pred-card{min-width:0;border:1px solid var(--border);border-radius:12px;background:rgba(255,255,255,.72);padding:8px;display:grid;grid-template-columns:minmax(48px,.32fr) minmax(0,1fr);gap:8px;align-items:center;}
+.scorer-pred-card{min-width:0;border:1px solid var(--border);border-radius:12px;background:rgba(255,255,255,.72);padding:6px;display:grid;grid-template-columns:minmax(44px,.22fr) minmax(0,1fr);gap:6px;align-items:center;}
 .scorer-pred-card.hit{border-color:rgba(22,163,74,.32);box-shadow:0 0 0 3px var(--greenf) inset;}
-.scorer-pred-head{display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:3px;font-size:11px;font-weight:900;color:var(--text2);min-width:0;}
+.scorer-pred-head{display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:2px;font-size:10px;font-weight:900;color:var(--text2);min-width:0;}
 .scorer-pred-head b{color:var(--accent);white-space:nowrap;}
-.scorer-pred-controls{display:grid;grid-template-columns:minmax(82px,.38fr) minmax(0,1.62fr);gap:6px;min-width:0;}
+.scorer-pred-controls{display:grid;grid-template-columns:minmax(104px,.46fr) minmax(0,1.54fr);gap:5px;min-width:0;}
 .scorer-select{width:100%;min-width:0;border:1.5px solid var(--border);border-radius:10px;background:var(--s1);color:var(--text);font:inherit;font-size:11px;font-weight:800;padding:7px 8px;outline:none;}
 .scorer-select:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accentf);}
 .scorer-select:disabled{opacity:.65;}
@@ -808,7 +808,7 @@ html,body{background:#ddd8ce;color:var(--text);font-family:'Inter',sans-serif;mi
   .player-row{padding:10px;}
   .player-mini-btn,.btn.ghost,.modal-close{font-size:11px;}
   .scorer-pred-grid{grid-template-columns:1fr;}
-  .scorer-pred-card{padding:9px;}
+  .scorer-pred-card{padding:6px;}
   .scorer-select{font-size:12px;padding:9px 8px;}
   .rank-card{padding:10px;}
   .rank-card-top{grid-template-columns:minmax(0,1fr) auto;gap:8px;align-items:center;}
@@ -4540,7 +4540,7 @@ function LeaderboardScreen({user,onOpenTeam,syncToken}){
 
   function scorerPredictionLabel(playerKey){
     const player=playerByScorerKey[normalizeScorerPredictionValue(playerKey)];
-    return player?`${teamJa(player.country)} / ${playerDisplayName(player)}`:'未選択';
+    return player?playerDisplayName(player):'未選択';
   }
   function selectedCountryFor(slotKey){
     const selectedPlayer=playerByScorerKey[normalizeScorerPredictionValue(myScorerPreds[slotKey])];
