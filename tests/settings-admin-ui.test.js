@@ -26,6 +26,13 @@ test('settings removes standalone player refresh controls', () => {
   assert.doesNotMatch(html, /const \[adminToken,setAdminToken\]/);
 });
 
+test('default point settings use the requested values in display order', () => {
+  assert.match(
+    html,
+    /const DEFAULT_ROOM_SETTINGS=\{resultPts:1,exactPts:1,koWinnerPts:1,koExactPts:1,koPenaltyPts:0,koChampionPts:3,koRunnerUpPts:2,koThirdPlacePts:1,koRunnerUpEnabled:true,koThirdPlaceEnabled:true,scorerFirstPts:3,scorerSecondPts:2,scorerThirdPts:1\};/,
+  );
+});
+
 test('home exposes the batch result reflection card', () => {
   assert.match(html, /className="result-judge-card"/);
   assert.match(html, /試合結果を反映/);

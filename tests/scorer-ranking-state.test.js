@@ -18,13 +18,29 @@ test('scorer ranking predictions are part of every shared room state shape', () 
 });
 
 test('scorer ranking points are configurable independently from knockout podium points', () => {
-  assert.match(html, /scorerFirstPts:5/);
-  assert.match(html, /scorerSecondPts:3/);
-  assert.match(html, /scorerThirdPts:2/);
+  assert.match(html, /scorerFirstPts:3/);
+  assert.match(html, /scorerSecondPts:2/);
+  assert.match(html, /scorerThirdPts:1/);
+  assert.match(server, /scorerFirstPts:\s*3/);
+  assert.match(server, /scorerSecondPts:\s*2/);
+  assert.match(server, /scorerThirdPts:\s*1/);
   assert.match(html, /得点ランキング 1位的中/);
   assert.match(html, /changePts\('scorerFirstPts',-1\)/);
   assert.match(html, /changePts\('scorerSecondPts',-1\)/);
   assert.match(html, /changePts\('scorerThirdPts',-1\)/);
+});
+
+test('server room settings defaults match requested point values', () => {
+  assert.match(server, /resultPts:\s*1/);
+  assert.match(server, /exactPts:\s*1/);
+  assert.match(server, /koWinnerPts:\s*1/);
+  assert.match(server, /koExactPts:\s*1/);
+  assert.match(server, /koPenaltyPts:\s*0/);
+  assert.match(server, /koChampionPts:\s*3/);
+  assert.match(server, /koRunnerUpPts:\s*2/);
+  assert.match(server, /koThirdPlacePts:\s*1/);
+  assert.match(server, /koRunnerUpEnabled:\s*true/);
+  assert.match(server, /koThirdPlaceEnabled:\s*true/);
 });
 
 test('scorer ranking prediction panel is compact and collapsible', () => {
@@ -35,7 +51,8 @@ test('scorer ranking prediction panel is compact and collapsible', () => {
   assert.match(html, /className="scorer-pred-body"/);
   assert.match(html, /className="scorer-pred-controls"/);
   assert.match(html, /\.scorer-pred-panel:not\(\[open\]\) \.scorer-pred-body\{display:none;\}/);
-  assert.match(html, /\.scorer-pred-card\{[^}]*grid-template-columns:minmax\(64px,\.55fr\) minmax\(0,1fr\)/);
+  assert.match(html, /\.scorer-pred-card\{[^}]*grid-template-columns:minmax\(48px,\.32fr\) minmax\(0,1fr\)/);
+  assert.match(html, /\.scorer-pred-controls\{[^}]*grid-template-columns:minmax\(82px,\.38fr\) minmax\(0,1\.62fr\)/);
 });
 
 test('scorer ranking list uses computed tie-aware ranks', () => {
@@ -73,6 +90,13 @@ test('scorer ranking predictions close at the final kickoff', () => {
     html,
     /disabled=\{readOnly\|\|scorerPredictionClosed\|\|!selectedCountry\}/,
   );
+});
+
+test('scorer ranking point summaries wait for the confirmed final result in app screens', () => {
+  assert.match(html, /function isScorerResultFinalized\(results=\{\}\)\{return !!normalizeKoRecord\(results\?\.?\['F-0'\]\);\}/);
+  assert.match(html, /calcScorerPointSummary\(scorerPreds,user\.id,settings,ALL_PLAYERS,results\)/);
+  assert.match(html, /calcScorerPointSummary\(scorerPreds,oppId,settings,ALL_PLAYERS,results\)/);
+  assert.match(html, /const results=gr\(roomId,'results',\{\}\);[\s\S]*?const scorerSummary=calcScorerPointSummary\(scorerPreds,user\.id,settings,ALL_PLAYERS,results\);/);
 });
 
 test('scorer ranking player cards show country names', () => {

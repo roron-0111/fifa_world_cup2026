@@ -326,6 +326,22 @@ test('knockout podium picks expose opponent selections', () => {
   );
 });
 
+test('knockout podium pick candidates include only resolved country teams', () => {
+  assert.match(
+    html,
+    /const base=KO_SEED_PAIRS\.flat\(\)\.map\(seed=>groupSeedTeam\(seed,results\)\)\.filter\(Boolean\);/,
+  );
+  assert.match(
+    html,
+    /const derived=\[[\s\S]*?\]\.filter\(Boolean\)\.map\(koSeedLabel\)\.filter\(team=>TEAM_JA\[team\]\);/,
+  );
+  assert.match(
+    html,
+    /return \[\.\.\.new Set\(\[\.\.\.derived,\.\.\.fixtureTeams,\.\.\.base\]\)\]\.filter\(team=>TEAM_JA\[team\]\);/,
+  );
+  assert.doesNotMatch(html, /groupSeedTeam\(seed,results\)\|\|koSeedLabel\(seed\)/);
+});
+
 test('knockout prediction modal places team labels next to score inputs', () => {
   assert.match(html, /function koModalTeamLabel\(side\)\{/);
   assert.match(html, /\.ko-modal-matchup\{display:grid;grid-template-columns:minmax\(0,1fr\) auto minmax\(0,1fr\);/);

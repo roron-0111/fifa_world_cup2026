@@ -106,15 +106,15 @@ test('knockout PK-decided tie earns normal score points even when PK points are 
     koExactPts: 2,
     koPenaltyPts: 0,
     koChampionPts: 5,
-    koRunnerUpPts: 3,
-    koThirdPlacePts: 2,
+    koRunnerUpPts: 2,
+    koThirdPlacePts: 1,
   });
 });
 
 test('scorer ranking predictions score the top three goal tiers with ties', () => {
   const match = html.match(/(const SCORER_PREDICTION_SLOTS=\[[\s\S]*?)\nfunction displayUserLabel/);
   assert.ok(match, 'scorer ranking summary should be extractable');
-  const context = { GROUP_MATCHES: [], KO_MATCHES: [] };
+  const context = { GROUP_MATCHES: [], KO_MATCHES: [], normalizeKoRecord: (record) => record || null };
   vm.runInNewContext(`${match[1]}; this.summary=calcScorerPointSummary(
     {user:{first:'MEX::same-first',second:'ARG::same-second',third:'BRA::third'}},
     'user',
@@ -125,7 +125,8 @@ test('scorer ranking predictions score the top three goal tiers with ties', () =
       {country:'CAN',id:'second',worldCupGoals:2},
       {country:'ARG',id:'same-second',worldCupGoals:2},
       {country:'BRA',id:'third',worldCupGoals:1}
-    ]
+    ],
+    {'F-0':{home:1,away:0}}
   );`, context);
   assert.deepEqual(JSON.parse(JSON.stringify(context.summary)), {
     total: 10,
@@ -135,6 +136,35 @@ test('scorer ranking predictions score the top three goal tiers with ties', () =
     firstPoints: 5,
     secondPoints: 3,
     thirdPoints: 2,
+    scorerFirstPts: 5,
+    scorerSecondPts: 3,
+    scorerThirdPts: 2,
+  });
+});
+
+test('scorer ranking predictions do not score before the final result is confirmed', () => {
+  const match = html.match(/(const SCORER_PREDICTION_SLOTS=\[[\s\S]*?)\nfunction displayUserLabel/);
+  assert.ok(match, 'scorer ranking summary should be extractable');
+  const context = { GROUP_MATCHES: [], KO_MATCHES: [], normalizeKoRecord: (record) => record || null };
+  vm.runInNewContext(`${match[1]}; this.summary=calcScorerPointSummary(
+    {user:{first:'MEX::same-first',second:'ARG::same-second',third:'BRA::third'}},
+    'user',
+    {scorerFirstPts:5,scorerSecondPts:3,scorerThirdPts:2},
+    [
+      {country:'MEX',id:'same-first',worldCupGoals:4},
+      {country:'ARG',id:'same-second',worldCupGoals:2},
+      {country:'BRA',id:'third',worldCupGoals:1}
+    ],
+    {}
+  );`, context);
+  assert.deepEqual(JSON.parse(JSON.stringify(context.summary)), {
+    total: 0,
+    firstHit: 0,
+    secondHit: 0,
+    thirdHit: 0,
+    firstPoints: 0,
+    secondPoints: 0,
+    thirdPoints: 0,
     scorerFirstPts: 5,
     scorerSecondPts: 3,
     scorerThirdPts: 2,
