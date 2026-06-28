@@ -927,12 +927,13 @@ html,body{background:#ddd8ce;color:var(--text);font-family:'Inter',sans-serif;mi
 .ko-podium-opp b{color:var(--gold);font-size:10px;white-space:nowrap;}
 .ko-podium-opp span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--text);}
 .ko-podium-note{font-size:10px;color:var(--text2);font-weight:700;line-height:1.35;}
+.ko-page{padding-bottom:16px;}
 .ko-round-band{margin-top:10px;height:52px;overflow:hidden;background:linear-gradient(135deg,#eaf3ef,#dfeadf);border-top:1px solid rgba(22,80,45,.12);}
 .ko-round-band-inner{position:relative;height:52px;min-width:100%;}
 .ko-round-band-label{position:absolute;top:9px;height:32px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;font-family:'Bebas Neue','Inter',sans-serif;font-size:22px;line-height:1;color:#1f2937;letter-spacing:0;font-weight:900;}
 .ko-round-band-label small{display:block;margin-top:2px;font-family:'Inter',sans-serif;font-size:10px;line-height:1;color:#4b5563;font-weight:900;}
 .ko-round-band-label.final{color:var(--gold);}
-.ko-scroll{margin:0 0 24px;overflow-x:auto;overflow-y:visible;background:#dfeadf;border-top:0;border-bottom:1px solid rgba(22,80,45,.12);box-shadow:inset 0 12px 26px rgba(40,80,45,.12);-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain;touch-action:pan-x pan-y;scrollbar-width:none;}
+.ko-scroll{margin:0;overflow-x:auto;overflow-y:visible;background:#dfeadf;border-top:0;border-bottom:1px solid rgba(22,80,45,.12);box-shadow:inset 0 12px 26px rgba(40,80,45,.12);-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain;touch-action:pan-x pan-y;scrollbar-width:none;}
 .ko-scroll::-webkit-scrollbar{display:none;}
 .ko-scrollbar-proxy{display:none;}
 .ko-canvas{position:relative;min-width:100%;background:
@@ -4077,10 +4078,12 @@ function BracketScreen({user,syncToken}){
   const settings={...DEFAULT_ROOM_SETTINGS,...gr(roomId,'settings',{})};
   const boardRounds=KO_ROUNDS.filter((round)=>['R32','R16','QF','SF','F'].includes(round.id));
   const BOARD={x:24,y:50,w:260,h:136,gapX:314,gapY:156};
-  const BOARD_WIDTH=BOARD.x+BOARD.gapX*5+BOARD.w+190;
-  const BOARD_HEIGHT=BOARD.y+BOARD.gapY*16+230;
   const R32_VISUAL_ORDER=[1,4,0,2,10,11,8,9,3,5,6,7,13,15,12,14];
   const R32_VISUAL_SLOT=R32_VISUAL_ORDER.reduce((acc,index,slot)=>({...acc,[index]:slot}),{});
+  const BOARD_WIDTH=BOARD.x+BOARD.gapX*5+BOARD.w+190;
+  const BOARD_BOTTOM_PADDING=20;
+  const BOARD_MAX_R32_SLOT=Math.max(...Object.values(R32_VISUAL_SLOT));
+  const BOARD_HEIGHT=BOARD.y+BOARD.gapY*BOARD_MAX_R32_SLOT+BOARD.h+BOARD_BOTTOM_PADDING;
   const canvasZoom=KO_VIEW_ZOOMS[viewMode]||1;
   const podium=koPodiumPredictions(myPreds,{},koFixtures);
   const oppPodium=oppId?koPodiumPredictions(oppPreds,{},koFixtures):{};
@@ -4406,7 +4409,7 @@ function BracketScreen({user,syncToken}){
   }
 
   return(
-    <div className="page">
+    <div className="page ko-page">
       <div className="ko-nav-spacer" aria-hidden="true"></div>
       <div className="ko-sticky-stage" ref={stickyStageRef}>
         <div className="ko-podium-panel">

@@ -327,6 +327,37 @@ test('knockout bracket zoom is user adjustable without changing board geometry',
   );
 });
 
+test('knockout board stops at the last visible match instead of leaving a large empty tail', () => {
+  assert.match(
+    html,
+    /\.ko-page\{padding-bottom:16px;\}/,
+  );
+  assert.match(
+    html,
+    /\.ko-scroll\{margin:0;/,
+  );
+  assert.match(
+    html,
+    /<div className="page ko-page">/,
+  );
+  assert.match(
+    html,
+    /const BOARD_BOTTOM_PADDING=20;/,
+  );
+  assert.match(
+    html,
+    /const BOARD_MAX_R32_SLOT=Math\.max\(\.\.\.Object\.values\(R32_VISUAL_SLOT\)\);/,
+  );
+  assert.match(
+    html,
+    /const BOARD_HEIGHT=BOARD\.y\+BOARD\.gapY\*BOARD_MAX_R32_SLOT\+BOARD\.h\+BOARD_BOTTOM_PADDING;/,
+  );
+  assert.doesNotMatch(
+    html,
+    /const BOARD_HEIGHT=BOARD\.y\+BOARD\.gapY\*16\+230;/,
+  );
+});
+
 test('knockout podium picks expose opponent selections', () => {
   assert.match(
     html,
