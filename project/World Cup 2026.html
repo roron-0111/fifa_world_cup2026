@@ -4064,7 +4064,10 @@ function BracketScreen({user,syncToken}){
   const labelScrollRef=useRef(null);
   const stickyStageRef=useRef(null);
   const [stickyHeight,setStickyHeight]=useState(0);
-  const [viewMode,setViewMode]=useState(()=>gs('koViewMode','normal'));
+  const KO_VIEW_SEQUENCE=['normal','overview','compact'];
+  const KO_VIEW_ZOOMS={normal:1,overview:0.72,compact:0.58};
+  function normalizeKoViewMode(mode){return KO_VIEW_SEQUENCE.includes(mode)?mode:'normal';}
+  const [viewMode,setViewMode]=useState(()=>normalizeKoViewMode(gs('koViewMode','normal')));
   const uiSettings=gs('settings',DEFAULT_UI_SETTINGS);
   const timeZone=uiSettings.timeZone||DEFAULT_UI_SETTINGS.timeZone;
   const myPreds=koPreds[user.id]||{};
@@ -4077,7 +4080,7 @@ function BracketScreen({user,syncToken}){
   const BOARD_HEIGHT=BOARD.y+BOARD.gapY*16+230;
   const R32_VISUAL_ORDER=[1,4,0,2,10,11,8,9,3,5,6,7,13,15,12,14];
   const R32_VISUAL_SLOT=R32_VISUAL_ORDER.reduce((acc,index,slot)=>({...acc,[index]:slot}),{});
-  const canvasZoom=viewMode==='overview'?0.72:1;
+  const canvasZoom=KO_VIEW_ZOOMS[viewMode]||1;
   const podium=koPodiumPredictions(myPreds,{},koFixtures);
   const oppPodium=oppId?koPodiumPredictions(oppPreds,{},koFixtures):{};
   const podiumCandidates=koPodiumCandidates(myPreds,results,koFixtures);
@@ -4248,7 +4251,8 @@ function BracketScreen({user,syncToken}){
     requestAnimationFrame(()=>syncBracketScroll('board'));
   }
   function toggleViewMode(){
-    updateViewMode(viewMode==='overview'?'normal':'overview');
+    const currentIndex=KO_VIEW_SEQUENCE.indexOf(viewMode);
+    updateViewMode(KO_VIEW_SEQUENCE[(currentIndex+1)%KO_VIEW_SEQUENCE.length]);
   }
   function renderLines(){
     const lines=[];
@@ -4433,7 +4437,7 @@ function BracketScreen({user,syncToken}){
         {renderStickyRoundBand()}
       </div>
       <div className="ko-sticky-spacer" style={{height:stickyHeight}} aria-hidden="true"></div>
-      <button className="ko-zoom-toggle" onClick={toggleViewMode} aria-label="決勝トーナメント表示倍率を切り替え">{viewMode==='overview'?'拡大':'縮小'}</button>
+      <button className="ko-zoom-toggle" onClick={toggleViewMode} aria-label="決勝トーナメント表示倍率を3段階で切り替え">{viewMode==='normal'?'縮小':viewMode==='overview'?'極小':'拡大'}</button>
       <div className="ko-scroll" ref={scrollRef} onScroll={()=>syncBracketScroll('board')}>
         <div className="ko-canvas" style={{width:BOARD_WIDTH,height:BOARD_HEIGHT,zoom:canvasZoom}}>
           {renderRoundGuides()}
