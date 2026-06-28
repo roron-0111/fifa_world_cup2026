@@ -4064,8 +4064,9 @@ function BracketScreen({user,syncToken}){
   const labelScrollRef=useRef(null);
   const stickyStageRef=useRef(null);
   const [stickyHeight,setStickyHeight]=useState(0);
-  const KO_VIEW_SEQUENCE=['normal','overview','compact'];
-  const KO_VIEW_ZOOMS={normal:1,overview:0.72,compact:0.58};
+  const KO_VIEW_SEQUENCE=['normal','minimal','compact','overview'];
+  const KO_VIEW_ZOOMS={normal:1,minimal:0.3,compact:0.5,overview:0.75};
+  const KO_VIEW_LABELS={normal:'30%へ',minimal:'50%へ',compact:'75%へ',overview:'100%へ'};
   function normalizeKoViewMode(mode){return KO_VIEW_SEQUENCE.includes(mode)?mode:'normal';}
   const [viewMode,setViewMode]=useState(()=>normalizeKoViewMode(gs('koViewMode','normal')));
   const uiSettings=gs('settings',DEFAULT_UI_SETTINGS);
@@ -4437,7 +4438,7 @@ function BracketScreen({user,syncToken}){
         {renderStickyRoundBand()}
       </div>
       <div className="ko-sticky-spacer" style={{height:stickyHeight}} aria-hidden="true"></div>
-      <button className="ko-zoom-toggle" onClick={toggleViewMode} aria-label="決勝トーナメント表示倍率を3段階で切り替え">{viewMode==='normal'?'縮小':viewMode==='overview'?'極小':'拡大'}</button>
+      <button className="ko-zoom-toggle" onClick={toggleViewMode} aria-label="決勝トーナメント表示倍率を4段階で切り替え">{KO_VIEW_LABELS[viewMode]||'30%へ'}</button>
       <div className="ko-scroll" ref={scrollRef} onScroll={()=>syncBracketScroll('board')}>
         <div className="ko-canvas" style={{width:BOARD_WIDTH,height:BOARD_HEIGHT,zoom:canvasZoom}}>
           {renderRoundGuides()}

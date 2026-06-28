@@ -251,11 +251,15 @@ test('third-place route does not render an extra dotted guide line', () => {
 test('knockout bracket zoom is user adjustable without changing board geometry', () => {
   assert.match(
     html,
-    /const KO_VIEW_SEQUENCE=\['normal','overview','compact'\];/,
+    /const KO_VIEW_SEQUENCE=\['normal','minimal','compact','overview'\];/,
   );
   assert.match(
     html,
-    /const KO_VIEW_ZOOMS=\{normal:1,overview:0\.72,compact:0\.58\};/,
+    /const KO_VIEW_ZOOMS=\{normal:1,minimal:0\.3,compact:0\.5,overview:0\.75\};/,
+  );
+  assert.match(
+    html,
+    /const KO_VIEW_LABELS=\{normal:'30%へ',minimal:'50%へ',compact:'75%へ',overview:'100%へ'\};/,
   );
   assert.match(
     html,
@@ -279,7 +283,7 @@ test('knockout bracket zoom is user adjustable without changing board geometry',
   );
   assert.match(
     html,
-    /<button className="ko-zoom-toggle" onClick=\{toggleViewMode\} aria-label="決勝トーナメント表示倍率を3段階で切り替え">\{viewMode==='normal'\?'縮小':viewMode==='overview'\?'極小':'拡大'\}<\/button>/,
+    /<button className="ko-zoom-toggle" onClick=\{toggleViewMode\} aria-label="決勝トーナメント表示倍率を4段階で切り替え">\{KO_VIEW_LABELS\[viewMode\]\|\|'30%へ'\}<\/button>/,
   );
   assert.match(
     html,
