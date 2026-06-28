@@ -3531,7 +3531,7 @@ function HomeScreen({user,onLogout,syncToken}){
   const koCompareRows=[
     {label:'勝者的中',me:koWinnerPts(myKoSummary),opp:koWinnerPts(oppKoSummary)},
     {label:'スコア的中',me:koScorePts(myKoSummary),opp:koScorePts(oppKoSummary)},
-    {label:'PK的中',me:koPenaltyHitPts(myKoSummary),opp:koPenaltyHitPts(oppKoSummary)},
+    {label:'PK勝者的中',me:koPenaltyHitPts(myKoSummary),opp:koPenaltyHitPts(oppKoSummary)},
     {label:'順位的中',me:koPodiumPts(myKoSummary),opp:koPodiumPts(oppKoSummary)},
     {label:'合計',me:`${myKoSummary.total}pt`,opp:`${oppKoSummary.total||0}pt`},
   ];
@@ -4884,7 +4884,7 @@ function SettingsScreen({user,syncToken,onRenameUser}){
             </div>
           </div>
           <div className="set-row">
-            <div className="sl">PK的中<span>同点予想+PK勝者的中時の追加点。勝者・スコア点も入るため0pt推奨</span></div>
+            <div className="sl">PK勝者的中<span>PKスコアではなく、同点予想+PK勝者が一致した場合の追加点。勝者・スコア点も入るため0pt推奨</span></div>
             <div className="pts-ctrl">
               <button className="ptsbtn" onClick={()=>changePts('koPenaltyPts',-1)}>−</button>
               <div className="pts-val">{pointSettings.koPenaltyPts}</div>
