@@ -62,7 +62,11 @@ test('leaderboard player info uses the shared player detail source', () => {
   assert.match(html, /function buildScorerRankingRows\(players=ALL_PLAYERS\)\{/);
   assert.match(html, /\.filter\(\(player\)=>Number\(player\?\.worldCupGoals\|\|0\)>0&&scorerPlayerKey\(player\)\)/);
   assert.match(html, /const rankingStamp=PLAYER_DATA_META\.meta\?\.worldFootballArchiveRankingUpdatedAt/);
-  assert.match(html, /得点データ更新: \{rankingStamp\}/);
+  assert.match(html, /const scorerUpdateStamp=rankingStamp\?formatTimestamp\(rankingStamp,uiSettings\.timeZone\):dataStamp;/);
+  assert.match(html, /毎日12:00頃に自動更新（日本時間）/);
+  assert.match(html, /最終更新: \$\{scorerUpdateStamp\}/);
+  assert.doesNotMatch(html, /公開データ更新:/);
+  assert.doesNotMatch(html, /得点データ更新:/);
   assert.match(html, /Number\(row\.worldCupAssists\|\|0\)>0&&<span>アシスト \{row\.worldCupAssists\}<\/span>/);
   assert.match(html, /scorerMinutes\(row\)!==null&&<span>出場 \{scorerMinutes\(row\)\}分<\/span>/);
   assert.match(html, /const scorerPreds=gr\(roomId,'scorerPreds',\{\}\);/);

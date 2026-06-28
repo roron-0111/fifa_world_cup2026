@@ -4535,6 +4535,7 @@ function LeaderboardScreen({user,onOpenTeam,syncToken}){
   const uiSettings=gs('settings',DEFAULT_UI_SETTINGS);
   const dataStamp=PLAYER_DATA_META.generatedAt ? formatTimestamp(PLAYER_DATA_META.generatedAt,uiSettings.timeZone) : '';
   const rankingStamp=PLAYER_DATA_META.meta?.worldFootballArchiveRankingUpdatedAt||'';
+  const scorerUpdateStamp=rankingStamp?formatTimestamp(rankingStamp,uiSettings.timeZone):dataStamp;
   const readOnly=!!user?.isGuest;
   const scorerPredictionClosed=isScorerPredictionClosed();
 
@@ -4643,8 +4644,6 @@ function LeaderboardScreen({user,onOpenTeam,syncToken}){
       <div className="shdr"><h2>得点ランキング</h2></div>
       <div className="lb-hero">
         <div className="lb-bg-txt">W杯</div>
-        {dataStamp&&<div style={{fontSize:10,color:'rgba(255,255,255,.68)',marginTop:4}}>公開データ更新: {dataStamp}</div>}
-        {rankingStamp&&<div style={{fontSize:10,color:'rgba(255,255,255,.68)',marginTop:4}}>得点データ更新: {rankingStamp}</div>}
         <div className="lb-vs-row" style={{gridTemplateColumns:'1fr'}}>
           <div className="lb-pl">
             <div className="lb-pl-name">トップスコアラー</div>
@@ -4657,6 +4656,9 @@ function LeaderboardScreen({user,onOpenTeam,syncToken}){
       <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',gap:10,margin:'12px 14px 0',padding:'10px 12px',background:'var(--s1)',border:'1px solid var(--border)',borderRadius:14,boxShadow:'var(--shadow)'}}>
         <div style={{minWidth:0}}>
           <div style={{fontSize:12,fontWeight:900,color:'var(--text)'}}>得点ランキングデータ</div>
+          <div style={{fontSize:10,fontWeight:800,color:'var(--text2)',marginTop:2,lineHeight:1.35}}>
+            {`毎日12:00頃に自動更新（日本時間）${scorerUpdateStamp?` / 最終更新: ${scorerUpdateStamp}`:''}`}
+          </div>
         </div>
         <button className="btn" style={{width:'auto',padding:'9px 13px',fontSize:12,whiteSpace:'nowrap',marginTop:0}} onClick={refreshScorerData} disabled={scorerRefreshing}>
           {scorerRefreshing?'更新中…':(HAS_BACKEND?'最新を反映':'公開データを再読込')}
