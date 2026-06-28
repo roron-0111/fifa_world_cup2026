@@ -481,6 +481,7 @@ html,body{background:#ddd8ce;color:var(--text);font-family:'Inter',sans-serif;mi
 .lb-pl{text-align:center;}
 .lb-pl-name{font-size:13px;font-weight:800;margin-bottom:3px;color:rgba(255,255,255,.8);}
 .lb-pl-pts{font-family:'Bebas Neue';font-size:56px;line-height:1;color:#fff;}
+.lb-top-player-name{font-size:12px;font-weight:800;line-height:1.2;color:rgba(255,255,255,.72);margin-top:4px;}
 .lb-opp .lb-pl-pts{color:var(--gold);}
 .lb-vs-txt{font-family:'Bebas Neue';font-size:26px;color:rgba(255,255,255,.4);text-align:center;}
 .lb-bar-wrap{margin-top:12px;height:6px;background:rgba(255,255,255,.15);border-radius:10px;overflow:hidden;}
@@ -4651,7 +4652,7 @@ function LeaderboardScreen({user,onOpenTeam,syncToken}){
           <div className="lb-pl">
             <div className="lb-pl-name">トップスコアラー</div>
             <div className="lb-pl-pts">{top?.worldCupGoals??0}</div>
-            {Number(top?.worldCupGoals||0)>0&&<div style={{fontSize:9,color:'rgba(255,255,255,.6)',marginTop:2}}>{playerDisplayName(top)||''}</div>}
+            {Number(top?.worldCupGoals||0)>0&&<div className="lb-top-player-name">{playerDisplayName(top)||''}</div>}
             {!top&&<div style={{fontSize:10,color:'rgba(255,255,255,.68)',marginTop:4}}>得点者はいません</div>}
           </div>
         </div>

@@ -79,6 +79,9 @@ test('leaderboard player info uses the shared player detail source', () => {
   assert.doesNotMatch(html, /公開データを再読込/);
   assert.match(html, /Number\(row\.worldCupAssists\|\|0\)>0&&<span>アシスト \{row\.worldCupAssists\}<\/span>/);
   assert.match(html, /scorerMinutes\(row\)!==null&&<span>出場 \{scorerMinutes\(row\)\}分<\/span>/);
+  assert.match(html, /\.lb-top-player-name\{[^}]*font-size:12px/);
+  assert.match(html, /<div className="lb-top-player-name">\{playerDisplayName\(top\)\|\|''\}<\/div>/);
+  assert.doesNotMatch(html, /fontSize:9,color:'rgba\(255,255,255,\.6\)'.*playerDisplayName\(top\)/);
   assert.match(html, /const scorerPreds=gr\(roomId,'scorerPreds',\{\}\);/);
   assert.match(html, /function saveScorerPrediction\(slotKey,playerKey\)/);
   assert.match(html, /国を選択/);
