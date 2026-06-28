@@ -249,3 +249,8 @@ test('knockout score row uses score hit wording', () => {
   assert.match(html, /\{label:'スコア的中',me:koScorePts\(myKoSummary\),opp:koScorePts\(oppKoSummary\)\}/);
   assert.doesNotMatch(html, /スコア \/ PK/);
 });
+
+test('knockout point setting explains PK winner handling', () => {
+  assert.match(html, /決勝トーナメント 勝者的中<span>PK決着でも最終勝者が一致すれば加点<\/span>/);
+  assert.match(html, /PK的中<span>PK決着を予想し、PK勝者も当たった場合<\/span>/);
+});

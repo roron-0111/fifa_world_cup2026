@@ -1009,10 +1009,11 @@ html,body{background:#ddd8ce;color:var(--text);font-family:'Inter',sans-serif;mi
 .ko-score-editor span{font-family:'Bebas Neue';font-size:28px;color:var(--text2);}
 .ko-score-editor.pk input{font-size:24px;}
 .ko-winner-preview{padding:8px 0 2px;font-size:12px;font-weight:900;color:var(--text2);}
+.ko-winner-preview.placeholder{visibility:hidden;}
 .ko-winner-preview b{color:var(--accent);}
 .ko-pk-toggle{display:flex;align-items:center;gap:8px;padding:9px 0 3px;font-size:13px;font-weight:900;color:var(--text);}
+.ko-pk-toggle.disabled{opacity:.45;}
 .ko-pk-toggle input{width:18px;height:18px;accent-color:var(--accent);}
-.ko-pk-note{padding:4px 0 2px;font-size:11px;font-weight:900;color:var(--text2);line-height:1.4;}
 .ko-modal-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:12px;}
 .ko-modal-actions .primary{background:var(--accent);border-color:var(--accent);color:#fff;}
 .ko-modal-actions .ghost{background:transparent;color:var(--red);border-color:var(--red);}
@@ -4459,16 +4460,13 @@ function BracketScreen({user,syncToken}){
                 </React.Fragment>
               ))}
             </div>
-            {koDraftScoreWinner()&&<div className="ko-winner-preview">勝者: <b>{koModalTeamLabel(koDraftScoreWinner())}</b></div>}
-            {koDraftScoresTied()&&(
-              <>
-                <label className="ko-pk-toggle">
-                  <input type="checkbox" checked={draft.decidedBy==='PK'} onChange={(e)=>setDraft({...draft,decidedBy:e.target.checked?'PK':'REG'})}/>
-                  PK戦で決着
-                </label>
-                <div className="ko-pk-note">同点の場合のみPK戦を選べます</div>
-              </>
-            )}
+            <div className={`ko-winner-preview ${koDraftScoreWinner()?'':'placeholder'}`}>
+              {koDraftScoreWinner()?<>勝者: <b>{koModalTeamLabel(koDraftScoreWinner())}</b></>:<span aria-hidden="true">&nbsp;</span>}
+            </div>
+            <label className={`ko-pk-toggle ${koDraftScoresTied()?'':'disabled'}`}>
+              <input type="checkbox" checked={draft.decidedBy==='PK'} disabled={!koDraftScoresTied()} onChange={(e)=>setDraft({...draft,decidedBy:e.target.checked?'PK':'REG'})}/>
+              PK戦で決着
+            </label>
             {koDraftScoresTied()&&draft.decidedBy==='PK'&&(
               <div className="ko-score-editor pk">
                 <input type="number" min="0" value={draft.homePen} onChange={(e)=>setDraft({...draft,homePen:e.target.value})}/>
@@ -4833,7 +4831,7 @@ function SettingsScreen({user,syncToken,onRenameUser}){
             </div>
           </div>
           <div className="set-row">
-            <div className="sl">決勝トーナメント 勝者的中<span>決勝トーナメントで勝ち上がるチームが当たった場合</span></div>
+            <div className="sl">決勝トーナメント 勝者的中<span>PK決着でも最終勝者が一致すれば加点</span></div>
             <div className="pts-ctrl">
               <button className="ptsbtn" onClick={()=>changePts('koWinnerPts',-1)}>−</button>
               <div className="pts-val">{pointSettings.koWinnerPts}</div>
@@ -4849,7 +4847,7 @@ function SettingsScreen({user,syncToken,onRenameUser}){
             </div>
           </div>
           <div className="set-row">
-            <div className="sl">PK的中<span>PK決着の勝者が当たった場合</span></div>
+            <div className="sl">PK的中<span>PK決着を予想し、PK勝者も当たった場合</span></div>
             <div className="pts-ctrl">
               <button className="ptsbtn" onClick={()=>changePts('koPenaltyPts',-1)}>−</button>
               <div className="pts-val">{pointSettings.koPenaltyPts}</div>

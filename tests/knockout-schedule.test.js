@@ -317,6 +317,8 @@ test('knockout prediction modal places team labels next to score inputs', () => 
   assert.match(html, /value=\{draft\[side\]\}/);
   assert.match(html, /aria-label=\{`\$\{koModalTeamLabel\(side\)\}の得点を減らす`\}/);
   assert.match(html, /onClick=\{\(\)=>adjustDraftScore\(side,-1\)\}/);
+  assert.match(html, /className=\{`ko-winner-preview \$\{koDraftScoreWinner\(\)\?'':'placeholder'\}`\}/);
+  assert.doesNotMatch(html, /\{koDraftScoreWinner\(\)&&<div className="ko-winner-preview">/);
   assert.doesNotMatch(html, /左側.*が勝利/);
   assert.doesNotMatch(html, /右側.*が勝利/);
   assert.doesNotMatch(html, /className="ko-pick-row"/);
@@ -327,13 +329,14 @@ test('knockout prediction modal places team labels next to score inputs', () => 
 });
 
 test('knockout PK inputs appear only for tied scores after checking PK', () => {
-  assert.match(html, /同点の場合のみPK戦を選べます/);
+  assert.doesNotMatch(html, /同点の場合のみPK戦を選べます/);
+  assert.doesNotMatch(html, /\.ko-pk-note/);
   assert.match(html, /const wantsPk=tied&&draft\.decidedBy==='PK';/);
   assert.match(html, /if\(tied&&draft\.decidedBy!=='PK'\)\{setStatus\('同点の場合はPK戦で決着にチェックしてください'\);return;\}/);
   assert.match(html, /if\(wantsPk&&!pkWinner\)\{setStatus\('PKの得点差がつくように入力してください'\);return;\}/);
   assert.match(html, /decidedBy:wantsPk\?'PK':'REG'/);
-  assert.match(html, /\{koDraftScoresTied\(\)&&\(/);
-  assert.match(html, /type="checkbox" checked=\{draft\.decidedBy==='PK'\}/);
+  assert.match(html, /<label className=\{`ko-pk-toggle \$\{koDraftScoresTied\(\)\?'':'disabled'\}`\}>/);
+  assert.match(html, /type="checkbox" checked=\{draft\.decidedBy==='PK'\} disabled=\{!koDraftScoresTied\(\)\}/);
   assert.match(html, /koDraftScoresTied\(\)&&draft\.decidedBy==='PK'&&\(/);
   assert.match(html, /className="ko-score-editor pk"/);
   assert.doesNotMatch(html, /選択した国をPK勝者として扱います/);
