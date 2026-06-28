@@ -35,7 +35,7 @@ test('static hosting loads scorer ranking data on startup and from leaderboard r
   assert.match(html, /async function refreshScorerData\(\)\{/);
   assert.match(html, /const staticOnly=STATIC_SHARED_ROOM_BACKEND&&!HAS_BACKEND;/);
   assert.match(html, /staticOnly\?await refreshStaticPlayerData\(\):await api\('\/api\/admin\/refresh-players'/);
-  assert.match(html, /HAS_BACKEND\?'最新を反映':'公開データを再読込'/);
+  assert.match(html, /HAS_BACKEND\?'最新を反映':'最新データを確認'/);
   assert.match(html, /得点ランキングデータを更新しました/);
   assert.match(html, /公開済みの得点ランキングデータは変更ありません/);
   assert.doesNotMatch(html, /公開サイトでは更新ジョブで公開済みの得点ランキングJSONを再読み込みします/);

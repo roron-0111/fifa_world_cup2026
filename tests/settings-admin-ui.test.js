@@ -62,11 +62,21 @@ test('leaderboard player info uses the shared player detail source', () => {
   assert.match(html, /function buildScorerRankingRows\(players=ALL_PLAYERS\)\{/);
   assert.match(html, /\.filter\(\(player\)=>Number\(player\?\.worldCupGoals\|\|0\)>0&&scorerPlayerKey\(player\)\)/);
   assert.match(html, /const rankingStamp=PLAYER_DATA_META\.meta\?\.worldFootballArchiveRankingUpdatedAt/);
-  assert.match(html, /const scorerUpdateStamp=rankingStamp\?formatTimestamp\(rankingStamp,uiSettings\.timeZone\):dataStamp;/);
-  assert.match(html, /毎日12:00頃に自動更新（日本時間）/);
-  assert.match(html, /最終更新: \$\{scorerUpdateStamp\}/);
+  assert.match(html, /const scorerUpdateStamp=dataStamp;/);
+  assert.doesNotMatch(html, /const scorerUpdateStamp=rankingStamp\?/);
+  assert.match(html, /更新目安: 毎日12:00以降（日本時間）/);
+  assert.match(html, /<div>更新目安: 毎日12:00以降（日本時間）<\/div>/);
+  assert.match(html, /<div className="scorer-data-note">※提供元データが未更新の場合は、最新を確認しても表示は変わりません。<\/div>/);
+  assert.match(html, /\.scorer-data-note\{[^}]*font-size:9px/);
+  assert.doesNotMatch(html, /<div>提供元データが未更新の場合は、最新を確認しても表示は変わりません。<\/div>/);
+  assert.doesNotMatch(html, /更新可能:/);
+  assert.doesNotMatch(html, /自動更新/);
+  assert.match(html, /\{scorerUpdateStamp&&<div>最終更新: \{scorerUpdateStamp\}<\/div>\}/);
+  assert.doesNotMatch(html, / \/ 最終更新:/);
   assert.doesNotMatch(html, /公開データ更新:/);
   assert.doesNotMatch(html, /得点データ更新:/);
+  assert.match(html, /最新データを確認/);
+  assert.doesNotMatch(html, /公開データを再読込/);
   assert.match(html, /Number\(row\.worldCupAssists\|\|0\)>0&&<span>アシスト \{row\.worldCupAssists\}<\/span>/);
   assert.match(html, /scorerMinutes\(row\)!==null&&<span>出場 \{scorerMinutes\(row\)\}分<\/span>/);
   assert.match(html, /const scorerPreds=gr\(roomId,'scorerPreds',\{\}\);/);
@@ -215,6 +225,8 @@ test('auth page offers recent room recovery', () => {
   assert.match(html, /\.auth-bg\{[^}]*overflow-y:auto/);
   assert.doesNotMatch(html, /\.auth-bg\{[^}]*overflow:hidden/);
   assert.match(html, /function useRecentProfile\(profile\)/);
+  assert.match(html, /<div className="guest-help">ゲストは閲覧専用です。予想入力・保存はできません。<\/div>/);
+  assert.match(html, /\.guest-help\{[^}]*text-align:center/);
 });
 
 test('static hosting uses shared Firestore rooms instead of per-device local rooms', () => {

@@ -117,6 +117,7 @@ html,body{background:#ddd8ce;color:var(--text);font-family:'Inter',sans-serif;mi
 .auth-tabs{display:flex;gap:4px;background:var(--bg);border-radius:10px;padding:4px;margin-bottom:22px;}
 .atab{flex:1;padding:10px;border:none;background:transparent;color:var(--text2);font-size:13px;font-weight:700;border-radius:7px;cursor:pointer;transition:all .2s;font-family:inherit;}
 .atab.on{background:var(--s1);color:var(--text);box-shadow:var(--shadow);}
+.guest-help{margin-top:8px;text-align:center;color:var(--text2);font-size:11px;font-weight:800;line-height:1.45;}
 .field{margin-bottom:14px;}
 .field label{display:block;font-size:11px;font-weight:700;color:var(--text2);margin-bottom:6px;letter-spacing:.5px;}
 .field input{width:100%;padding:12px 16px;background:var(--s2);border:1.5px solid var(--border);border-radius:10px;color:var(--text);font-size:15px;font-family:inherit;outline:none;transition:border-color .2s;}
@@ -487,6 +488,7 @@ html,body{background:#ddd8ce;color:var(--text);font-family:'Inter',sans-serif;mi
 .lb-list{margin:0 14px;}
 .lb-row{display:grid;grid-template-columns:1fr auto 1fr;gap:6px;align-items:center;padding:10px 0;border-bottom:1px solid var(--border);}
 .lb-row:last-child{border-bottom:none;}
+.scorer-data-note{margin:4px 18px 0;padding:0 2px;font-size:9px;font-weight:700;line-height:1.35;color:rgba(122,120,134,.74);}
 .pred-cell{text-align:center;}
 .pred-sc{font-family:'Bebas Neue';font-size:22px;line-height:1;}
 .pred-sc.me-c{color:var(--accent);}
@@ -3438,6 +3440,7 @@ function AuthScreen({onAuth}){
         <button className="btn ghost" style={{marginTop:10}} onClick={startGuestMode}>
           ゲストで見る
         </button>
+        <div className="guest-help">ゲストは閲覧専用です。予想入力・保存はできません。</div>
       </div>
     </div>
   );
@@ -4535,7 +4538,7 @@ function LeaderboardScreen({user,onOpenTeam,syncToken}){
   const uiSettings=gs('settings',DEFAULT_UI_SETTINGS);
   const dataStamp=PLAYER_DATA_META.generatedAt ? formatTimestamp(PLAYER_DATA_META.generatedAt,uiSettings.timeZone) : '';
   const rankingStamp=PLAYER_DATA_META.meta?.worldFootballArchiveRankingUpdatedAt||'';
-  const scorerUpdateStamp=rankingStamp?formatTimestamp(rankingStamp,uiSettings.timeZone):dataStamp;
+  const scorerUpdateStamp=dataStamp;
   const readOnly=!!user?.isGuest;
   const scorerPredictionClosed=isScorerPredictionClosed();
 
@@ -4657,13 +4660,15 @@ function LeaderboardScreen({user,onOpenTeam,syncToken}){
         <div style={{minWidth:0}}>
           <div style={{fontSize:12,fontWeight:900,color:'var(--text)'}}>得点ランキングデータ</div>
           <div style={{fontSize:10,fontWeight:800,color:'var(--text2)',marginTop:2,lineHeight:1.35}}>
-            {`毎日12:00頃に自動更新（日本時間）${scorerUpdateStamp?` / 最終更新: ${scorerUpdateStamp}`:''}`}
+            <div>更新目安: 毎日12:00以降（日本時間）</div>
+            {scorerUpdateStamp&&<div>最終更新: {scorerUpdateStamp}</div>}
           </div>
         </div>
         <button className="btn" style={{width:'auto',padding:'9px 13px',fontSize:12,whiteSpace:'nowrap',marginTop:0}} onClick={refreshScorerData} disabled={scorerRefreshing}>
-          {scorerRefreshing?'更新中…':(HAS_BACKEND?'最新を反映':'公開データを再読込')}
+          {scorerRefreshing?'更新中…':(HAS_BACKEND?'最新を反映':'最新データを確認')}
         </button>
       </div>
+      <div className="scorer-data-note">※提供元データが未更新の場合は、最新を確認しても表示は変わりません。</div>
       <details className="scorer-pred-panel">
         <summary className="scorer-pred-summary">
           <div className="scorer-pred-summary-title">
