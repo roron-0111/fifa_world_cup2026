@@ -63,13 +63,16 @@ test('group exact score earns both result and exact score points', () => {
   assert.match(html, /return\{pts:s\.resultPts\+s\.exactPts,type:'exact'\}/);
 });
 
-test('knockout PK-decided tie does not earn normal exact-score points', () => {
+test('knockout PK-decided tie earns normal score points even when PK points are zero', () => {
   const match = html.match(/(function calcKoPointSummary\(koPreds,results,userId,settings\)\{[\s\S]*?)\nconst SCORER_PREDICTION_SLOTS=/);
   assert.ok(match, 'calcKoPointSummary should be extractable');
   const context = {
     KO_MATCHES: [{ id: 'F-0' }],
     normalizeKoRecord: (record) => record || null,
     koRecordHasScore: (record) => Number.isFinite(record?.home) && Number.isFinite(record?.away),
+    koRecordScoreExact: (pred, actual) => Number.isFinite(pred?.home) && Number.isFinite(pred?.away)
+      && Number.isFinite(actual?.home) && Number.isFinite(actual?.away)
+      && pred.home === actual.home && pred.away === actual.away,
     koRecordWinnerSide: (record) => {
       if (!record) return null;
       if (record.decidedBy === 'PK') {
@@ -89,19 +92,19 @@ test('knockout PK-decided tie does not earn normal exact-score points', () => {
     {user:{'F-0':{home:1,away:1,decidedBy:'PK',homePen:4,awayPen:3,winnerSide:'home'}}},
     {'F-0':{home:1,away:1,decidedBy:'PK',homePen:4,awayPen:3,winnerSide:'home'}},
     'user',
-    {koWinnerPts:1,koExactPts:2,koPenaltyPts:1,koChampionPts:5}
+    {koWinnerPts:1,koExactPts:2,koPenaltyPts:0,koChampionPts:5}
   );`, context);
   assert.deepEqual(JSON.parse(JSON.stringify(context.summary)), {
-    total: 2,
+    total: 3,
     winnerHits: 1,
-    exactHits: 0,
+    exactHits: 1,
     penaltyHits: 1,
     championHit: 0,
     runnerUpHit: 0,
     thirdPlaceHit: 0,
     koWinnerPts: 1,
     koExactPts: 2,
-    koPenaltyPts: 1,
+    koPenaltyPts: 0,
     koChampionPts: 5,
     koRunnerUpPts: 3,
     koThirdPlacePts: 2,

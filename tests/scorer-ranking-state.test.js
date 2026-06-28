@@ -52,6 +52,29 @@ test('scorer ranking prediction panel always exposes opponent picks', () => {
   assert.doesNotMatch(html, /\{oppId&&<span>相手:/);
 });
 
+test('scorer ranking predictions close at the final kickoff', () => {
+  assert.match(
+    html,
+    /function isScorerPredictionClosed\(now=new Date\(\)\)\{return isMatchPredictionClosed\(koGetMatch\('F',0\),now\);\}/,
+  );
+  assert.match(
+    html,
+    /const scorerPredictionClosed=isScorerPredictionClosed\(\);/,
+  );
+  assert.match(
+    html,
+    /if\(readOnly\|\|isScorerPredictionClosed\(\)\)return;/,
+  );
+  assert.match(
+    html,
+    /disabled=\{readOnly\|\|scorerPredictionClosed\}/,
+  );
+  assert.match(
+    html,
+    /disabled=\{readOnly\|\|scorerPredictionClosed\|\|!selectedCountry\}/,
+  );
+});
+
 test('scorer ranking player cards show country names', () => {
   assert.match(html, /<span>\{row\.countryJa\|\|teamJa\(row\.country\)\}<\/span>/);
 });

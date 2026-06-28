@@ -40,6 +40,29 @@ test('knockout match predictions close at kickoff time before results arrive', (
   );
 });
 
+test('knockout podium predictions close at their configured match deadlines', () => {
+  assert.match(
+    html,
+    /function koPodiumDeadlineMatch\(key\)\{[\s\S]*?if\(key==='third'\)return koGetMatch\('3RD',0\);[\s\S]*?return koGetMatch\('F',0\);[\s\S]*?\}/,
+  );
+  assert.match(
+    html,
+    /function isKoPodiumPredictionClosed\(key,now=new Date\(\)\)\{return isMatchPredictionClosed\(koPodiumDeadlineMatch\(key\),now\);\}/,
+  );
+  assert.match(
+    html,
+    /if\(!canEditKo\|\|isKoPodiumPredictionClosed\(key\)\)return;/,
+  );
+  assert.match(
+    html,
+    /const isPodiumClosed=isKoPodiumPredictionClosed\(item\.key\);/,
+  );
+  assert.match(
+    html,
+    /disabled=\{!item\.enabled\|\|!canEditKo\|\|isPodiumClosed\}/,
+  );
+});
+
 test('knockout route uses official match-number bracket sources', () => {
   assert.match(
     html,

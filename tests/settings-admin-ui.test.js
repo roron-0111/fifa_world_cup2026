@@ -247,10 +247,12 @@ test('pending prediction summary includes opponent state', () => {
 
 test('knockout score row uses score hit wording', () => {
   assert.match(html, /\{label:'スコア的中',me:koScorePts\(myKoSummary\),opp:koScorePts\(oppKoSummary\)\}/);
+  assert.match(html, /\{label:'PK的中',me:koPenaltyHitPts\(myKoSummary\),opp:koPenaltyHitPts\(oppKoSummary\)\}/);
   assert.doesNotMatch(html, /スコア \/ PK/);
 });
 
 test('knockout point setting explains PK winner handling', () => {
   assert.match(html, /決勝トーナメント 勝者的中<span>PK決着でも最終勝者が一致すれば加点<\/span>/);
-  assert.match(html, /PK的中<span>PK決着を予想し、PK勝者も当たった場合<\/span>/);
+  assert.match(html, /決勝トーナメント スコア的中<span>PK決着でも試合スコアが完全一致すれば加点<\/span>/);
+  assert.match(html, /PK的中<span>同点予想\+PK勝者的中時の追加点。勝者・スコア点も入るため0pt推奨<\/span>/);
 });

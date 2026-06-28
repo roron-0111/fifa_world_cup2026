@@ -1829,6 +1829,15 @@ const KO_ROUND_INDEX=Object.fromEntries(KO_ROUND_ORDER.map((id,i)=>[id,i]));
 function koMatchKey(roundId,matchIndex){return `${roundId}-${matchIndex}`;}
 function koGetRound(roundId){return KO_ROUNDS.find(r=>r.id===roundId);}
 function koGetMatch(roundId,matchIndex){return koGetRound(roundId)?.matches?.[matchIndex]||null;}
+function koPodiumDeadlineMatch(key){
+  if(key==='third')return koGetMatch('3RD',0);
+  return koGetMatch('F',0);
+}
+function koPodiumDeadlineLabel(key){
+  return key==='third'?'3位決定戦開始まで':'決勝開始まで';
+}
+function isKoPodiumPredictionClosed(key,now=new Date()){return isMatchPredictionClosed(koPodiumDeadlineMatch(key),now);}
+function isScorerPredictionClosed(now=new Date()){return isMatchPredictionClosed(koGetMatch('F',0),now);}
 function koSourceRef(roundId,matchIndex,side){
   const match=koGetMatch(roundId,matchIndex);
   if(match?.sourceRefs?.[side])return match.sourceRefs[side];
@@ -2084,6 +2093,9 @@ function koMatchPredictionCount(userKoPreds={}){
 function koRecordHasScore(record){
   return record&&Number.isFinite(record.home)&&Number.isFinite(record.away);
 }
+function koRecordScoreExact(pred,actual){
+  return koRecordHasScore(pred)&&koRecordHasScore(actual)&&pred.home===actual.home&&pred.away===actual.away;
+}
 function scorePairText(record,fallback='未入力'){
   if(!koRecordHasScore(record))return fallback;
   const base=`${record.home} - ${record.away}`;
@@ -2117,7 +2129,7 @@ function getKoJudgment(pred,actual){
   const aw=koRecordWinnerSide(actual);
   if(!pw||!aw)return {state:'pending',label:'判定待ち'};
   if(pw!==aw)return {state:'miss',label:'不一致'};
-  const scoreExact=actual.decidedBy!=='PK'&&pred.home===actual.home&&pred.away===actual.away;
+  const scoreExact=koRecordScoreExact(pred,actual);
   return {state:'hit',label:scoreExact?'スコア+勝者':'勝者的中'};
 }
 function koWinnerSideForMatch(match,picks={},results={}){
@@ -2800,7 +2812,7 @@ function calcKoPointSummary(koPreds,results,userId,settings){
     if(predWinner&&actualWinner&&predWinner===actualWinner){
       total+=koWinnerPts;winnerHits+=1;
     }
-    if(actual.decidedBy!=='PK'&&koRecordHasScore(pred)&&koRecordHasScore(actual)&&pred.home===actual.home&&pred.away===actual.away){
+    if(koRecordScoreExact(pred,actual)){
       total+=koExactPts;exactHits+=1;
     }
     if(actual.decidedBy==='PK'&&pred.decidedBy==='PK'&&predWinner&&actualWinner&&predWinner===actualWinner){
@@ -3506,11 +3518,13 @@ function HomeScreen({user,onLogout,syncToken}){
     {label:'合計',me:`${mySummary.total}pt`,opp:`${oppSummary.total||0}pt`},
   ];
   const koWinnerPts=(summary)=>`${summary.winnerHits||0}件 / +${(summary.winnerHits||0)*(summary.koWinnerPts||0)}pt`;
-  const koScorePts=(summary)=>`${(summary.exactHits||0)+(summary.penaltyHits||0)}件 / +${(summary.exactHits||0)*(summary.koExactPts||0)+(summary.penaltyHits||0)*(summary.koPenaltyPts||0)}pt`;
+  const koScorePts=(summary)=>`${summary.exactHits||0}件 / +${(summary.exactHits||0)*(summary.koExactPts||0)}pt`;
+  const koPenaltyHitPts=(summary)=>`${summary.penaltyHits||0}件 / +${(summary.penaltyHits||0)*(summary.koPenaltyPts||0)}pt`;
   const koPodiumPts=(summary)=>`${(summary.championHit||0)+(summary.runnerUpHit||0)+(summary.thirdPlaceHit||0)}件 / +${(summary.championHit||0)*(summary.koChampionPts||0)+(summary.runnerUpHit||0)*(summary.koRunnerUpPts||0)+(summary.thirdPlaceHit||0)*(summary.koThirdPlacePts||0)}pt`;
   const koCompareRows=[
     {label:'勝者的中',me:koWinnerPts(myKoSummary),opp:koWinnerPts(oppKoSummary)},
     {label:'スコア的中',me:koScorePts(myKoSummary),opp:koScorePts(oppKoSummary)},
+    {label:'PK的中',me:koPenaltyHitPts(myKoSummary),opp:koPenaltyHitPts(oppKoSummary)},
     {label:'順位的中',me:koPodiumPts(myKoSummary),opp:koPodiumPts(oppKoSummary)},
     {label:'合計',me:`${myKoSummary.total}pt`,opp:`${oppKoSummary.total||0}pt`},
   ];
@@ -4127,7 +4141,7 @@ function BracketScreen({user,syncToken}){
     let pts=0;
     const pw=koRecordWinnerSide(pred), aw=koRecordWinnerSide(actual);
     if(pw&&aw&&pw===aw)pts+=settings.koWinnerPts||0;
-    if(actual.decidedBy!=='PK'&&koRecordHasScore(pred)&&koRecordHasScore(actual)&&pred.home===actual.home&&pred.away===actual.away)pts+=settings.koExactPts||0;
+    if(koRecordScoreExact(pred,actual))pts+=settings.koExactPts||0;
     if(actual.decidedBy==='PK'&&pred.decidedBy==='PK'&&pw&&aw&&pw===aw)pts+=settings.koPenaltyPts||0;
     return pts;
   }
@@ -4216,7 +4230,7 @@ function BracketScreen({user,syncToken}){
     setEditing(null);setDraft(null);setStatus('');
   }
   function updatePodium(key,value){
-    if(!canEditKo)return;
+    if(!canEditKo||isKoPodiumPredictionClosed(key))return;
     const nextUserPreds={...myPreds,_podium:{...(myPreds._podium||{}),[key]:value}};
     if(!value)delete nextUserPreds._podium[key];
     const next={...koPreds,[user.id]:nextUserPreds};
@@ -4390,21 +4404,24 @@ function BracketScreen({user,syncToken}){
               {key:'champion',label:'優勝予想',enabled:true,points:settings.koChampionPts},
               {key:'runnerUp',label:'2位予想',enabled:settings.koRunnerUpEnabled,points:settings.koRunnerUpPts},
               {key:'third',label:'3位予想',enabled:settings.koThirdPlaceEnabled,points:settings.koThirdPlacePts},
-            ].map(item=>(
-              <div className={`ko-podium-pick${item.enabled?'':' off'}`} key={item.key}>
-                <div className="ko-podium-label"><span>{item.label}</span></div>
-                <select
-                  value={podium[item.key]||''}
-                  disabled={!item.enabled||!canEditKo}
-                  onChange={(e)=>updatePodium(item.key,e.target.value)}
-                >
-                  <option value="">{item.enabled?'未選択':'設定で無効'}</option>
-                  {podiumCandidates.map(candidate=><option key={`${item.key}-${candidate}`} value={candidate}>{koTeamName(candidate)}</option>)}
-                </select>
-                <div className="ko-podium-opp"><b>相手</b><span>{oppId?podiumPickLabel(oppPodium[item.key]):'-'}</span></div>
-                <div className="ko-podium-note">{!item.enabled?'採点しない場合はこのままでOK':canEditKo?`的中で +${item.points}pt`:'ゲストは閲覧のみ'}</div>
-              </div>
-            ))}
+            ].map(item=>{
+              const isPodiumClosed=isKoPodiumPredictionClosed(item.key);
+              return (
+                <div className={`ko-podium-pick${item.enabled?'':' off'}`} key={item.key}>
+                  <div className="ko-podium-label"><span>{item.label}</span></div>
+                  <select
+                    value={podium[item.key]||''}
+                    disabled={!item.enabled||!canEditKo||isPodiumClosed}
+                    onChange={(e)=>updatePodium(item.key,e.target.value)}
+                  >
+                    <option value="">{item.enabled?'未選択':'設定で無効'}</option>
+                    {podiumCandidates.map(candidate=><option key={`${item.key}-${candidate}`} value={candidate}>{koTeamName(candidate)}</option>)}
+                  </select>
+                  <div className="ko-podium-opp"><b>相手</b><span>{oppId?podiumPickLabel(oppPodium[item.key]):'-'}</span></div>
+                  <div className="ko-podium-note">{!item.enabled?'採点しない場合はこのままでOK':isPodiumClosed?'予想締切済み':canEditKo?`${koPodiumDeadlineLabel(item.key)} / 的中で +${item.points}pt`:'ゲストは閲覧のみ'}</div>
+                </div>
+              );
+            })}
           </div>
         </div>
         {renderStickyRoundBand()}
@@ -4516,6 +4533,7 @@ function LeaderboardScreen({user,onOpenTeam,syncToken}){
   const dataStamp=PLAYER_DATA_META.generatedAt ? formatTimestamp(PLAYER_DATA_META.generatedAt,uiSettings.timeZone) : '';
   const rankingStamp=PLAYER_DATA_META.meta?.worldFootballArchiveRankingUpdatedAt||'';
   const readOnly=!!user?.isGuest;
+  const scorerPredictionClosed=isScorerPredictionClosed();
 
   function scorerPredictionLabel(playerKey){
     const player=playerByScorerKey[normalizeScorerPredictionValue(playerKey)];
@@ -4526,7 +4544,7 @@ function LeaderboardScreen({user,onOpenTeam,syncToken}){
     return scorerCountryFilters[slotKey] || selectedPlayer?.country || '';
   }
   function saveScorerPrediction(slotKey,playerKey){
-    if(readOnly)return;
+    if(readOnly||isScorerPredictionClosed())return;
     const current=gr(roomId,'scorerPreds',{});
     const nextUser={...(current[user.id]||{})};
     if(playerKey)nextUser[slotKey]=playerKey;else delete nextUser[slotKey];
@@ -4584,7 +4602,7 @@ function LeaderboardScreen({user,onOpenTeam,syncToken}){
           <select
             className="scorer-select"
             value={selectedCountry}
-            disabled={readOnly}
+            disabled={readOnly||scorerPredictionClosed}
             onChange={(e)=>{
               const country=e.target.value;
               setScorerCountryFilters({...scorerCountryFilters,[slot.key]:country});
@@ -4597,7 +4615,7 @@ function LeaderboardScreen({user,onOpenTeam,syncToken}){
           <select
             className="scorer-select"
             value={selectedKey}
-            disabled={readOnly||!selectedCountry}
+            disabled={readOnly||scorerPredictionClosed||!selectedCountry}
             onChange={(e)=>saveScorerPrediction(slot.key,e.target.value)}
           >
             <option value="">選手を選択</option>
@@ -4658,7 +4676,7 @@ function LeaderboardScreen({user,onOpenTeam,syncToken}){
             {SCORER_PREDICTION_SLOTS.map(renderScorerPick)}
           </div>
           <div className="scorer-pred-help">
-            同率の場合は同じ得点数の選手全員をその順位の正解扱いにします。得点数そのものは予想対象ではありません。
+            {scorerPredictionClosed?'予想締切済み':'予想期限: 決勝開始まで'}。同率の場合は同じ得点数の選手全員をその順位の正解扱いにします。得点数そのものは予想対象ではありません。
           </div>
         </div>
       </details>
@@ -4839,7 +4857,7 @@ function SettingsScreen({user,syncToken,onRenameUser}){
             </div>
           </div>
           <div className="set-row">
-            <div className="sl">決勝トーナメント スコア的中<span>決勝トーナメントの通常スコアが完全一致した場合</span></div>
+            <div className="sl">決勝トーナメント スコア的中<span>PK決着でも試合スコアが完全一致すれば加点</span></div>
             <div className="pts-ctrl">
               <button className="ptsbtn" onClick={()=>changePts('koExactPts',-1)}>−</button>
               <div className="pts-val">{pointSettings.koExactPts}</div>
@@ -4847,7 +4865,7 @@ function SettingsScreen({user,syncToken,onRenameUser}){
             </div>
           </div>
           <div className="set-row">
-            <div className="sl">PK的中<span>PK決着を予想し、PK勝者も当たった場合</span></div>
+            <div className="sl">PK的中<span>同点予想+PK勝者的中時の追加点。勝者・スコア点も入るため0pt推奨</span></div>
             <div className="pts-ctrl">
               <button className="ptsbtn" onClick={()=>changePts('koPenaltyPts',-1)}>−</button>
               <div className="pts-val">{pointSettings.koPenaltyPts}</div>
