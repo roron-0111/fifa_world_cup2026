@@ -462,3 +462,14 @@ test('knockout PK inputs appear only for tied scores after checking PK', () => {
   assert.match(html, /className="ko-score-editor pk"/);
   assert.doesNotMatch(html, /選択した国をPK勝者として扱います/);
 });
+
+test('knockout actual PK score is split into compact score and PK lines', () => {
+  assert.match(html, /function renderActualScore\(record\)\{/);
+  assert.match(html, /const parts=record\?koActualScoreParts\(record\):null;/);
+  assert.match(html, /<span className="ko-actual-main-score">\{parts\.main\}<\/span>/);
+  assert.match(html, /\{parts\.pk&&<span className="ko-actual-pk-score">\{parts\.pk\}<\/span>\}/);
+  assert.match(html, /\.ko-actual-score\.on\{[^}]*flex-direction:column/);
+  assert.match(html, /\.ko-actual-pk-score\{[^}]*font-size:9px[^}]*white-space:nowrap/);
+  assert.match(html, /return \{main:`\$\{record\.home\}-\$\{record\.away\}`,pk:`PK\$\{record\.homePen\}-\$\{record\.awayPen\}`\};/);
+  assert.doesNotMatch(html, /\{record\?koRecordScoreText\(record\):'VS'\}/);
+});

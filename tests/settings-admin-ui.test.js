@@ -114,6 +114,7 @@ test('home result judge area is reordered and scrollable', () => {
   assert.match(html, /const myJudgment=meta\.kind==='ko'\?getKoJudgment\(myPred,actual\):getGroupJudgment\(myPred,actual\);/);
   assert.match(html, /const oppJudgment=oppId\?\(meta\.kind==='ko'\?getKoJudgment\(oppPred,actual\):getGroupJudgment\(oppPred,actual\)\):null;/);
   assert.match(html, /const scoreText=scorePairText\(actual,'未反映'\);/);
+  assert.match(html, /const scoreParts=scorePairParts\(actual,'未反映'\);/);
   assert.match(html, /const myPredText=scorePairText\(myPred,'未予想'\);/);
   assert.match(html, /const oppPredText=scorePairText\(oppPred,'未予想'\);/);
   assert.match(html, /const koHome=meta\.kind==='ko'\?koOfficialResolvedTeam\(meta\.roundId,meta\.matchIndex,'home',results,koFixtures\)\|\|meta\.match\.home:null;/);
@@ -143,7 +144,11 @@ test('home result judge area is reordered and scrollable', () => {
   assert.match(html, /\.result-judge-list\{[^}]*overflow-y:auto/);
   assert.match(html, /@media \(max-width: 520px\)\{[\s\S]*?\.result-match-item\{grid-template-columns:1fr/);
   assert.match(html, /@media \(max-width: 520px\)\{[\s\S]*?\.result-match-side\{grid-template-columns:minmax\(58px,\s*\.52fr\) repeat\(2,minmax\(0,1fr\)\)/);
+  assert.match(html, /<span className="result-match-main-score">\{item\.scoreParts\.main\}<\/span>/);
+  assert.match(html, /\{item\.scoreParts\.pk&&<span className="result-match-pk-score">\{item\.scoreParts\.pk\}<\/span>\}/);
+  assert.match(html, /\.result-match-pk-score\{[^}]*font-size:10px[^}]*white-space:nowrap/);
   assert.match(html, /@media \(max-width: 520px\)\{[\s\S]*?\.result-match-score\{font-size:34px;justify-self:center/);
+  assert.match(html, /@media \(max-width: 520px\)\{[\s\S]*?\.result-match-score\{[^}]*align-items:center/);
   assert.match(html, /@media \(max-width: 520px\)\{[\s\S]*?\.result-match-teams\{font-size:13px/);
   assert.doesNotMatch(html, /result-judge-input/);
 });

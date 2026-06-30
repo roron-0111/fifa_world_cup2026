@@ -284,8 +284,10 @@ html,body{background:#ddd8ce;color:var(--text);font-family:'Inter',sans-serif;mi
 .result-match-time{font-size:11px;color:var(--text2);font-weight:700;}
 .result-match-teams{margin-top:4px;font-size:12px;font-weight:800;color:var(--text);line-height:1.35;}
 .result-match-side{display:grid;grid-template-columns:auto minmax(56px,1fr) minmax(56px,1fr);align-items:center;justify-items:center;gap:6px;min-width:176px;}
-.result-match-score{justify-self:start;font-family:'Bebas Neue';font-size:30px;line-height:1;color:var(--accent);font-weight:900;letter-spacing:-.04em;}
+.result-match-score{justify-self:start;font-family:'Bebas Neue';font-size:30px;line-height:1;color:var(--accent);font-weight:900;letter-spacing:-.04em;display:inline-flex;flex-direction:column;align-items:flex-start;gap:2px;white-space:nowrap;}
 .result-match-score.pending{color:var(--text2);}
+.result-match-main-score{display:block;line-height:1;}
+.result-match-pk-score{display:block;font-family:'Inter',sans-serif;font-size:10px;line-height:1.05;font-weight:900;letter-spacing:0;color:var(--text2);white-space:nowrap;}
 .result-match-judge-col{display:flex;flex-direction:column;align-items:center;gap:3px;min-width:0;width:100%;}
 .result-match-judge-label{max-width:100%;font-size:9px;font-weight:900;color:var(--text2);line-height:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 .result-pred-score{font-family:'Bebas Neue';font-size:15px;line-height:1;color:var(--text);font-weight:900;letter-spacing:.02em;}
@@ -800,7 +802,7 @@ html,body{background:#ddd8ce;color:var(--text);font-family:'Inter',sans-serif;mi
   .result-match-head{align-content:flex-start;gap:4px;}
   .result-match-teams{font-size:13px;line-height:1.25;margin-top:0;overflow-wrap:anywhere;}
   .result-match-side{grid-template-columns:minmax(58px,.52fr) repeat(2,minmax(0,1fr));width:100%;min-width:0;gap:6px;align-items:center;}
-  .result-match-score{font-size:34px;justify-self:center;}
+  .result-match-score{font-size:34px;justify-self:center;align-items:center;}
   .result-match-judge-col .match-status-badge{width:100%;max-width:none;min-width:0;padding:4px 5px;font-size:9px;}
   .guest-notice{align-items:flex-start;flex-direction:column;}
   .player-edit-grid{grid-template-columns:1fr;}
@@ -976,7 +978,9 @@ html,body{background:#ddd8ce;color:var(--text);font-family:'Inter',sans-serif;mi
 .ko-team-name{font-size:11px;font-weight:900;line-height:1.14;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;word-break:break-word;text-align:left;}
 .ko-win-mark{justify-self:end;font-size:9px;font-weight:900;color:#fff;background:#ff140f;border-radius:999px;padding:2px 7px;text-align:center;white-space:nowrap;}
 .ko-actual-score{display:flex;align-items:center;justify-content:center;text-align:center;min-width:0;padding:0 4px;font-family:'Bebas Neue','Inter',sans-serif;font-size:17px;line-height:1.05;font-weight:900;color:#8a8a8a;background:rgba(255,255,255,.5);border-left:1px solid rgba(0,0,0,.08);border-right:1px solid rgba(0,0,0,.08);white-space:normal;}
-.ko-actual-score.on{font-family:'Inter',sans-serif;font-size:12px;color:#111;background:linear-gradient(180deg,#fff,#f6f1e8);}
+.ko-actual-score.on{flex-direction:column;gap:1px;font-family:'Inter',sans-serif;font-size:12px;color:#111;background:linear-gradient(180deg,#fff,#f6f1e8);white-space:nowrap;}
+.ko-actual-main-score{display:block;font-size:13px;line-height:1;font-weight:900;white-space:nowrap;}
+.ko-actual-pk-score{display:block;font-size:9px;line-height:1;font-weight:900;color:var(--text2);white-space:nowrap;}
 .ko-score-stack{border-top:1px solid rgba(0,0,0,.1);background:rgba(255,255,255,.72);display:grid;grid-template-columns:repeat(2,minmax(0,1fr));}
 .ko-pred-line{height:31px;display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:4px;padding:4px 6px;font-size:10px;color:#555;font-weight:800;border-left:1px solid rgba(0,0,0,.06);min-width:0;}
 .ko-pred-line:first-child{border-left:none;}
@@ -2100,14 +2104,26 @@ function koRecordHasScore(record){
 function koRecordScoreExact(pred,actual){
   return koRecordHasScore(pred)&&koRecordHasScore(actual)&&pred.home===actual.home&&pred.away===actual.away;
 }
-function scorePairText(record,fallback='未入力'){
-  if(!koRecordHasScore(record))return fallback;
-  const base=`${record.home} - ${record.away}`;
+function scorePairParts(record,fallback='未入力'){
+  if(!koRecordHasScore(record))return {main:fallback,pk:''};
+  const main=`${record.home} - ${record.away}`;
   if(record.decidedBy==='PK'&&Number.isFinite(record.homePen)&&Number.isFinite(record.awayPen)){
-    return `${base} PK ${record.homePen} - ${record.awayPen}`;
+    return {main,pk:`PK${record.homePen}-${record.awayPen}`};
   }
-  if(record.decidedBy==='PK')return `${base} PK`;
-  return base;
+  if(record.decidedBy==='PK')return {main,pk:'PK'};
+  return {main,pk:''};
+}
+function koActualScoreParts(record){
+  if(!koRecordHasScore(record))return {main:'VS',pk:''};
+  if(record.decidedBy==='PK'&&Number.isFinite(record.homePen)&&Number.isFinite(record.awayPen)){
+    return {main:`${record.home}-${record.away}`,pk:`PK${record.homePen}-${record.awayPen}`};
+  }
+  if(record.decidedBy==='PK')return {main:`${record.home}-${record.away}`,pk:'PK'};
+  return {main:`${record.home}-${record.away}`,pk:''};
+}
+function scorePairText(record,fallback='未入力'){
+  const parts=scorePairParts(record,fallback);
+  return parts.pk?`${parts.main} ${parts.pk}`:parts.main;
 }
 function koRecordScoreText(record){
   return scorePairText(record,'未入力');
@@ -3572,12 +3588,13 @@ function HomeScreen({user,onLogout,syncToken}){
       const myJudgment=meta.kind==='ko'?getKoJudgment(myPred,actual):getGroupJudgment(myPred,actual);
       const oppJudgment=oppId?(meta.kind==='ko'?getKoJudgment(oppPred,actual):getGroupJudgment(oppPred,actual)):null;
       const scoreText=scorePairText(actual,'未反映');
+      const scoreParts=scorePairParts(actual,'未反映');
       const myPredText=scorePairText(myPred,'未予想');
       const oppPredText=scorePairText(oppPred,'未予想');
       const koHome=meta.kind==='ko'?koOfficialResolvedTeam(meta.roundId,meta.matchIndex,'home',results,koFixtures)||meta.match.home:null;
       const koAway=meta.kind==='ko'?koOfficialResolvedTeam(meta.roundId,meta.matchIndex,'away',results,koFixtures)||meta.match.away:null;
       const teamsText=meta.kind==='ko'?`${koTeamName(koHome)} vs ${koTeamName(koAway)}`:`${teamJa(meta.match.home)} vs ${teamJa(meta.match.away)}`;
-      return {...meta,actual,myJudgment,oppJudgment,scoreText,myPredText,oppPredText,teamsText};
+      return {...meta,actual,myJudgment,oppJudgment,scoreText,scoreParts,myPredText,oppPredText,teamsText};
     })
     .filter(Boolean)
     .sort((a,b)=>{
@@ -3758,7 +3775,10 @@ function HomeScreen({user,onLogout,syncToken}){
                   </div>
                 </div>
                 <div className="result-match-side">
-                  <div className={`result-match-score${item.scoreText==='未反映'?' pending':''}`}>{item.scoreText}</div>
+                  <div className={`result-match-score${item.scoreParts.main==='未反映'?' pending':''}`}>
+                    <span className="result-match-main-score">{item.scoreParts.main}</span>
+                    {item.scoreParts.pk&&<span className="result-match-pk-score">{item.scoreParts.pk}</span>}
+                  </div>
                   <div className="result-match-judge-col me">
                     <span className="result-match-judge-label" title={myLabel}>{myLabel}</span>
                     <span className="result-pred-score">{item.myPredText}</span>
@@ -4306,9 +4326,15 @@ function BracketScreen({user,syncToken}){
     );
   }
   function renderActualScore(record){
+    const parts=record?koActualScoreParts(record):null;
     return (
       <div className={`ko-actual-score${record?' on':''}`}>
-        {record?koRecordScoreText(record):'VS'}
+        {parts?(
+          <>
+            <span className="ko-actual-main-score">{parts.main}</span>
+            {parts.pk&&<span className="ko-actual-pk-score">{parts.pk}</span>}
+          </>
+        ):'VS'}
       </div>
     );
   }
