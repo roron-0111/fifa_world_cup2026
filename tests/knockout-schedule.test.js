@@ -473,3 +473,15 @@ test('knockout actual PK score is split into compact score and PK lines', () => 
   assert.match(html, /return \{main:`\$\{record\.home\}-\$\{record\.away\}`,pk:`PK\$\{record\.homePen\}-\$\{record\.awayPen\}`\};/);
   assert.doesNotMatch(html, /\{record\?koRecordScoreText\(record\):'VS'\}/);
 });
+
+test('knockout opponent predictions stay masked until the match has an actual result', () => {
+  assert.match(html, /function canShowOpponentKoPrediction\(actual\)\{return !!normalizeKoRecord\(actual\);\}/);
+  assert.match(html, /const showOppPrediction=canShowOpponentKoPrediction\(actual\);/);
+  assert.match(html, /const displayOppPred=showOppPrediction\?oppPred:null;/);
+  assert.match(html, /const displayOppPts=showOppPrediction\?oppPts:null;/);
+  assert.match(html, /renderPredictionLine\('opp','相手',oppId\?displayOppPred:null,displayOppPts,\{masked:oppId&&!showOppPrediction,maskedLabel:'終了後に公開'\}\)/);
+  assert.match(html, /const displayText=options\.masked\?options\.maskedLabel:koRecordScoreText\(record\);/);
+  assert.match(html, /className=\{`ko-pred-line \$\{kind\}\$\{options\.masked\?' masked':''\}`\}/);
+  assert.match(html, /\.ko-pred-line\.masked strong\{[^}]*color:var\(--text2\)[^}]*font-size:11px/);
+  assert.doesNotMatch(html, /renderPredictionLine\('opp','相手',oppId\?oppPred:null,oppPts\)/);
+});

@@ -988,6 +988,7 @@ html,body{background:#ddd8ce;color:var(--text);font-family:'Inter',sans-serif;mi
 .ko-pred-line.me b{background:#1e6ef0;}
 .ko-pred-line.opp b{background:#d4960a;}
 .ko-pred-line strong{font-family:'Inter',sans-serif;font-size:12px;line-height:1.1;color:#111;font-weight:900;letter-spacing:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.ko-pred-line.masked strong{color:var(--text2);font-size:11px;font-weight:900;letter-spacing:0;}
 .ko-pred-line em{font-style:normal;color:#ff140f;font-size:10px;font-weight:900;white-space:nowrap;line-height:1;}
 .ko-champion-node{position:absolute;z-index:2;width:142px;min-height:88px;background:#fff;color:#111;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:12px;border:1px solid rgba(255,255,255,.28);box-shadow:0 12px 30px rgba(0,0,0,.3);}
 .ko-champion-node span{font-size:12px;font-weight:900;color:#777;letter-spacing:.4px;}
@@ -4181,6 +4182,7 @@ function BracketScreen({user,syncToken}){
     if(actual.decidedBy==='PK'&&pred.decidedBy==='PK'&&pw&&aw&&pw===aw)pts+=settings.koPenaltyPts||0;
     return pts;
   }
+  function canShowOpponentKoPrediction(actual){return !!normalizeKoRecord(actual);}
   function buildDraft(match){
     const current=normalizeKoRecord(myPreds[match.id])||{};
     const inferred=current.winnerSide||inferWinnerSide(current.home,current.away)||'home';
@@ -4338,11 +4340,12 @@ function BracketScreen({user,syncToken}){
       </div>
     );
   }
-  function renderPredictionLine(kind,label,record,pts=null){
+  function renderPredictionLine(kind,label,record,pts=null,options={}){
+    const displayText=options.masked?options.maskedLabel:koRecordScoreText(record);
     return(
-      <div className={`ko-pred-line ${kind}`} key={kind}>
+      <div className={`ko-pred-line ${kind}${options.masked?' masked':''}`} key={kind}>
         <b>{label}</b>
-        <strong>{koRecordScoreText(record)}</strong>
+        <strong>{displayText}</strong>
         {pts!==null&&<em>+{pts}pt</em>}
       </div>
     );
@@ -4409,6 +4412,9 @@ function BracketScreen({user,syncToken}){
     const awayLabel=koOfficialResolvedTeam(round.id,index,'away',results,koFixtures)||match.away;
     const pts=matchPoints(match,myPreds);
     const oppPts=oppId?matchPoints(match,oppPreds):null;
+    const showOppPrediction=canShowOpponentKoPrediction(actual);
+    const displayOppPred=showOppPrediction?oppPred:null;
+    const displayOppPts=showOppPrediction?oppPts:null;
     const koJudgment=getKoJudgment(pred,actual);
     const matchKindLabel=round.id==='F'?'決勝':round.id==='3RD'?'3位決定戦':'';
     const canEditMatch=canEditKo&&!actual&&!isPredictionClosed;
@@ -4438,7 +4444,7 @@ function BracketScreen({user,syncToken}){
         </div>
         <div className="ko-score-stack">
           {renderPredictionLine('me','自分',pred,pts)}
-          {renderPredictionLine('opp','相手',oppId?oppPred:null,oppPts)}
+          {renderPredictionLine('opp','相手',oppId?displayOppPred:null,displayOppPts,{masked:oppId&&!showOppPrediction,maskedLabel:'終了後に公開'})}
         </div>
       </button>
     );

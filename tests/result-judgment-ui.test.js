@@ -240,9 +240,12 @@ test('group match cards show only finished state after results and score both us
 test('knockout finished cards show point tags for both users without wrapping', () => {
   assert.match(html, /const pts=matchPoints\(match,myPreds\);/);
   assert.match(html, /const oppPts=oppId\?matchPoints\(match,oppPreds\):null;/);
+  assert.match(html, /const displayOppPred=showOppPrediction\?oppPred:null;/);
+  assert.match(html, /const displayOppPts=showOppPrediction\?oppPts:null;/);
   assert.match(html, /\{renderPredictionLine\('me','自分',pred,pts\)\}/);
-  assert.match(html, /\{renderPredictionLine\('opp','相手',oppId\?oppPred:null,oppPts\)\}/);
+  assert.match(html, /\{renderPredictionLine\('opp','相手',oppId\?displayOppPred:null,displayOppPts,\{masked:oppId&&!showOppPrediction,maskedLabel:'終了後に公開'\}\)\}/);
   assert.match(html, /\.ko-pred-line\{height:31px;display:grid;grid-template-columns:auto minmax\(0,1fr\) auto;/);
+  assert.match(html, /\.ko-pred-line\.masked strong\{[^}]*font-size:11px/);
   assert.match(html, /\.ko-pred-line em\{[^}]*white-space:nowrap/);
 });
 
