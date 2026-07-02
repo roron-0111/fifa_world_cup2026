@@ -408,6 +408,14 @@ test('knockout podium picks expose opponent selections', () => {
   );
 });
 
+test('knockout champion node uses actual final result, not my champion prediction', () => {
+  assert.match(html, /const actualChampion=koActualPodium\(results,koFixtures\)\.champion;/);
+  assert.match(html, /<div className=\{`ko-champion-node\$\{actualChampion\?' on':''\}`\}/);
+  assert.match(html, /<strong>\{actualChampion\?<><TeamFlag team=\{actualChampion\}\/> \{koTeamName\(actualChampion\)\}<\/>:'未定'\}<\/strong>/);
+  assert.doesNotMatch(html, /const champion=podium\.champion;/);
+  assert.doesNotMatch(html, /ko-champion-node\$\{champion\?' on':''\}/);
+});
+
 test('knockout podium pick candidates include only resolved country teams', () => {
   assert.match(
     html,

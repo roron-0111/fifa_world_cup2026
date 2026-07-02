@@ -111,6 +111,50 @@ test('knockout PK-decided tie earns normal score points even when PK points are 
   });
 });
 
+test('knockout podium predictions score only after matching actual podium results', () => {
+  const match = html.match(/(function calcKoPointSummary\(koPreds,results,userId,settings\)\{[\s\S]*?)\nconst SCORER_PREDICTION_SLOTS=/);
+  assert.ok(match, 'calcKoPointSummary should be extractable');
+  assert.match(html, /const predPodium=koPodiumPredictions\(userPreds,\{\}\);/);
+  assert.match(html, /const actualPodium=koActualPodium\(results\);/);
+  const context = {
+    KO_MATCHES: [],
+    normalizeKoRecord: () => null,
+    koRecordWinnerSide: () => null,
+    koRecordScoreExact: () => false,
+    koPodiumPredictions: () => ({ champion: 'CAN', runnerUp: 'USA', third: 'MEX' }),
+    koActualPodium: (results) => results?.actualPodium || {},
+    koSeedLabel: (value) => value,
+  };
+  vm.runInNewContext(`${match[1]}; this.beforeFinal=calcKoPointSummary(
+    {user:{_podium:{champion:'CAN',runnerUp:'USA',third:'MEX'}}},
+    {},
+    'user',
+    {koChampionPts:3,koRunnerUpPts:2,koThirdPlacePts:1}
+  ); this.afterFinal=calcKoPointSummary(
+    {user:{_podium:{champion:'CAN',runnerUp:'USA',third:'MEX'}}},
+    {actualPodium:{champion:'CAN',runnerUp:'USA',third:'MEX'}},
+    'user',
+    {koChampionPts:3,koRunnerUpPts:2,koThirdPlacePts:1}
+  ); this.mismatch=calcKoPointSummary(
+    {user:{_podium:{champion:'CAN',runnerUp:'USA',third:'MEX'}}},
+    {actualPodium:{champion:'ARG',runnerUp:'USA',third:'BRA'}},
+    'user',
+    {koChampionPts:3,koRunnerUpPts:2,koThirdPlacePts:1}
+  );`, context);
+  assert.equal(context.beforeFinal.total, 0);
+  assert.equal(context.beforeFinal.championHit, 0);
+  assert.equal(context.beforeFinal.runnerUpHit, 0);
+  assert.equal(context.beforeFinal.thirdPlaceHit, 0);
+  assert.equal(context.afterFinal.total, 6);
+  assert.equal(context.afterFinal.championHit, 1);
+  assert.equal(context.afterFinal.runnerUpHit, 1);
+  assert.equal(context.afterFinal.thirdPlaceHit, 1);
+  assert.equal(context.mismatch.total, 2);
+  assert.equal(context.mismatch.championHit, 0);
+  assert.equal(context.mismatch.runnerUpHit, 1);
+  assert.equal(context.mismatch.thirdPlaceHit, 0);
+});
+
 test('scorer ranking predictions score the top three goal tiers with ties', () => {
   const match = html.match(/(const SCORER_PREDICTION_SLOTS=\[[\s\S]*?)\nfunction displayUserLabel/);
   assert.ok(match, 'scorer ranking summary should be extractable');

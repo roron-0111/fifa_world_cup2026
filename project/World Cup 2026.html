@@ -4112,7 +4112,7 @@ function BracketScreen({user,syncToken}){
   const podium=koPodiumPredictions(myPreds,{},koFixtures);
   const oppPodium=oppId?koPodiumPredictions(oppPreds,{},koFixtures):{};
   const podiumCandidates=koPodiumCandidates(myPreds,results,koFixtures);
-  const champion=podium.champion;
+  const actualChampion=koActualPodium(results,koFixtures).champion;
 
   useEffect(()=>{
     setKoPreds(gr(roomId,'koPreds',{}));
@@ -4493,9 +4493,9 @@ function BracketScreen({user,syncToken}){
           {renderRoundLabels()}
           {boardRounds.map((round)=>round.matches.map((m,i)=>renderMatch(round,i)))}
           {KO_ROUNDS.find(r=>r.id==='3RD').matches.map((m,i)=>renderMatch(KO_ROUNDS.find(r=>r.id==='3RD'),i))}
-          <div className={`ko-champion-node${champion?' on':''}`} style={{left:roundX('F')+BOARD.w+124,top:centerY('F',0)-54}}>
+          <div className={`ko-champion-node${actualChampion?' on':''}`} style={{left:roundX('F')+BOARD.w+124,top:centerY('F',0)-54}}>
             <span>優勝</span>
-            <strong>{champion?<><TeamFlag team={champion}/> {koTeamName(champion)}</>:'未定'}</strong>
+            <strong>{actualChampion?<><TeamFlag team={actualChampion}/> {koTeamName(actualChampion)}</>:'未定'}</strong>
           </div>
         </div>
       </div>
