@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-02T06:47:28.517Z",
+  "generatedAt": "2026-07-03T06:37:34.174Z",
   "sources": {
     "googleScheduleSearch": "https://www.google.com/search?num=10&sa=X&sca_esv=f6913a6b03d5cca2&rlz=1C1JCYX_jaJP1059JP1059&sxsrf=ANbL-n70He_OogrO5hSbIWeTQHISUMbceg:1776594446411&q=%E3%83%AF%E3%83%BC%E3%83%AB%E3%83%89%E3%82%AB%E3%83%83%E3%83%97&si=AL3DRZGlEbdhA7XmWJj80t1CsOZGFzUh_Eb-GlfbqiISmN5DEgu7LWf3OmvACopQM184n8KPXnQtYFGFP0r94M5Ok1EiKiL_zxwaGqExIOUt_YuH9NJkgl0ob1JeaC4dvKMbGv7soNpq&ved=2ahUKEwjz2JWb2vmTAxUxoa8BHSukHTwQyNoBKAB6BAgNEAA&ictx=1&biw=2560&bih=1271&dpr=1",
     "fifaTeamsPage": "https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026/teams",
@@ -12279,7 +12279,7 @@
         "profileUrl": "https://www.transfermarkt.co.uk/malik-tillman/profil/spieler/467437",
         "currentNationalTeamId": "",
         "rank": 19,
-        "worldCupGoals": 0,
+        "worldCupGoals": 1,
         "shirtNumber": 17,
         "nationalTeamDebut": "2022-06",
         "worldCupHistory": "26",
@@ -12501,7 +12501,7 @@
         "profileUrl": "https://www.transfermarkt.co.uk/folarin-balogun/profil/spieler/503770",
         "currentNationalTeamId": "",
         "rank": 25,
-        "worldCupGoals": 2,
+        "worldCupGoals": 3,
         "shirtNumber": 20,
         "nationalTeamDebut": "2023-06",
         "worldCupHistory": "26",
@@ -27296,7 +27296,7 @@
         "profileUrl": "https://www.transfermarkt.co.uk/pedro-porro/profil/spieler/553875",
         "currentNationalTeamId": "",
         "rank": 8,
-        "worldCupGoals": 0,
+        "worldCupGoals": 1,
         "shirtNumber": 12,
         "nationalTeamDebut": "2021-03",
         "worldCupHistory": "26",
@@ -27418,7 +27418,7 @@
         "source": "world-football-archive",
         "isFinalMember": true,
         "clubGoalsKnown": true,
-        "worldCupAssists": 0
+        "worldCupAssists": 2
       },
       {
         "id": "338424",
@@ -27788,7 +27788,7 @@
         "source": "world-football-archive",
         "isFinalMember": true,
         "clubGoalsKnown": true,
-        "worldCupAssists": 0
+        "worldCupAssists": 1
       },
       {
         "id": "709187",
@@ -27888,7 +27888,7 @@
         "profileUrl": "https://www.transfermarkt.co.uk/mikel-oyarzabal/profil/spieler/351478",
         "currentNationalTeamId": "",
         "rank": 24,
-        "worldCupGoals": 2,
+        "worldCupGoals": 4,
         "shirtNumber": 21,
         "nationalTeamDebut": "2016-05",
         "worldCupHistory": "26",
@@ -46303,14 +46303,14 @@
       "Korea Republic": "2026-06-25",
       "Czechia": "2026-06-25",
       "Canada": "2026-06-29",
-      "Bosnia and Herzegovina": "2026-06-25",
+      "Bosnia and Herzegovina": "2026-07-02",
       "Switzerland": "2026-06-25",
       "Qatar": "2026-06-25",
       "Brazil": "2026-06-30",
       "Morocco": "2026-06-30",
       "Haiti": "2026-06-25",
       "Scotland": "2026-06-25",
-      "USA": "2026-06-26",
+      "USA": "2026-07-02",
       "Australia": "2026-06-26",
       "Paraguay": "2026-06-30",
       "Türkiye": "2026-06-26",
@@ -46326,7 +46326,7 @@
       "IR Iran": "2026-06-27",
       "Egypt": "2026-06-27",
       "New Zealand": "2026-06-27",
-      "Spain": "2026-06-27",
+      "Spain": "2026-07-03",
       "Uruguay": "2026-06-27",
       "Saudi Arabia": "2026-06-27",
       "Cabo Verde": "2026-06-27",
@@ -46335,7 +46335,7 @@
       "Norway": "2026-07-01",
       "Iraq": "2026-06-27",
       "Argentina": "2026-06-28",
-      "Austria": "2026-06-28",
+      "Austria": "2026-07-03",
       "Algeria": "2026-06-28",
       "Jordan": "2026-06-28",
       "Portugal": "2026-06-28",
@@ -46347,13 +46347,13 @@
       "Panama": "2026-06-28",
       "Ghana": "2026-06-28"
     },
-    "worldFootballArchiveRankingUpdatedAt": "2026-07-02",
+    "worldFootballArchiveRankingUpdatedAt": "2026-07-03",
     "worldFootballArchiveRankingStats": {
-      "matchedGoals": 150,
-      "matchedAssists": 141,
+      "matchedGoals": 152,
+      "matchedAssists": 143,
       "unmatchedGoals": [
         {
-          "rank": 19,
+          "rank": 21,
           "name": "マルコ・アルナウトヴィッチ",
           "countryJa": "オーストリア",
           "goals": 2
@@ -46373,13 +46373,13 @@
       ],
       "unmatchedAssists": [
         {
-          "rank": 27,
+          "rank": 28,
           "name": "プロミス・アキンペル",
           "countryJa": "カナダ",
           "assists": 1
         },
         {
-          "rank": 27,
+          "rank": 28,
           "name": "ミヒャエル・グレゴリッチュ",
           "countryJa": "オーストリア",
           "assists": 1
