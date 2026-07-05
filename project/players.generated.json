@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-04T06:25:16.739Z",
+  "generatedAt": "2026-07-05T06:46:53.318Z",
   "sources": {
     "googleScheduleSearch": "https://www.google.com/search?num=10&sa=X&sca_esv=f6913a6b03d5cca2&rlz=1C1JCYX_jaJP1059JP1059&sxsrf=ANbL-n70He_OogrO5hSbIWeTQHISUMbceg:1776594446411&q=%E3%83%AF%E3%83%BC%E3%83%AB%E3%83%89%E3%82%AB%E3%83%83%E3%83%97&si=AL3DRZGlEbdhA7XmWJj80t1CsOZGFzUh_Eb-GlfbqiISmN5DEgu7LWf3OmvACopQM184n8KPXnQtYFGFP0r94M5Ok1EiKiL_zxwaGqExIOUt_YuH9NJkgl0ob1JeaC4dvKMbGv7soNpq&ved=2ahUKEwjz2JWb2vmTAxUxoa8BHSukHTwQyNoBKAB6BAgNEAA&ictx=1&biw=2560&bih=1271&dpr=1",
     "fifaTeamsPage": "https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026/teams",
@@ -5908,7 +5908,7 @@
         "nationalTeamDebut": "",
         "worldCupHistory": "26",
         "dateOfBirth": "2002-07-03",
-        "age": 23,
+        "age": 24,
         "heightCm": 189,
         "note": "最終メンバー",
         "source": "world-football-archive",
@@ -8843,7 +8843,7 @@
         "source": "world-football-archive",
         "isFinalMember": true,
         "clubGoalsKnown": true,
-        "worldCupAssists": 1
+        "worldCupAssists": 2
       },
       {
         "id": "340456",
@@ -9239,7 +9239,7 @@
         "profileUrl": "https://www.transfermarkt.co.uk/azzedine-ounahi/profil/spieler/593482",
         "currentNationalTeamId": "",
         "rank": 15,
-        "worldCupGoals": 0,
+        "worldCupGoals": 2,
         "shirtNumber": 8,
         "nationalTeamDebut": "2022-01",
         "worldCupHistory": "26 / 22",
@@ -9392,7 +9392,7 @@
         "nationalTeamDebut": "2025-09",
         "worldCupHistory": "26",
         "dateOfBirth": "2001-07-02",
-        "age": 24,
+        "age": 25,
         "heightCm": 185,
         "note": "最終メンバー",
         "source": "world-football-archive",
@@ -9461,7 +9461,7 @@
         "profileUrl": "https://www.transfermarkt.co.uk/soufiane-rahimi/profil/spieler/598506",
         "currentNationalTeamId": "",
         "rank": 21,
-        "worldCupGoals": 1,
+        "worldCupGoals": 2,
         "shirtNumber": 9,
         "nationalTeamDebut": "2021-01",
         "worldCupHistory": "26",
@@ -9509,7 +9509,7 @@
         "source": "world-football-archive",
         "isFinalMember": true,
         "clubGoalsKnown": true,
-        "worldCupAssists": 2
+        "worldCupAssists": 4
       },
       {
         "id": "1151929",
@@ -30181,7 +30181,7 @@
         "clubGoals": 0,
         "internationalGoals": 0,
         "goals": 0,
-        "worldCupGoals": 0,
+        "worldCupGoals": 1,
         "internationalCaps": 0,
         "marketValue": 0,
         "lastSeason": "",
@@ -30447,12 +30447,12 @@
         "profileUrl": "https://www.transfermarkt.co.uk/deroy-duarte/profil/spieler/432852",
         "currentNationalTeamId": "",
         "rank": 15,
-        "worldCupGoals": 0,
+        "worldCupGoals": 1,
         "shirtNumber": 14,
         "nationalTeamDebut": "2022-03",
         "worldCupHistory": "26",
         "dateOfBirth": "1999-07-04",
-        "age": 26,
+        "age": 27,
         "heightCm": 177,
         "note": "最終メンバー",
         "source": "world-football-archive",
@@ -30532,7 +30532,7 @@
         "source": "world-football-archive",
         "isFinalMember": true,
         "clubGoalsKnown": true,
-        "worldCupAssists": 0
+        "worldCupAssists": 1
       },
       {
         "id": "448466",
@@ -30791,7 +30791,7 @@
         "source": "world-football-archive",
         "isFinalMember": true,
         "clubGoalsKnown": true,
-        "worldCupAssists": 0
+        "worldCupAssists": 1
       },
       {
         "id": "306166",
@@ -30935,7 +30935,7 @@
         "nationalTeamDebut": "2020-10",
         "worldCupHistory": "26",
         "dateOfBirth": "1995-07-03",
-        "age": 30,
+        "age": 31,
         "heightCm": 191,
         "note": "最終メンバー",
         "source": "world-football-archive",
@@ -31633,7 +31633,7 @@
         "profileUrl": "https://www.transfermarkt.co.uk/kylian-mbappe/profil/spieler/342229",
         "currentNationalTeamId": "",
         "rank": 21,
-        "worldCupGoals": 6,
+        "worldCupGoals": 7,
         "shirtNumber": 10,
         "nationalTeamDebut": "2017-03",
         "worldCupHistory": "26 / 22 / 18",
@@ -34971,7 +34971,7 @@
         "profileUrl": "https://www.transfermarkt.co.uk/lisandro-martinez/profil/spieler/480762",
         "currentNationalTeamId": "",
         "rank": 7,
-        "worldCupGoals": 0,
+        "worldCupGoals": 1,
         "shirtNumber": 6,
         "nationalTeamDebut": "2019-03",
         "worldCupHistory": "26 / 22",
@@ -34982,7 +34982,7 @@
         "source": "world-football-archive",
         "isFinalMember": true,
         "clubGoalsKnown": true,
-        "worldCupAssists": 0
+        "worldCupAssists": 1
       },
       {
         "id": "355915",
@@ -35161,7 +35161,7 @@
         "nationalTeamDebut": "2017-06",
         "worldCupHistory": "26 / 22",
         "dateOfBirth": "1994-06-29",
-        "age": 31,
+        "age": 32,
         "heightCm": 180,
         "note": "最終メンバー",
         "source": "world-football-archive",
@@ -35389,7 +35389,7 @@
         "source": "world-football-archive",
         "isFinalMember": true,
         "clubGoalsKnown": true,
-        "worldCupAssists": 0
+        "worldCupAssists": 1
       },
       {
         "id": "648195",
@@ -35489,7 +35489,7 @@
         "profileUrl": "https://www.transfermarkt.co.uk/lionel-messi/profil/spieler/28003",
         "currentNationalTeamId": "",
         "rank": 21,
-        "worldCupGoals": 6,
+        "worldCupGoals": 7,
         "shirtNumber": 10,
         "nationalTeamDebut": "2005-08",
         "worldCupHistory": "26 / 22 / 18 / 14 / 10 / 06",
@@ -41310,7 +41310,7 @@
         "profileUrl": "https://www.transfermarkt.co.uk/jhon-arias/profil/spieler/588989",
         "currentNationalTeamId": "",
         "rank": 22,
-        "worldCupGoals": 0,
+        "worldCupGoals": 1,
         "shirtNumber": 11,
         "nationalTeamDebut": "2022-06",
         "worldCupHistory": "26",
@@ -41432,7 +41432,7 @@
         "source": "world-football-archive",
         "isFinalMember": true,
         "clubGoalsKnown": true,
-        "worldCupAssists": 0
+        "worldCupAssists": 1
       },
       {
         "id": "957461",
@@ -45616,7 +45616,7 @@
         "nationalTeamDebut": "",
         "worldCupHistory": "26",
         "dateOfBirth": "1994-07-02",
-        "age": 31,
+        "age": 32,
         "heightCm": 179,
         "note": "最終メンバー",
         "rank": 8,
@@ -45727,7 +45727,7 @@
         "nationalTeamDebut": "",
         "worldCupHistory": "26",
         "dateOfBirth": "1995-07-03",
-        "age": 30,
+        "age": 31,
         "heightCm": 186,
         "note": "最終メンバー(6/2追加)",
         "rank": 11,
@@ -46302,17 +46302,17 @@
       "South Africa": "2026-06-29",
       "Korea Republic": "2026-06-25",
       "Czechia": "2026-06-25",
-      "Canada": "2026-06-29",
+      "Canada": "2026-07-05",
       "Bosnia and Herzegovina": "2026-07-02",
-      "Switzerland": "2026-06-25",
+      "Switzerland": "2026-07-03",
       "Qatar": "2026-06-25",
       "Brazil": "2026-06-30",
-      "Morocco": "2026-06-30",
+      "Morocco": "2026-07-05",
       "Haiti": "2026-06-25",
       "Scotland": "2026-06-25",
       "USA": "2026-07-02",
       "Australia": "2026-07-04",
-      "Paraguay": "2026-06-30",
+      "Paraguay": "2026-07-05",
       "Türkiye": "2026-06-26",
       "Germany": "2026-06-30",
       "Ecuador": "2026-07-01",
@@ -46329,28 +46329,28 @@
       "Spain": "2026-07-03",
       "Uruguay": "2026-06-27",
       "Saudi Arabia": "2026-06-27",
-      "Cabo Verde": "2026-06-27",
-      "France": "2026-07-01",
+      "Cabo Verde": "2026-07-04",
+      "France": "2026-07-05",
       "Senegal": "2026-07-02",
       "Norway": "2026-07-01",
       "Iraq": "2026-06-27",
-      "Argentina": "2026-06-28",
+      "Argentina": "2026-07-04",
       "Austria": "2026-07-03",
       "Algeria": "2026-06-28",
       "Jordan": "2026-06-28",
       "Portugal": "2026-07-03",
       "Congo": "2026-07-02",
-      "Colombia": "2026-06-28",
+      "Colombia": "2026-07-04",
       "Uzbekistan": "2026-06-24",
       "England": "2026-07-02",
       "Croatia": "2026-07-03",
       "Panama": "2026-06-28",
-      "Ghana": "2026-06-28"
+      "Ghana": "2026-07-04"
     },
-    "worldFootballArchiveRankingUpdatedAt": "2026-07-04",
+    "worldFootballArchiveRankingUpdatedAt": "2026-07-05",
     "worldFootballArchiveRankingStats": {
-      "matchedGoals": 155,
-      "matchedAssists": 145,
+      "matchedGoals": 160,
+      "matchedAssists": 150,
       "unmatchedGoals": [
         {
           "rank": 22,
@@ -46359,33 +46359,39 @@
           "goals": 2
         },
         {
-          "rank": 47,
+          "rank": 49,
           "name": "プロミス・アキンペル",
           "countryJa": "カナダ",
           "goals": 1
         },
         {
-          "rank": 47,
+          "rank": 49,
           "name": "サーシャ・カライジッチ",
           "countryJa": "オーストリア",
           "goals": 1
         },
         {
-          "rank": 47,
+          "rank": 49,
           "name": "モハメド・ハニー",
           "countryJa": "オーストラリア",
+          "goals": 1
+        },
+        {
+          "rank": 49,
+          "name": "ディニー",
+          "countryJa": "アルゼンチン",
           "goals": 1
         }
       ],
       "unmatchedAssists": [
         {
-          "rank": 30,
+          "rank": 31,
           "name": "プロミス・アキンペル",
           "countryJa": "カナダ",
           "assists": 1
         },
         {
-          "rank": 30,
+          "rank": 31,
           "name": "ミヒャエル・グレゴリッチュ",
           "countryJa": "オーストリア",
           "assists": 1
