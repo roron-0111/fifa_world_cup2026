@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-05T06:46:53.318Z",
+  "generatedAt": "2026-07-06T07:19:06.065Z",
   "sources": {
     "googleScheduleSearch": "https://www.google.com/search?num=10&sa=X&sca_esv=f6913a6b03d5cca2&rlz=1C1JCYX_jaJP1059JP1059&sxsrf=ANbL-n70He_OogrO5hSbIWeTQHISUMbceg:1776594446411&q=%E3%83%AF%E3%83%BC%E3%83%AB%E3%83%89%E3%82%AB%E3%83%83%E3%83%97&si=AL3DRZGlEbdhA7XmWJj80t1CsOZGFzUh_Eb-GlfbqiISmN5DEgu7LWf3OmvACopQM184n8KPXnQtYFGFP0r94M5Ok1EiKiL_zxwaGqExIOUt_YuH9NJkgl0ob1JeaC4dvKMbGv7soNpq&ved=2ahUKEwjz2JWb2vmTAxUxoa8BHSukHTwQyNoBKAB6BAgNEAA&ictx=1&biw=2560&bih=1271&dpr=1",
     "fifaTeamsPage": "https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026/teams",
@@ -8312,7 +8312,7 @@
         "profileUrl": "https://www.transfermarkt.co.uk/neymar/profil/spieler/68290",
         "currentNationalTeamId": "",
         "rank": 16,
-        "worldCupGoals": 0,
+        "worldCupGoals": 1,
         "shirtNumber": 10,
         "nationalTeamDebut": "2010-08",
         "worldCupHistory": "26 / 22 / 18 / 14",
@@ -33059,8 +33059,8 @@
       {
         "id": "41609",
         "name": "Marcus Pedersen",
-        "officialNameJa": "マルクス・ホルムグレン・ペデルセン",
-        "displayNameJa": "マルクス・ホルムグレン・ペデルセン",
+        "officialNameJa": "マルクス・ペデルセン",
+        "displayNameJa": "マルクス・ペデルセン",
         "firstName": "",
         "lastName": "",
         "country": "Norway",
@@ -33080,7 +33080,7 @@
         "profileUrl": "https://www.transfermarkt.co.uk/marcus-pedersen/profil/spieler/41609",
         "currentNationalTeamId": "",
         "rank": 8,
-        "worldCupGoals": 1,
+        "worldCupGoals": 0,
         "shirtNumber": 16,
         "nationalTeamDebut": "2021-09",
         "worldCupHistory": "26",
@@ -33561,7 +33561,7 @@
         "profileUrl": "https://www.transfermarkt.co.uk/erling-haaland/profil/spieler/418560",
         "currentNationalTeamId": "",
         "rank": 21,
-        "worldCupGoals": 5,
+        "worldCupGoals": 7,
         "shirtNumber": 9,
         "nationalTeamDebut": "2019-09",
         "worldCupHistory": "26",
@@ -33586,7 +33586,7 @@
         "countryName": "Norway",
         "position": "FW",
         "subPosition": "FW",
-        "club": "ウルヴァーハンプトン・ワンダラーズ",
+        "club": "クリスタル・パレス",
         "clubId": "",
         "clubGoals": 9,
         "internationalGoals": 6,
@@ -33683,7 +33683,7 @@
         "source": "world-football-archive",
         "isFinalMember": true,
         "clubGoalsKnown": true,
-        "worldCupAssists": 1
+        "worldCupAssists": 3
       },
       {
         "id": "661207",
@@ -46306,7 +46306,7 @@
       "Bosnia and Herzegovina": "2026-07-02",
       "Switzerland": "2026-07-03",
       "Qatar": "2026-06-25",
-      "Brazil": "2026-06-30",
+      "Brazil": "2026-07-06",
       "Morocco": "2026-07-05",
       "Haiti": "2026-06-25",
       "Scotland": "2026-06-25",
@@ -46332,7 +46332,7 @@
       "Cabo Verde": "2026-07-04",
       "France": "2026-07-05",
       "Senegal": "2026-07-02",
-      "Norway": "2026-07-01",
+      "Norway": "2026-07-06",
       "Iraq": "2026-06-27",
       "Argentina": "2026-07-04",
       "Austria": "2026-07-03",
@@ -46347,7 +46347,7 @@
       "Panama": "2026-06-28",
       "Ghana": "2026-07-04"
     },
-    "worldFootballArchiveRankingUpdatedAt": "2026-07-05",
+    "worldFootballArchiveRankingUpdatedAt": "2026-07-06",
     "worldFootballArchiveRankingStats": {
       "matchedGoals": 160,
       "matchedAssists": 150,
@@ -46357,6 +46357,12 @@
           "name": "マルコ・アルナウトヴィッチ",
           "countryJa": "オーストリア",
           "goals": 2
+        },
+        {
+          "rank": 49,
+          "name": "マルクス・ホルムグレン・ペデルセン",
+          "countryJa": "ノルウェー",
+          "goals": 1
         },
         {
           "rank": 49,
@@ -46385,13 +46391,13 @@
       ],
       "unmatchedAssists": [
         {
-          "rank": 31,
+          "rank": 32,
           "name": "プロミス・アキンペル",
           "countryJa": "カナダ",
           "assists": 1
         },
         {
-          "rank": 31,
+          "rank": 32,
           "name": "ミヒャエル・グレゴリッチュ",
           "countryJa": "オーストリア",
           "assists": 1
