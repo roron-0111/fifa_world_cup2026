@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-07T06:52:05.799Z",
+  "generatedAt": "2026-07-08T05:57:45.538Z",
   "sources": {
     "googleScheduleSearch": "https://www.google.com/search?num=10&sa=X&sca_esv=f6913a6b03d5cca2&rlz=1C1JCYX_jaJP1059JP1059&sxsrf=ANbL-n70He_OogrO5hSbIWeTQHISUMbceg:1776594446411&q=%E3%83%AF%E3%83%BC%E3%83%AB%E3%83%89%E3%82%AB%E3%83%83%E3%83%97&si=AL3DRZGlEbdhA7XmWJj80t1CsOZGFzUh_Eb-GlfbqiISmN5DEgu7LWf3OmvACopQM184n8KPXnQtYFGFP0r94M5Ok1EiKiL_zxwaGqExIOUt_YuH9NJkgl0ob1JeaC4dvKMbGv7soNpq&ved=2ahUKEwjz2JWb2vmTAxUxoa8BHSukHTwQyNoBKAB6BAgNEAA&ictx=1&biw=2560&bih=1271&dpr=1",
     "fifaTeamsPage": "https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026/teams",
@@ -25257,7 +25257,7 @@
         "profileUrl": "https://www.transfermarkt.co.uk/yasser-ibrahim/profil/spieler/237425",
         "currentNationalTeamId": "",
         "rank": 5,
-        "worldCupGoals": 0,
+        "worldCupGoals": 1,
         "shirtNumber": 2,
         "nationalTeamDebut": "2022-03",
         "worldCupHistory": "26",
@@ -25712,7 +25712,7 @@
         "source": "world-football-archive",
         "isFinalMember": true,
         "clubGoalsKnown": true,
-        "worldCupAssists": 0
+        "worldCupAssists": 1
       },
       {
         "id": "729390",
@@ -25886,7 +25886,7 @@
         "profileUrl": "https://www.transfermarkt.co.uk/mostafa-ziko/profil/spieler/896616",
         "currentNationalTeamId": "",
         "rank": 22,
-        "worldCupGoals": 1,
+        "worldCupGoals": 2,
         "shirtNumber": 11,
         "nationalTeamDebut": "",
         "worldCupHistory": "26",
@@ -25934,7 +25934,7 @@
         "source": "world-football-archive",
         "isFinalMember": true,
         "clubGoalsKnown": true,
-        "worldCupAssists": 0
+        "worldCupAssists": 1
       },
       {
         "id": "677278",
@@ -34945,7 +34945,7 @@
         "source": "world-football-archive",
         "isFinalMember": true,
         "clubGoalsKnown": true,
-        "worldCupAssists": 0
+        "worldCupAssists": 1
       },
       {
         "id": "480762",
@@ -35008,7 +35008,7 @@
         "profileUrl": "https://www.transfermarkt.co.uk/cristian-romero/profil/spieler/355915",
         "currentNationalTeamId": "",
         "rank": 8,
-        "worldCupGoals": 0,
+        "worldCupGoals": 1,
         "shirtNumber": 13,
         "nationalTeamDebut": "2021-06",
         "worldCupHistory": "26 / 22",
@@ -35415,7 +35415,7 @@
         "profileUrl": "https://www.transfermarkt.co.uk/enzo-fernandez/profil/spieler/648195",
         "currentNationalTeamId": "",
         "rank": 19,
-        "worldCupGoals": 0,
+        "worldCupGoals": 1,
         "shirtNumber": 24,
         "nationalTeamDebut": "2022-09",
         "worldCupHistory": "26 / 22",
@@ -35489,7 +35489,7 @@
         "profileUrl": "https://www.transfermarkt.co.uk/lionel-messi/profil/spieler/28003",
         "currentNationalTeamId": "",
         "rank": 21,
-        "worldCupGoals": 7,
+        "worldCupGoals": 8,
         "shirtNumber": 10,
         "nationalTeamDebut": "2005-08",
         "worldCupHistory": "26 / 22 / 18 / 14 / 10 / 06",
@@ -35500,7 +35500,7 @@
         "source": "world-football-archive",
         "isFinalMember": true,
         "clubGoalsKnown": true,
-        "worldCupAssists": 0
+        "worldCupAssists": 1
       },
       {
         "id": "486031",
@@ -35685,7 +35685,7 @@
         "source": "world-football-archive",
         "isFinalMember": true,
         "clubGoalsKnown": true,
-        "worldCupAssists": 0
+        "worldCupAssists": 1
       }
     ],
     "Austria": [
@@ -46304,7 +46304,7 @@
       "Czechia": "2026-06-25",
       "Canada": "2026-07-05",
       "Bosnia and Herzegovina": "2026-07-02",
-      "Switzerland": "2026-07-03",
+      "Switzerland": "2026-07-08",
       "Qatar": "2026-06-25",
       "Brazil": "2026-07-06",
       "Morocco": "2026-07-05",
@@ -46324,7 +46324,7 @@
       "Sweden": "2026-07-01",
       "Belgium": "2026-07-07",
       "IR Iran": "2026-06-27",
-      "Egypt": "2026-07-04",
+      "Egypt": "2026-07-08",
       "New Zealand": "2026-06-27",
       "Spain": "2026-07-07",
       "Uruguay": "2026-06-27",
@@ -46334,23 +46334,23 @@
       "Senegal": "2026-07-02",
       "Norway": "2026-07-06",
       "Iraq": "2026-06-27",
-      "Argentina": "2026-07-04",
+      "Argentina": "2026-07-08",
       "Austria": "2026-07-03",
       "Algeria": "2026-06-28",
       "Jordan": "2026-06-28",
       "Portugal": "2026-07-07",
       "Congo": "2026-07-02",
-      "Colombia": "2026-07-04",
+      "Colombia": "2026-07-08",
       "Uzbekistan": "2026-06-24",
       "England": "2026-07-06",
       "Croatia": "2026-07-03",
       "Panama": "2026-06-28",
       "Ghana": "2026-07-04"
     },
-    "worldFootballArchiveRankingUpdatedAt": "2026-07-07",
+    "worldFootballArchiveRankingUpdatedAt": "2026-07-08",
     "worldFootballArchiveRankingStats": {
-      "matchedGoals": 163,
-      "matchedAssists": 153,
+      "matchedGoals": 166,
+      "matchedAssists": 158,
       "unmatchedGoals": [
         {
           "rank": 25,
@@ -46359,31 +46359,31 @@
           "goals": 2
         },
         {
-          "rank": 51,
+          "rank": 52,
           "name": "マルクス・ホルムグレン・ペデルセン",
           "countryJa": "ノルウェー",
           "goals": 1
         },
         {
-          "rank": 51,
+          "rank": 52,
           "name": "プロミス・アキンペル",
           "countryJa": "カナダ",
           "goals": 1
         },
         {
-          "rank": 51,
+          "rank": 52,
           "name": "サーシャ・カライジッチ",
           "countryJa": "オーストリア",
           "goals": 1
         },
         {
-          "rank": 51,
+          "rank": 52,
           "name": "モハメド・ハニー",
           "countryJa": "オーストラリア",
           "goals": 1
         },
         {
-          "rank": 51,
+          "rank": 52,
           "name": "ディニー",
           "countryJa": "アルゼンチン",
           "goals": 1
