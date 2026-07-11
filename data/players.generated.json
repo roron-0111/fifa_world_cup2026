@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-10T06:51:13.022Z",
+  "generatedAt": "2026-07-11T05:45:51.281Z",
   "sources": {
     "googleScheduleSearch": "https://www.google.com/search?num=10&sa=X&sca_esv=f6913a6b03d5cca2&rlz=1C1JCYX_jaJP1059JP1059&sxsrf=ANbL-n70He_OogrO5hSbIWeTQHISUMbceg:1776594446411&q=%E3%83%AF%E3%83%BC%E3%83%AB%E3%83%89%E3%82%AB%E3%83%83%E3%83%97&si=AL3DRZGlEbdhA7XmWJj80t1CsOZGFzUh_Eb-GlfbqiISmN5DEgu7LWf3OmvACopQM184n8KPXnQtYFGFP0r94M5Ok1EiKiL_zxwaGqExIOUt_YuH9NJkgl0ob1JeaC4dvKMbGv7soNpq&ved=2ahUKEwjz2JWb2vmTAxUxoa8BHSukHTwQyNoBKAB6BAgNEAA&ictx=1&biw=2560&bih=1271&dpr=1",
     "fifaTeamsPage": "https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026/teams",
@@ -23562,7 +23562,7 @@
         "source": "world-football-archive",
         "isFinalMember": true,
         "clubGoalsKnown": true,
-        "worldCupAssists": 0
+        "worldCupAssists": 1
       },
       {
         "id": "548254",
@@ -23736,7 +23736,7 @@
         "profileUrl": "https://www.transfermarkt.co.uk/charles-de-ketelaere/profil/spieler/435772",
         "currentNationalTeamId": "",
         "rank": 16,
-        "worldCupGoals": 2,
+        "worldCupGoals": 3,
         "shirtNumber": 17,
         "nationalTeamDebut": "2020-11",
         "worldCupHistory": "26 / 22",
@@ -27444,7 +27444,7 @@
         "profileUrl": "https://www.transfermarkt.co.uk/mikel-merino/profil/spieler/338424",
         "currentNationalTeamId": "",
         "rank": 12,
-        "worldCupGoals": 1,
+        "worldCupGoals": 2,
         "shirtNumber": 6,
         "nationalTeamDebut": "2020-09",
         "worldCupHistory": "26",
@@ -27481,7 +27481,7 @@
         "profileUrl": "https://www.transfermarkt.co.uk/fabian-ruiz/profil/spieler/350219",
         "currentNationalTeamId": "",
         "rank": 13,
-        "worldCupGoals": 0,
+        "worldCupGoals": 1,
         "shirtNumber": 8,
         "nationalTeamDebut": "2019-06",
         "worldCupHistory": "26",
@@ -46322,11 +46322,11 @@
       "Japan": "2026-06-30",
       "Tunisia": "2026-06-26",
       "Sweden": "2026-07-01",
-      "Belgium": "2026-07-07",
+      "Belgium": "2026-07-11",
       "IR Iran": "2026-06-27",
       "Egypt": "2026-07-08",
       "New Zealand": "2026-06-27",
-      "Spain": "2026-07-07",
+      "Spain": "2026-07-11",
       "Uruguay": "2026-06-27",
       "Saudi Arabia": "2026-06-27",
       "Cabo Verde": "2026-07-04",
@@ -46347,43 +46347,43 @@
       "Panama": "2026-06-28",
       "Ghana": "2026-07-04"
     },
-    "worldFootballArchiveRankingUpdatedAt": "2026-07-10",
+    "worldFootballArchiveRankingUpdatedAt": "2026-07-11",
     "worldFootballArchiveRankingStats": {
-      "matchedGoals": 166,
-      "matchedAssists": 159,
+      "matchedGoals": 167,
+      "matchedAssists": 160,
       "unmatchedGoals": [
         {
-          "rank": 25,
+          "rank": 26,
           "name": "マルコ・アルナウトヴィッチ",
           "countryJa": "オーストリア",
           "goals": 2
         },
         {
-          "rank": 52,
+          "rank": 53,
           "name": "マルクス・ホルムグレン・ペデルセン",
           "countryJa": "ノルウェー",
           "goals": 1
         },
         {
-          "rank": 52,
+          "rank": 53,
           "name": "プロミス・アキンペル",
           "countryJa": "カナダ",
           "goals": 1
         },
         {
-          "rank": 52,
+          "rank": 53,
           "name": "サーシャ・カライジッチ",
           "countryJa": "オーストリア",
           "goals": 1
         },
         {
-          "rank": 52,
+          "rank": 53,
           "name": "モハメド・ハニー",
           "countryJa": "オーストラリア",
           "goals": 1
         },
         {
-          "rank": 52,
+          "rank": 53,
           "name": "ディニー",
           "countryJa": "アルゼンチン",
           "goals": 1
