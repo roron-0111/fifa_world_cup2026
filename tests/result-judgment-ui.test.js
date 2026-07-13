@@ -22,6 +22,7 @@ test('knockout nodes reserve the right side for a compact judgment badge', () =>
   assert.match(html, /ko-match-meta/);
   assert.match(html, /ko-match-time/);
   assert.match(html, /スコア\+勝者/);
+  assert.match(html, /スコア的中/);
   assert.match(html, /勝者的中/);
 });
 
@@ -63,7 +64,7 @@ test('group exact score earns both result and exact score points', () => {
   assert.match(html, /return\{pts:s\.resultPts\+s\.exactPts,type:'exact'\}/);
 });
 
-test('knockout PK-decided tie earns normal score points even when PK points are zero', () => {
+test('knockout PK-decided tie earns the default maximum two points without judging shootout scores', () => {
   const match = html.match(/(function calcKoPointSummary\(koPreds,results,userId,settings\)\{[\s\S]*?)\nconst SCORER_PREDICTION_SLOTS=/);
   assert.ok(match, 'calcKoPointSummary should be extractable');
   const context = {
@@ -89,13 +90,13 @@ test('knockout PK-decided tie earns normal score points even when PK points are 
     koSeedLabel: (value) => value,
   };
   vm.runInNewContext(`${match[1]}; this.summary=calcKoPointSummary(
-    {user:{'F-0':{home:1,away:1,decidedBy:'PK',homePen:4,awayPen:3,winnerSide:'home'}}},
+    {user:{'F-0':{home:1,away:1,decidedBy:'PK',homePen:5,awayPen:4,winnerSide:'home'}}},
     {'F-0':{home:1,away:1,decidedBy:'PK',homePen:4,awayPen:3,winnerSide:'home'}},
     'user',
-    {koWinnerPts:1,koExactPts:2,koPenaltyPts:0,koChampionPts:5}
+    {koWinnerPts:1,koExactPts:1,koPenaltyPts:0,koChampionPts:5}
   );`, context);
   assert.deepEqual(JSON.parse(JSON.stringify(context.summary)), {
-    total: 3,
+    total: 2,
     winnerHits: 1,
     exactHits: 1,
     penaltyHits: 1,
@@ -103,12 +104,26 @@ test('knockout PK-decided tie earns normal score points even when PK points are 
     runnerUpHit: 0,
     thirdPlaceHit: 0,
     koWinnerPts: 1,
-    koExactPts: 2,
+    koExactPts: 1,
     koPenaltyPts: 0,
     koChampionPts: 5,
     koRunnerUpPts: 2,
     koThirdPlacePts: 1,
   });
+});
+
+test('knockout exact score remains a hit when the predicted PK winner is wrong', () => {
+  const match = html.match(/(function getKoJudgment\(pred,actual\)\{[\s\S]*?)\nfunction koWinnerSideForMatch/);
+  assert.ok(match, 'getKoJudgment should be extractable');
+  const context = {
+    koRecordScoreExact: (pred, actual) => pred.home === actual.home && pred.away === actual.away,
+    koRecordWinnerSide: (record) => record.winnerSide || null,
+  };
+  vm.runInNewContext(`${match[1]}; this.judgment=getKoJudgment(
+    {home:1,away:1,decidedBy:'PK',winnerSide:'home'},
+    {home:1,away:1,decidedBy:'PK',winnerSide:'away'}
+  );`, context);
+  assert.deepEqual(JSON.parse(JSON.stringify(context.judgment)), {state:'hit',label:'スコア的中'});
 });
 
 test('knockout podium predictions score only after matching actual podium results', () => {

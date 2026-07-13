@@ -2103,6 +2103,7 @@ function koRecordHasScore(record){
   return record&&Number.isFinite(record.home)&&Number.isFinite(record.away);
 }
 function koRecordScoreExact(pred,actual){
+  // Match scores end after extra time; shootout scores are judged separately.
   return koRecordHasScore(pred)&&koRecordHasScore(actual)&&pred.home===actual.home&&pred.away===actual.away;
 }
 function scorePairParts(record,fallback='未入力'){
@@ -2146,12 +2147,13 @@ function getGroupJudgment(pred,actual){
 }
 function getKoJudgment(pred,actual){
   if(!pred||!actual)return {state:'pending',label:'判定待ち'};
+  const scoreExact=koRecordScoreExact(pred,actual);
   const pw=koRecordWinnerSide(pred);
   const aw=koRecordWinnerSide(actual);
+  if(scoreExact&&pw&&aw&&pw===aw)return {state:'hit',label:'スコア+勝者'};
+  if(scoreExact)return {state:'hit',label:'スコア的中'};
   if(!pw||!aw)return {state:'pending',label:'判定待ち'};
-  if(pw!==aw)return {state:'miss',label:'不一致'};
-  const scoreExact=koRecordScoreExact(pred,actual);
-  return {state:'hit',label:scoreExact?'スコア+勝者':'勝者的中'};
+  return pw===aw?{state:'hit',label:'勝者的中'}:{state:'miss',label:'不一致'};
 }
 function koWinnerSideForMatch(match,picks={},results={}){
   if(!match)return null;
@@ -4918,7 +4920,7 @@ function SettingsScreen({user,syncToken,onRenameUser}){
             </div>
           </div>
           <div className="set-row">
-            <div className="sl">決勝トーナメント スコア的中<span>PK決着でも試合スコアが完全一致すれば加点</span></div>
+            <div className="sl">決勝トーナメント スコア的中<span>延長終了時のスコアが完全一致すれば加点（PK戦の得点は対象外）</span></div>
             <div className="pts-ctrl">
               <button className="ptsbtn" onClick={()=>changePts('koExactPts',-1)}>−</button>
               <div className="pts-val">{pointSettings.koExactPts}</div>

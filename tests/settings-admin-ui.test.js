@@ -290,7 +290,7 @@ test('knockout score row uses score hit wording', () => {
 
 test('knockout point setting explains PK winner handling', () => {
   assert.match(html, /決勝トーナメント 勝者的中<span>PK決着でも最終勝者が一致すれば加点<\/span>/);
-  assert.match(html, /決勝トーナメント スコア的中<span>PK決着でも試合スコアが完全一致すれば加点<\/span>/);
+  assert.match(html, /決勝トーナメント スコア的中<span>延長終了時のスコアが完全一致すれば加点（PK戦の得点は対象外）<\/span>/);
   assert.match(html, /PK勝者的中<span>PKスコアではなく、同点予想\+PK勝者が一致した場合の追加点。勝者・スコア点も入るため0pt推奨<\/span>/);
   assert.doesNotMatch(html, /PK的中<span>同点予想/);
 });
