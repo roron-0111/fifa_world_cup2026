@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-14T05:37:07.442Z",
+  "generatedAt": "2026-07-15T05:38:03.665Z",
   "sources": {
     "googleScheduleSearch": "https://www.google.com/search?num=10&sa=X&sca_esv=f6913a6b03d5cca2&rlz=1C1JCYX_jaJP1059JP1059&sxsrf=ANbL-n70He_OogrO5hSbIWeTQHISUMbceg:1776594446411&q=%E3%83%AF%E3%83%BC%E3%83%AB%E3%83%89%E3%82%AB%E3%83%83%E3%83%97&si=AL3DRZGlEbdhA7XmWJj80t1CsOZGFzUh_Eb-GlfbqiISmN5DEgu7LWf3OmvACopQM184n8KPXnQtYFGFP0r94M5Ok1EiKiL_zxwaGqExIOUt_YuH9NJkgl0ob1JeaC4dvKMbGv7soNpq&ved=2ahUKEwjz2JWb2vmTAxUxoa8BHSukHTwQyNoBKAB6BAgNEAA&ictx=1&biw=2560&bih=1271&dpr=1",
     "fifaTeamsPage": "https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026/teams",
@@ -27296,7 +27296,7 @@
         "profileUrl": "https://www.transfermarkt.co.uk/pedro-porro/profil/spieler/553875",
         "currentNationalTeamId": "",
         "rank": 8,
-        "worldCupGoals": 1,
+        "worldCupGoals": 2,
         "shirtNumber": 12,
         "nationalTeamDebut": "2021-03",
         "worldCupHistory": "26",
@@ -27566,7 +27566,7 @@
         "source": "world-football-archive",
         "isFinalMember": true,
         "clubGoalsKnown": true,
-        "worldCupAssists": 1
+        "worldCupAssists": 2
       },
       {
         "id": "8163",
@@ -27819,7 +27819,7 @@
         "nationalTeamDebut": "2022-09",
         "worldCupHistory": "26 / 22",
         "dateOfBirth": "2002-07-12",
-        "age": 23,
+        "age": 24,
         "heightCm": 181,
         "note": "最終メンバー",
         "source": "world-football-archive",
@@ -27856,7 +27856,7 @@
         "nationalTeamDebut": "2023-09",
         "worldCupHistory": "26",
         "dateOfBirth": "2007-07-13",
-        "age": 18,
+        "age": 19,
         "heightCm": 180,
         "note": "最終メンバー",
         "source": "world-football-archive",
@@ -27888,7 +27888,7 @@
         "profileUrl": "https://www.transfermarkt.co.uk/mikel-oyarzabal/profil/spieler/351478",
         "currentNationalTeamId": "",
         "rank": 24,
-        "worldCupGoals": 4,
+        "worldCupGoals": 5,
         "shirtNumber": 21,
         "nationalTeamDebut": "2016-05",
         "worldCupHistory": "26",
@@ -27930,7 +27930,7 @@
         "nationalTeamDebut": "2026-03",
         "worldCupHistory": "26",
         "dateOfBirth": "2003-07-13",
-        "age": 22,
+        "age": 23,
         "heightCm": 173,
         "note": "最終メンバー",
         "source": "world-football-archive",
@@ -46326,11 +46326,11 @@
       "IR Iran": "2026-06-27",
       "Egypt": "2026-07-08",
       "New Zealand": "2026-06-27",
-      "Spain": "2026-07-11",
+      "Spain": "2026-07-15",
       "Uruguay": "2026-06-27",
       "Saudi Arabia": "2026-06-27",
       "Cabo Verde": "2026-07-04",
-      "France": "2026-07-10",
+      "France": "2026-07-15",
       "Senegal": "2026-07-02",
       "Norway": "2026-07-12",
       "Iraq": "2026-06-27",
@@ -46347,7 +46347,7 @@
       "Panama": "2026-06-28",
       "Ghana": "2026-07-04"
     },
-    "worldFootballArchiveRankingUpdatedAt": "2026-07-12",
+    "worldFootballArchiveRankingUpdatedAt": "2026-07-15",
     "worldFootballArchiveRankingStats": {
       "matchedGoals": 170,
       "matchedAssists": 162,
@@ -46359,31 +46359,31 @@
           "goals": 2
         },
         {
-          "rank": 55,
+          "rank": 56,
           "name": "マルクス・ホルムグレン・ペデルセン",
           "countryJa": "ノルウェー",
           "goals": 1
         },
         {
-          "rank": 55,
+          "rank": 56,
           "name": "プロミス・アキンペル",
           "countryJa": "カナダ",
           "goals": 1
         },
         {
-          "rank": 55,
+          "rank": 56,
           "name": "サーシャ・カライジッチ",
           "countryJa": "オーストリア",
           "goals": 1
         },
         {
-          "rank": 55,
+          "rank": 56,
           "name": "モハメド・ハニー",
           "countryJa": "オーストラリア",
           "goals": 1
         },
         {
-          "rank": 55,
+          "rank": 56,
           "name": "ディニー",
           "countryJa": "アルゼンチン",
           "goals": 1
@@ -46391,13 +46391,13 @@
       ],
       "unmatchedAssists": [
         {
-          "rank": 36,
+          "rank": 37,
           "name": "プロミス・アキンペル",
           "countryJa": "カナダ",
           "assists": 1
         },
         {
-          "rank": 36,
+          "rank": 37,
           "name": "ミヒャエル・グレゴリッチュ",
           "countryJa": "オーストリア",
           "assists": 1
