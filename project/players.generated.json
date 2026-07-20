@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-19T06:04:23.961Z",
+  "generatedAt": "2026-07-20T06:22:40.223Z",
   "sources": {
     "googleScheduleSearch": "https://www.google.com/search?num=10&sa=X&sca_esv=f6913a6b03d5cca2&rlz=1C1JCYX_jaJP1059JP1059&sxsrf=ANbL-n70He_OogrO5hSbIWeTQHISUMbceg:1776594446411&q=%E3%83%AF%E3%83%BC%E3%83%AB%E3%83%89%E3%82%AB%E3%83%83%E3%83%97&si=AL3DRZGlEbdhA7XmWJj80t1CsOZGFzUh_Eb-GlfbqiISmN5DEgu7LWf3OmvACopQM184n8KPXnQtYFGFP0r94M5Ok1EiKiL_zxwaGqExIOUt_YuH9NJkgl0ob1JeaC4dvKMbGv7soNpq&ved=2ahUKEwjz2JWb2vmTAxUxoa8BHSukHTwQyNoBKAB6BAgNEAA&ictx=1&biw=2560&bih=1271&dpr=1",
     "fifaTeamsPage": "https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026/teams",
@@ -27703,7 +27703,7 @@
         "profileUrl": "https://www.transfermarkt.co.uk/ferran-torres/profil/spieler/398184",
         "currentNationalTeamId": "",
         "rank": 19,
-        "worldCupGoals": 0,
+        "worldCupGoals": 1,
         "shirtNumber": 7,
         "nationalTeamDebut": "2020-09",
         "worldCupHistory": "26 / 22",
@@ -27782,7 +27782,7 @@
         "nationalTeamDebut": "2023-09",
         "worldCupHistory": "26",
         "dateOfBirth": "2001-07-20",
-        "age": 24,
+        "age": 25,
         "heightCm": 174,
         "note": "最終メンバー",
         "source": "world-football-archive",
@@ -27825,7 +27825,7 @@
         "source": "world-football-archive",
         "isFinalMember": true,
         "clubGoalsKnown": true,
-        "worldCupAssists": 0
+        "worldCupAssists": 1
       },
       {
         "id": "937958",
@@ -46326,7 +46326,7 @@
       "IR Iran": "2026-06-27",
       "Egypt": "2026-07-08",
       "New Zealand": "2026-06-27",
-      "Spain": "2026-07-15",
+      "Spain": "2026-07-20",
       "Uruguay": "2026-06-27",
       "Saudi Arabia": "2026-06-27",
       "Cabo Verde": "2026-07-04",
@@ -46334,7 +46334,7 @@
       "Senegal": "2026-07-02",
       "Norway": "2026-07-12",
       "Iraq": "2026-06-27",
-      "Argentina": "2026-07-16",
+      "Argentina": "2026-07-20",
       "Austria": "2026-07-03",
       "Algeria": "2026-06-28",
       "Jordan": "2026-06-28",
@@ -46347,10 +46347,10 @@
       "Panama": "2026-06-28",
       "Ghana": "2026-07-04"
     },
-    "worldFootballArchiveRankingUpdatedAt": "2026-07-19",
+    "worldFootballArchiveRankingUpdatedAt": "2026-07-20",
     "worldFootballArchiveRankingStats": {
-      "matchedGoals": 174,
-      "matchedAssists": 166,
+      "matchedGoals": 175,
+      "matchedAssists": 167,
       "unmatchedGoals": [
         {
           "rank": 29,
