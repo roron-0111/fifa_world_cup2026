@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-16T08:01:32.536Z",
+  "generatedAt": "2026-10-17T07:39:28.638Z",
   "sources": {
     "googleScheduleSearch": "https://www.google.com/search?num=10&sa=X&sca_esv=f6913a6b03d5cca2&rlz=1C1JCYX_jaJP1059JP1059&sxsrf=ANbL-n70He_OogrO5hSbIWeTQHISUMbceg:1776594446411&q=%E3%83%AF%E3%83%BC%E3%83%AB%E3%83%89%E3%82%AB%E3%83%83%E3%83%97&si=AL3DRZGlEbdhA7XmWJj80t1CsOZGFzUh_Eb-GlfbqiISmN5DEgu7LWf3OmvACopQM184n8KPXnQtYFGFP0r94M5Ok1EiKiL_zxwaGqExIOUt_YuH9NJkgl0ob1JeaC4dvKMbGv7soNpq&ved=2ahUKEwjz2JWb2vmTAxUxoa8BHSukHTwQyNoBKAB6BAgNEAA&ictx=1&biw=2560&bih=1271&dpr=1",
     "fifaTeamsPage": "https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026/teams",
@@ -8143,8 +8143,8 @@
       {
         "id": "32816",
         "name": "Danilo",
-        "officialNameJa": "ダニーロ",
-        "displayNameJa": "ダニーロ",
+        "officialNameJa": "ダニーロ・サントス",
+        "displayNameJa": "ダニーロ・サントス",
         "firstName": "",
         "lastName": "",
         "country": "Brazil",
@@ -30315,8 +30315,8 @@
       {
         "id": "wfa-Cabo Verde-15",
         "name": "Kevin Lenini",
-        "officialNameJa": "ケヴィン・レニニ",
-        "displayNameJa": "ケヴィン・レニニ",
+        "officialNameJa": "ケヴィン・レニニ（ピナ）",
+        "displayNameJa": "ケヴィン・レニニ（ピナ）",
         "firstName": "",
         "lastName": "",
         "country": "Cabo Verde",
@@ -33059,8 +33059,8 @@
       {
         "id": "41609",
         "name": "Marcus Pedersen",
-        "officialNameJa": "マルクス・ペデルセン",
-        "displayNameJa": "マルクス・ペデルセン",
+        "officialNameJa": "マルクス・ホルムグレン・ペデルセン",
+        "displayNameJa": "マルクス・ホルムグレン・ペデルセン",
         "firstName": "",
         "lastName": "",
         "country": "Norway",
@@ -33080,7 +33080,7 @@
         "profileUrl": "https://www.transfermarkt.co.uk/marcus-pedersen/profil/spieler/41609",
         "currentNationalTeamId": "",
         "rank": 8,
-        "worldCupGoals": 0,
+        "worldCupGoals": 1,
         "shirtNumber": 16,
         "nationalTeamDebut": "2021-09",
         "worldCupHistory": "26",
@@ -38397,8 +38397,8 @@
       {
         "id": "wfa-Jordan-26",
         "name": "Mousa Al-Tamari",
-        "officialNameJa": "ムーサ・アル=ターマリ",
-        "displayNameJa": "ムーサ・アル=ターマリ",
+        "officialNameJa": "ムーサ・アッ＝タアマリー",
+        "displayNameJa": "ムーサ・アッ＝タアマリー",
         "firstName": "",
         "lastName": "",
         "country": "Jordan",
@@ -46349,7 +46349,7 @@
     },
     "worldFootballArchiveRankingUpdatedAt": "2026-07-20",
     "worldFootballArchiveRankingStats": {
-      "matchedGoals": 175,
+      "matchedGoals": 176,
       "matchedAssists": 167,
       "unmatchedGoals": [
         {
@@ -46360,13 +46360,7 @@
         },
         {
           "rank": 58,
-          "name": "マルクス・ホルムグレン・ペデルセン",
-          "countryJa": "ノルウェー",
-          "goals": 1
-        },
-        {
-          "rank": 58,
-          "name": "プロミス・アキンペル",
+          "name": "プロミス・デイヴィッド",
           "countryJa": "カナダ",
           "goals": 1
         },
@@ -46375,24 +46369,12 @@
           "name": "サーシャ・カライジッチ",
           "countryJa": "オーストリア",
           "goals": 1
-        },
-        {
-          "rank": 58,
-          "name": "モハメド・ハニー",
-          "countryJa": "オーストラリア",
-          "goals": 1
-        },
-        {
-          "rank": 58,
-          "name": "ディニー",
-          "countryJa": "アルゼンチン",
-          "goals": 1
         }
       ],
       "unmatchedAssists": [
         {
           "rank": 38,
-          "name": "プロミス・アキンペル",
+          "name": "プロミス・デイヴィッド",
           "countryJa": "カナダ",
           "assists": 1
         },
