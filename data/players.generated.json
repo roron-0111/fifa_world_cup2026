@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-27T11:56:46.746Z",
+  "generatedAt": "2026-11-28T11:31:42.437Z",
   "sources": {
     "googleScheduleSearch": "https://www.google.com/search?num=10&sa=X&sca_esv=f6913a6b03d5cca2&rlz=1C1JCYX_jaJP1059JP1059&sxsrf=ANbL-n70He_OogrO5hSbIWeTQHISUMbceg:1776594446411&q=%E3%83%AF%E3%83%BC%E3%83%AB%E3%83%89%E3%82%AB%E3%83%83%E3%83%97&si=AL3DRZGlEbdhA7XmWJj80t1CsOZGFzUh_Eb-GlfbqiISmN5DEgu7LWf3OmvACopQM184n8KPXnQtYFGFP0r94M5Ok1EiKiL_zxwaGqExIOUt_YuH9NJkgl0ob1JeaC4dvKMbGv7soNpq&ved=2ahUKEwjz2JWb2vmTAxUxoa8BHSukHTwQyNoBKAB6BAgNEAA&ictx=1&biw=2560&bih=1271&dpr=1",
     "fifaTeamsPage": "https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026/teams",
@@ -122,7 +122,7 @@
         "worldCupGoals": 0,
         "shirtNumber": 13,
         "nationalTeamDebut": "2005-12",
-        "worldCupHistory": "WC 26 / 22 / 18 / 14 / 10",
+        "worldCupHistory": "WC 26 / 22 / 18 / 14 / 10 / 06",
         "dateOfBirth": "1985-07-13",
         "age": 40,
         "heightCm": 185,
@@ -43909,7 +43909,7 @@
         "worldCupGoals": 0,
         "shirtNumber": 10,
         "nationalTeamDebut": "2006-03",
-        "worldCupHistory": "WC 26 / 22 / 18 / 14",
+        "worldCupHistory": "WC 26 / 22 / 18 / 14 / 06",
         "dateOfBirth": "1985-09-09",
         "age": 40,
         "heightCm": 172,
